@@ -121,7 +121,7 @@
      caps 3.2cqw + role 4.4cqw, ink #181520, near-sharp corners */
   + ".alp-fcard{position:absolute;left:0;top:0;width:clamp(270px,21vw,370px);aspect-ratio:1140/1260;container-type:inline-size;cursor:default;will-change:transform;pointer-events:auto;}"
   + ".alp-fcard .alp-fin{position:absolute;inset:0;padding:8.2cqw;border-radius:3px;color:#181520;overflow:hidden;"
-  +   "background:linear-gradient(168deg,rgba(252,253,255,.34) 0%,rgba(237,239,246,.20) 42%,rgba(196,201,215,.30) 100%),rgba(237,239,246,.18);"
+  +   "background:linear-gradient(168deg,rgba(252,253,255,.29) 0%,rgba(237,239,246,.17) 42%,rgba(196,201,215,.26) 100%),rgba(237,239,246,.15);"
   +   "-webkit-backdrop-filter:blur(16px) saturate(1.12);backdrop-filter:blur(16px) saturate(1.12);"
   +   "border:1px solid rgba(255,255,255,.62);"
   +   "box-shadow:-5px 6px 0 -1px rgba(204,208,221,.85),-2px 3px 0 0 rgba(226,229,238,.95),0 34px 90px rgba(0,0,0,.42),0 6px 18px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.7),inset -1px -1px 0 rgba(150,156,175,.35);"
@@ -230,9 +230,10 @@
   /* fleet: evenly spaced cards riding one arc track like Noomo's — enter
      bottom-right, crest mid-screen, descend out left. Per-card: only jitter,
      tilt, depth and bob vary: [yJitter vh, rotZ, rotY, depth, bobDur] */
+  /* [yJitter vh, rotZ, rotY, depth, bobDur, rotX] — irregular tilts, no pattern */
   var FLEET = [
-    [0, -2, 10, 0.9, 7.2], [-2, 1.5, -9, 0.62, 8.4], [1, -1.5, 8, 0.5, 9.1], [-1, 2, -12, 0.85, 8.8],
-    [2, -2, 9, 0.55, 7.6], [-2, 1.5, -8, 0.95, 8.1], [1, -2, 11, 0.5, 9.4], [0, 1.5, -9, 0.72, 8.6]
+    [1, -2.6, 9, 0.9, 7.2, 1.2], [-3, 1.2, -5, 0.62, 8.4, 2.1], [2, 2.8, 12, 0.5, 9.1, 0.8], [-1, -1.1, 7, 0.85, 8.8, 1.8],
+    [3, 1.9, -11, 0.55, 7.6, 2.4], [-2, -3.2, 6, 0.95, 8.1, 1.0], [0, 0.8, -8, 0.5, 9.4, 1.6], [-1, -1.7, 10, 0.72, 8.6, 2.0]
   ];
   var FLEET_SPAN = 140;        // vw a single card travels across the screen
   var FLEET_GAP = 26;          // vw between cards on the track (even spacing)
@@ -240,7 +241,7 @@
   var svcCards = SERVICES.map(function (s, i) {
     var c = FLEET[i];
     return '<div class="alp-fcard" data-i="' + i + '" data-depth="' + c[3] + '" style="z-index:6;">'
-      + '<div class="alp-fin" style="transform:perspective(900px) rotateY(' + c[2] + 'deg) rotateX(1.6deg) rotateZ(' + c[1] + 'deg);">'
+      + '<div class="alp-fin" style="transform:perspective(900px) rotateY(' + c[2] + 'deg) rotateX(' + c[5] + 'deg) rotateZ(' + c[1] + 'deg);">'
       + '<svg class="alp-fico" viewBox="0 0 24 24">' + ICONS[i] + "</svg>"
       + "<p>" + s[1] + "</p>"
       + '<div class="alp-ffoot"><span>Service 0' + (i + 1) + ' / 08 · Addept Workshop</span><b>' + s[0] + "</b></div>"

@@ -213,6 +213,7 @@
   + "@keyframes alp-lbreathe{0%,100%{opacity:1}50%{opacity:.6}}"
   + "@media (max-width:760px){#alp-lbadge{width:78vw;}}"
   + "#alp-fx{position:fixed;inset:0;z-index:1000001;pointer-events:none;}"
+  + ".alp-nocursor,.alp-nocursor *{cursor:none!important;}"
   /* nav */
   + "#alp-nav{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:18px 32px;}"
   + "#alp-nav .alp-brand{font-size:15px;letter-spacing:.12em;text-transform:uppercase;color:#fff;text-decoration:none;white-space:nowrap;transition:opacity .25s;}"
@@ -243,7 +244,7 @@
   + ".alp-hbrk i.bl{bottom:0;left:0;border-bottom-width:2px;border-left-width:2px;}"
   + ".alp-hbrk i.br{bottom:5px;right:0;border-bottom-width:2px;border-right-width:2px;}"
   + ".alp-section.alp-hero-low{align-items:flex-end;}"
-  + ".alp-section.alp-hero-low .alp-inner{box-sizing:border-box;width:clamp(480px,48%,620px);max-width:none;padding:0 0 14vh 56px;position:relative;left:40px;top:-15px;}"
+  + ".alp-section.alp-hero-low .alp-inner{box-sizing:border-box;width:clamp(480px,48%,620px);max-width:none;padding:0 0 14vh 56px;position:relative;left:50px;top:-25px;}"
   + ".alp-lead{margin-top:18px;color:rgba(255,255,255,.58);line-height:1.65;font-size:clamp(.98rem,1.8vw,1.2rem);max-width:30em;}"
   + ".alp-ticks{margin-top:26px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 20px;font-size:11px;letter-spacing:.05em;color:rgba(255,255,255,.38);}"
   + ".alp-ticks span{display:inline-flex;align-items:center;gap:6px;}"
@@ -1264,6 +1265,7 @@
     var c = document.createElement("canvas");
     c.id = "alp-fx";
     root.appendChild(c);
+    root.classList.add("alp-nocursor"); // the droplet IS the cursor now
     var fctx = c.getContext("2d");
     var W = 0, H = 0, FDPR = Math.min(window.devicePixelRatio || 1, 2);
     function fxSize() { W = window.innerWidth; H = window.innerHeight; c.width = W * FDPR; c.height = H * FDPR; }
@@ -1271,10 +1273,21 @@
     var tx = -100, ty = -100, ox = -100, oy = -100, lvx = 0, lvy = 0;
     var sparks = [], fxRun = false, lastMove = 0;
     function spawn(x, y, pow) {
-      if (sparks.length > 90) return;
+      if (sparks.length > 240) return;
       var a = Math.random() * 6.283, sp = (0.4 + Math.random() * 1.4) * pow;
       sparks.push({ x: x, y: y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 0.3,
         life: 1, dk: 0.02 + Math.random() * 0.025, r: 0.8 + Math.random() * 1.8, w: Math.random() < 0.3 });
+    }
+    function spawnTail(x, y, vx, vy, sp) {
+      if (sparks.length > 240) return;
+      var m = Math.sqrt(vx * vx + vy * vy) || 1;
+      var bx = -vx / m, by = -vy / m;        /* flung backward along travel */
+      var j = (Math.random() - 0.5) * 1.4;   /* sideways scatter */
+      var s2 = 0.5 + Math.random() * 1.6 + sp * 0.04;
+      sparks.push({ x: x, y: y,
+        vx: bx * s2 - by * j, vy: by * s2 + bx * j - 0.15,
+        life: 1, dk: 0.012 + Math.random() * 0.022,
+        r: 0.7 + Math.random() * 1.9, w: Math.random() < 0.35 });
     }
     function wake() { if (!fxRun) { fxRun = true; requestAnimationFrame(fxStep); } }
     window.addEventListener("mousemove", function (e) {
@@ -1289,10 +1302,19 @@
     }, { passive: true });
     function fxStep() {
       var dx = tx - ox, dy = ty - oy;
-      ox += dx * 0.16; oy += dy * 0.16;
-      lvx = lvx * 0.8 + dx * 0.2; lvy = lvy * 0.8 + dy * 0.2;
+      var pox = ox, poy = oy;
+      ox += dx * 0.55; oy += dy * 0.55;
+      lvx = lvx * 0.75 + dx * 0.25; lvy = lvy * 0.75 + dy * 0.25;
       var speed = Math.sqrt(lvx * lvx + lvy * lvy);
-      if (speed > 3 && Math.random() < 0.55) spawn(ox, oy, Math.min(speed / 14, 1.6));
+      /* comet tail: seed sparks all along this frame's travel so fast sweeps
+         leave a continuous blazing trail */
+      if (speed > 0.6 && pox > -50) {
+        var nT = Math.min(10, 1 + Math.ceil(speed * 0.5));
+        for (var sT = 0; sT < nT; sT++) {
+          var tt = Math.random();
+          spawnTail(pox + (ox - pox) * tt, poy + (oy - poy) * tt, lvx, lvy, speed);
+        }
+      }
       fctx.setTransform(FDPR, 0, 0, FDPR, 0, 0);
       fctx.clearRect(0, 0, W, H);
       fctx.globalCompositeOperation = "lighter";

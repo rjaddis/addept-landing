@@ -25,6 +25,7 @@
   var BADGE = SCRIPT_BASE + "/addept-logo-badge.svg";
   var MAPS = "https://maps.google.com/?q=35B+Brookes+Road,+Frankton,+Queenstown+9300";
   var introActive = true; // gates input + section render until the loader's badge-burst hands off
+  var fxSpawn = null; // set by the cursor-spark module; lets the loader tracer shed sparks
 
   function frameSrc(i) {
     var n = String(i + 1); while (n.length < 4) n = "0" + n;
@@ -146,7 +147,7 @@
   + "@keyframes alp-sheen{0%{opacity:0;background-position:130% 0}12%{opacity:1}85%{opacity:.8}100%{opacity:0;background-position:-50% 0}}"
   /* drifting amber embers behind the emblem */
   + "#alp-lembers{position:absolute;inset:0;pointer-events:none;overflow:hidden;}"
-  + "#alp-lembers i{position:absolute;top:55%;border-radius:99px;background:#ffc9a0;box-shadow:0 0 6px 2px rgba(255,160,70,.6);opacity:0;animation:alp-ember linear infinite;}"
+  + "#alp-lembers i{position:absolute;top:55%;border-radius:99px;background:#ffc9a0;box-shadow:0 0 7px 2px rgba(255,160,70,.7);opacity:0;animation:alp-ember linear infinite;}"
   + "#alp-lembers i:nth-child(1){left:35%;width:2px;height:2px;animation-duration:6.5s;animation-delay:-2s;}"
   + "#alp-lembers i:nth-child(2){left:39%;width:3px;height:3px;animation-duration:8s;animation-delay:-5.5s;}"
   + "#alp-lembers i:nth-child(3){left:43%;width:2px;height:2px;animation-duration:5.5s;animation-delay:-3.4s;}"
@@ -163,6 +164,18 @@
   + "#alp-lembers i:nth-child(14){left:69%;width:2px;height:2px;animation-duration:8.8s;animation-delay:-6.8s;}"
   + "#alp-lembers i:nth-child(15){left:25%;width:2px;height:2px;animation-duration:10s;animation-delay:-2.3s;}"
   + "#alp-lembers i:nth-child(16){left:74%;width:2px;height:2px;animation-duration:9.2s;animation-delay:-7.6s;}"
+  + "#alp-lembers i:nth-child(17){left:33%;width:3px;height:3px;animation-duration:7.2s;animation-delay:-1.4s;}"
+  + "#alp-lembers i:nth-child(18){left:37%;width:2px;height:2px;animation-duration:5.8s;animation-delay:-4.1s;}"
+  + "#alp-lembers i:nth-child(19){left:45%;width:2px;height:2px;animation-duration:8.2s;animation-delay:-6.4s;}"
+  + "#alp-lembers i:nth-child(20){left:49%;width:3px;height:3px;animation-duration:6.4s;animation-delay:-2.9s;}"
+  + "#alp-lembers i:nth-child(21){left:52%;width:2px;height:2px;animation-duration:7.6s;animation-delay:-5.2s;}"
+  + "#alp-lembers i:nth-child(22){left:58%;width:2px;height:2px;animation-duration:5.4s;animation-delay:-0.6s;}"
+  + "#alp-lembers i:nth-child(23){left:62%;width:3px;height:3px;animation-duration:8.6s;animation-delay:-3.7s;}"
+  + "#alp-lembers i:nth-child(24){left:67%;width:2px;height:2px;animation-duration:6.9s;animation-delay:-6.9s;}"
+  + "#alp-lembers i:nth-child(25){left:28%;width:2px;height:2px;animation-duration:9.4s;animation-delay:-1.9s;}"
+  + "#alp-lembers i:nth-child(26){left:71%;width:2px;height:2px;animation-duration:7.4s;animation-delay:-4.8s;}"
+  + "#alp-lembers i:nth-child(27){left:22%;width:2px;height:2px;animation-duration:8.4s;animation-delay:-5.8s;}"
+  + "#alp-lembers i:nth-child(28){left:78%;width:2px;height:2px;animation-duration:6.6s;animation-delay:-2.2s;}"
   + "@keyframes alp-ember{0%{transform:translateY(16vh) translateX(0) scale(1);opacity:0}7%{opacity:.9}28%{transform:translateY(2vh) translateX(7px) scale(.95);opacity:.55}55%{transform:translateY(-12vh) translateX(-6px) scale(.8);opacity:.65}100%{transform:translateY(-28vh) translateX(4px) scale(.45);opacity:0}}"
   /* orbit stroke that draws itself around the emblem with an amber pen-tip */
   + "#alp-larc{position:absolute;left:-16%;top:-20%;width:132%;height:140%;pointer-events:none;overflow:visible;}"
@@ -195,22 +208,6 @@
   + "#alp-lveil{position:absolute;inset:0;pointer-events:none;background:#fff;opacity:0;}"
   + "#alp-lveil.alp-on{animation:alp-veil 1s ease-out forwards;}"
   + "@keyframes alp-veil{0%{opacity:0}22%{opacity:.12}100%{opacity:0}}"
-  /* amber aurora around the edges — three blurred blobs lapping in from
-     offscreen, each drifting on its own slow orbit; a soft rim glow and the
-     parent breathe modulate the whole thing. Flares on burst. */
-  + "#alp-lglow{position:absolute;inset:0;pointer-events:none;opacity:0;overflow:hidden;box-shadow:inset 0 0 130px 10px rgba(255,166,77,.18),inset 0 0 54px 4px rgba(255,120,40,.1);}"
-  + "#alp-lglow i{position:absolute;display:block;border-radius:50%;filter:blur(46px);will-change:transform;}"
-  + "#alp-lglow i:nth-child(1){width:70vw;height:46vh;left:-12vw;top:-30vh;background:radial-gradient(ellipse,rgba(255,166,77,.32),transparent 65%);animation:alp-aur1 7.5s ease-in-out infinite alternate;}"
-  + "#alp-lglow i:nth-child(2){width:46vw;height:40vh;right:-26vw;top:22vh;background:radial-gradient(ellipse,rgba(255,120,40,.26),transparent 65%);animation:alp-aur2 9s ease-in-out infinite alternate;}"
-  + "#alp-lglow i:nth-child(3){width:64vw;height:42vh;left:-10vw;bottom:-26vh;background:radial-gradient(ellipse,rgba(255,196,112,.24),transparent 65%);animation:alp-aur3 6.5s ease-in-out infinite alternate;}"
-  /* multi-stop wander paths with a little rotation so the lobes change shape
-     as they roam — the right blob stays mostly offscreen, dancing vertically */
-  + "@keyframes alp-aur1{0%{transform:translate(-9vw,1vh) rotate(-4deg) scale(1)}35%{transform:translate(4vw,-3vh) rotate(5deg) scale(1.16)}70%{transform:translate(11vw,4vh) rotate(-3deg) scale(1.04)}100%{transform:translate(16vw,-2vh) rotate(8deg) scale(1.26)}}"
-  + "@keyframes alp-aur2{0%{transform:translate(2vw,-7vh) rotate(3deg) scale(1.1)}40%{transform:translate(-2vw,3vh) rotate(-6deg) scale(.92)}75%{transform:translate(1vw,9vh) rotate(4deg) scale(1.06)}100%{transform:translate(0,-4vh) rotate(-3deg) scale(1.18)}}"
-  + "@keyframes alp-aur3{0%{transform:translate(12vw,2vh) rotate(5deg) scale(1.06)}30%{transform:translate(2vw,-3vh) rotate(-4deg) scale(1.22)}65%{transform:translate(-6vw,1vh) rotate(6deg) scale(1)}100%{transform:translate(-10vw,-3vh) rotate(-7deg) scale(1.3)}}"
-  + "#alp-lglow.alp-on{animation:alp-glowin 1.6s ease .4s forwards,alp-lbreathe 5.6s ease-in-out 2.2s infinite;}"
-  + "@keyframes alp-glowin{to{opacity:1}}"
-  + "@keyframes alp-lbreathe{0%,100%{opacity:1}50%{opacity:.6}}"
   + "@media (max-width:760px){#alp-lbadge{width:78vw;}}"
   + "#alp-fx{position:fixed;inset:0;z-index:1000001;pointer-events:none;}"
   + ".alp-nocursor,.alp-nocursor *{cursor:none!important;}"
@@ -236,7 +233,7 @@
   + ".alp-h2{font-weight:800;line-height:1.05;letter-spacing:-.025em;font-size:clamp(1.9rem,4.5vw,3rem);}"
   + ".alp-giant{font-family:'Space Grotesk',Inter,sans-serif;font-weight:500;line-height:1.04;letter-spacing:.005em;text-transform:uppercase;font-size:clamp(2.6rem,6.2vw,5.6rem);}"
   + ".alp-heroh{font-family:'Space Grotesk',Inter,sans-serif;font-weight:500;line-height:1.04;letter-spacing:.005em;text-transform:uppercase;font-size:38px;}"
-  + ".alp-herodim{color:rgba(255,255,255,.45);margin-top:26px;font-size:40px;}"
+  + ".alp-herodim{color:rgba(255,255,255,.6);margin-top:26px;font-size:40px;}"
   + ".alp-hbrk{position:relative;display:inline-block;padding:14px 16px 12px;margin:18px 0 0 -16px;}"
   + ".alp-hbrk i{position:absolute;width:15px;height:15px;border-style:solid;border-color:rgba(255,255,255,.85);border-width:0;}"
   + ".alp-hbrk i.tl{top:0;left:0;border-top-width:2px;border-left-width:2px;}"
@@ -246,6 +243,7 @@
   + ".alp-section.alp-hero-low{align-items:flex-end;}"
   + ".alp-section.alp-hero-low .alp-inner{box-sizing:border-box;width:clamp(480px,48%,620px);max-width:none;padding:0 0 14vh 56px;position:relative;left:100px;top:-25px;}"
   + ".alp-hwrap{transform:scale(1.13);transform-origin:left bottom;}"
+  + ".alp-hwrap .alp-eyebrow{position:relative;top:15px;}"
   + ".alp-lead{margin-top:18px;color:rgba(255,255,255,.58);line-height:1.65;font-size:clamp(.98rem,1.8vw,1.2rem);max-width:30em;}"
   + ".alp-ticks{margin-top:26px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 20px;font-size:11px;letter-spacing:.05em;color:#fff;}"
   + ".alp-ticks span{display:inline-flex;align-items:center;gap:6px;}"
@@ -654,8 +652,8 @@
     +   "</div>"
     +   '<div class="alp-footer">Copyright © Addept Automotive 2026. Full Rights Reserved.</div>'
     + "</div></div>"
-    + '<div id="alp-loader"><div id="alp-lglow"><i></i><i></i><i></i></div>'
-    +   '<div id="alp-lembers"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>'
+    + '<div id="alp-loader">'
+    +   '<div id="alp-lembers"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>'
     +   '<div id="alp-lcore"><div id="alp-lbadge"></div><div id="alp-lsheen"></div>'
     +     '<svg id="alp-larc" viewBox="0 0 1000 640" preserveAspectRatio="none">'
     +       '<path class="alp-arcb" d="M 96 522 A 442 224 -11 1 1 916 426" pathLength="1000"/>'
@@ -735,12 +733,11 @@
   var lOdT = document.getElementById("alp-odt");
   var lOdO = document.getElementById("alp-odo");
   var lStat = document.getElementById("alp-lstat");
-  var lGlow = document.getElementById("alp-lglow");
   var lDot = document.getElementById("alp-ldot");
   var lVeil = document.getElementById("alp-lveil");
   var arcB = loader.querySelector(".alp-arcb");
   var arcT = loader.querySelector(".alp-arct");
-  var batchLoaded = 0, badgeSvg = null, badgeReady = false;
+  var batchLoaded = 0, badgeSvg = null, badgeReady = false, arcLen = 0;
   var loaderT0 = performance.now(), LOADER_MIN_MS = 2600, shownPct = 0, bursting = false;
   var REDUCE = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -750,10 +747,10 @@
     lBadge.innerHTML = txt;
     badgeSvg = lBadge.querySelector("svg");
     if (badgeSvg) { badgeSvg.removeAttribute("width"); badgeSvg.removeAttribute("height"); }
-    badgeReady = true; lBadge.classList.add("alp-lin"); lSheen.classList.add("alp-on"); lGlow.classList.add("alp-on");
+    badgeReady = true; lBadge.classList.add("alp-lin"); lSheen.classList.add("alp-on");
   }).catch(function () {
     lBadge.innerHTML = '<img src="' + BADGE + '" alt="Addept Automotive">';
-    badgeReady = true; lBadge.classList.add("alp-lin"); lSheen.classList.add("alp-on"); lGlow.classList.add("alp-on");
+    badgeReady = true; lBadge.classList.add("alp-lin"); lSheen.classList.add("alp-on");
   });
 
   /* the handoff, in three beats: the emblem and its orbit stroke collapse
@@ -799,11 +796,9 @@
       lDot.style.opacity = "0";
       lVeil.classList.add("alp-on");
       loader.classList.add("alp-lout");
-      lGlow.style.animation = "none";
-      lGlow.style.opacity = "1";
     }, 1100);
     setTimeout(function () { introActive = false; startIntro(); tT = tDur * 0.46; }, 1200);
-    setTimeout(function () { lGlow.style.transition = "opacity .8s ease"; lGlow.style.opacity = "0"; lStat.style.opacity = 0; }, 1650);
+    setTimeout(function () { lStat.style.opacity = 0; }, 1650);
     setTimeout(function () { loader.style.display = "none"; }, 2300);
   }
 
@@ -827,6 +822,26 @@
     arcT.style.strokeDasharray = "34 966";
     arcT.style.strokeDashoffset = (34 - 1000 * p).toFixed(1);
     arcT.style.opacity = p > 0.02 && p < 0.995 ? 1 : 0;
+    /* the tracer grinds off sparks as it draws — flung back along its tangent */
+    if (fxSpawn && p > 0.03 && p < 0.99 && Math.random() < 0.7) {
+      try {
+        if (!arcLen) arcLen = arcT.getTotalLength();
+        var ptA = arcT.getPointAtLength(arcLen * p);
+        var ptB = arcT.getPointAtLength(arcLen * Math.max(p - 0.012, 0));
+        var ctm = arcT.getScreenCTM();
+        if (ctm) {
+          var sx2 = ptA.x * ctm.a + ptA.y * ctm.c + ctm.e;
+          var sy2 = ptA.x * ctm.b + ptA.y * ctm.d + ctm.f;
+          var tvx = sx2 - (ptB.x * ctm.a + ptB.y * ctm.c + ctm.e);
+          var tvy = sy2 - (ptB.x * ctm.b + ptB.y * ctm.d + ctm.f);
+          var tm = Math.sqrt(tvx * tvx + tvy * tvy) || 1;
+          fxSpawn(sx2, sy2,
+            -tvx / tm * (0.5 + Math.random() * 1.2) + (Math.random() - 0.5) * 0.8,
+            -tvy / tm * (0.5 + Math.random() * 1.2) + (Math.random() - 0.5) * 0.8 - 0.2,
+            Math.random() < 0.25);
+        }
+      } catch (eT) {}
+    }
     if (!REDUCE) lCore.style.transform = "scale(" + (1 + p * 0.18).toFixed(4) + ")";
     if (shownPct >= 100 && firstReady && badgeReady) burst();
   })();
@@ -1300,6 +1315,7 @@
       addSpark(x, y, bx * v - by * j, by * v + bx * j - 0.25, Math.random() < 0.2);
     }
     function wake() { if (!fxRun) { fxRun = true; requestAnimationFrame(fxStep); } }
+    fxSpawn = function (x, y, vx, vy, hot) { addSpark(x, y, vx, vy, hot); wake(); };
     window.addEventListener("mousemove", function (e) {
       tx = e.clientX; ty = e.clientY; lastMove = performance.now();
       if (ox < -50) { ox = tx; oy = ty; }

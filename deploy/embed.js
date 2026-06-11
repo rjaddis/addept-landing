@@ -1287,16 +1287,16 @@
     var tx = -100, ty = -100, ox = -100, oy = -100, lvx = 0, lvy = 0;
     var sparks = [], fxRun = false, lastMove = 0;
     function addSpark(x, y, vx, vy, hot) {
-      if (sparks.length > 420) return;
+      if (sparks.length > 680) return;
       sparks.push({ x: x, y: y, vx: vx, vy: vy, life: 1,
-        dk: 0.0045 + Math.random() * 0.009,
-        r: hot ? 1.3 + Math.random() * 1.5 : 0.6 + Math.random() * 1.1 });
+        dk: 0.0025 + Math.random() * 0.0055,
+        r: hot ? 1.8 + Math.random() * 1.8 : 0.8 + Math.random() * 1.4 });
     }
     function spawnTail(x, y, dirx, diry, sp) {
       var m = Math.sqrt(dirx * dirx + diry * diry) || 1;
       var bx = -dirx / m, by = -diry / m;
       var j = (Math.random() - 0.5) * 1.8;
-      var v = 0.7 + Math.random() * 2.1 + sp * 0.05;
+      var v = 0.9 + Math.random() * 2.6 + sp * 0.06;
       addSpark(x, y, bx * v - by * j, by * v + bx * j - 0.25, Math.random() < 0.2);
     }
     function wake() { if (!fxRun) { fxRun = true; requestAnimationFrame(fxStep); } }
@@ -1324,7 +1324,7 @@
       lvx = lvx * 0.7 + mvx * 0.3; lvy = lvy * 0.7 + mvy * 0.3;
       var speed = Math.sqrt(lvx * lvx + lvy * lvy);
       if (speed > 0.5 && pox > -50) {
-        var nT = Math.min(14, 1 + Math.ceil(speed * 0.6));
+        var nT = Math.min(18, 1 + Math.ceil(speed * 0.8));
         for (var sT = 0; sT < nT; sT++) {
           var tt = Math.random();
           spawnTail(pox + mvx * tt, poy + mvy * tt, lvx, lvy, speed);
@@ -1348,13 +1348,13 @@
       }
       for (var i = sparks.length - 1; i >= 0; i--) {
         var s = sparks[i];
-        s.vy += 0.05;                  /* gravity */
-        s.vx *= 0.988; s.vy *= 0.988;  /* drag */
+        s.vy += 0.04;                  /* gravity */
+        s.vx *= 0.99; s.vy *= 0.99;    /* drag */
         s.x += s.vx; s.y += s.vy;
         s.life -= s.dk;
         if (s.life <= 0 || s.y > H + 50 || s.x < -60 || s.x > W + 60) { sparks.splice(i, 1); continue; }
         /* a spark occasionally pops and splits mid-flight */
-        if (s.life < 0.85 && s.life > 0.25 && sparks.length < 400 && Math.random() < 0.005) {
+        if (s.life < 0.85 && s.life > 0.25 && sparks.length < 640 && Math.random() < 0.006) {
           for (var k2 = 0; k2 < 2; k2++) {
             var ra = (Math.random() - 0.5) * 1.6;
             var ca = Math.cos(ra), sa = Math.sin(ra);
@@ -1370,7 +1370,7 @@
           fctx.lineWidth = s.r * (0.5 + s.life * 0.9);
           fctx.beginPath();
           fctx.moveTo(s.x, s.y);
-          fctx.lineTo(s.x - s.vx * 2.4, s.y - s.vy * 2.4);
+          fctx.lineTo(s.x - s.vx * 3.2, s.y - s.vy * 3.2);
           fctx.stroke();
         } else {
           fctx.fillStyle = "rgba(" + tone(s.life) + "," + al.toFixed(3) + ")";

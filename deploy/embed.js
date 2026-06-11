@@ -1308,9 +1308,11 @@
     var sparks = [], fxRun = false, lastMove = 0;
     function addSpark(x, y, vx, vy, hot) {
       if (sparks.length > 520) return;
+      var rT = Math.random();
       sparks.push({ x: x, y: y, vx: vx, vy: vy, life: 1,
-        dk: 0.0025 + Math.random() * 0.0055,
-        r: hot ? 1.8 + Math.random() * 1.8 : 0.8 + Math.random() * 1.4 });
+        dk: 0.004 + rT * rT * 0.028,           /* heavy tail: many die fast, a few burn long */
+        r: hot ? 1.8 + Math.random() * 1.8 : 0.8 + Math.random() * 1.4,
+        b: Math.random() < 0.3 });             /* carbon-rich: will explode near burnout */
     }
     function spawnTail(x, y, dirx, diry, sp) {
       var m = Math.sqrt(dirx * dirx + diry * diry) || 1;
@@ -1367,22 +1369,32 @@
         fctx.beginPath(); fctx.arc(0, 0, 12, 0, 6.283); fctx.fill();
         fctx.restore();
       }
-      /* physics pass: integrate, cull, split */
+      /* physics pass — tuned to studies of real grinder sparks: launch fast,
+         decelerate under (quadratic-ish) air drag, fall ballistically; slow
+         embers flutter in turbulence; carbon-rich sparks EXPLODE near the end
+         of flight — a bright flash, a kick off-trajectory, rapid dimming, and
+         a tiny starburst of short-lived rays */
       for (var i = sparks.length - 1; i >= 0; i--) {
         var s = sparks[i];
+        var vmag = Math.sqrt(s.vx * s.vx + s.vy * s.vy);
+        var dr2 = 1 - Math.min(0.07, 0.011 * vmag);
+        s.vx *= dr2; s.vy *= dr2 + 0.006;
         s.vy += 0.085;                 /* gravity */
-        s.vx *= 0.986; s.vy *= 0.992;  /* drag */
+        if (vmag < 1.3) { s.vx += (Math.random() - 0.5) * 0.05; s.vy += (Math.random() - 0.5) * 0.03; }
         s.x += s.vx; s.y += s.vy;
         s.life -= s.dk;
         if (s.life <= 0 || s.y > H + 50 || s.x < -60 || s.x > W + 60) { sparks.splice(i, 1); continue; }
-        /* a spark occasionally pops and splits mid-flight */
-        if (s.life < 0.85 && s.life > 0.25 && sparks.length < 480 && Math.random() < 0.006) {
-          for (var k2 = 0; k2 < 2; k2++) {
-            var ra = (Math.random() - 0.5) * 1.6;
-            var ca = Math.cos(ra), sa = Math.sin(ra);
-            addSpark(s.x, s.y, (s.vx * ca - s.vy * sa) * 0.7, (s.vx * sa + s.vy * ca) * 0.7 - 0.3, false);
+        if (s.b && s.life < 0.28) {
+          s.b = false;
+          s.life = 0.9; s.dk = 0.055 + Math.random() * 0.03;   /* flash, then dim fast */
+          s.vx += (Math.random() - 0.5) * 1.8;                  /* knocked off course */
+          s.vy += (Math.random() - 0.5) * 1.8 - 0.4;
+          var nb = (3 + Math.random() * 3) | 0;
+          for (var b5 = 0; b5 < nb && sparks.length < 520; b5++) {
+            var ba = Math.random() * 6.283, bs = 1.2 + Math.random() * 2.2;
+            sparks.push({ x: s.x, y: s.y, vx: Math.cos(ba) * bs + s.vx * 0.3, vy: Math.sin(ba) * bs + s.vy * 0.3,
+              life: 0.85, dk: 0.05 + Math.random() * 0.05, r: 0.5 + Math.random() * 0.9, b: false });
           }
-          s.dk *= 1.8; /* the parent burns out quicker after popping */
         }
       }
       /* draw pass, batched: sparks grouped by tone/alpha/width so the whole
@@ -1392,6 +1404,7 @@
       for (i = 0; i < sparks.length; i++) {
         var s4 = sparks[i];
         var al = Math.pow(s4.life, 1.4) * (0.72 + Math.random() * 0.28); /* flicker */
+        if (s4.life < 0.22) al *= 0.45 + Math.random() * 0.55;           /* dying pulse */
         var aq = (al * 6) | 0;
         if (aq <= 0) continue;
         if (aq > 5) aq = 5;
@@ -1429,6 +1442,12 @@
             fctx.lineTo(sl.x - sl.vx * 3.2, sl.y - sl.vy * 3.2);
           }
           fctx.stroke();
+          if ((kn / 100 | 0) === 0) {
+            /* white-hot sparks get a soft bloom halo (re-strokes the same path) */
+            fctx.strokeStyle = "rgba(255,214,150," + (alpha4 * 0.22).toFixed(3) + ")";
+            fctx.lineWidth = WIDTHS3[wq4] + 2.4;
+            fctx.stroke();
+          }
         }
       }
       if (performance.now() - lastMove > 300 && sparks.length === 0) {

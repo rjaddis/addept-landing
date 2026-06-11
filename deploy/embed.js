@@ -121,7 +121,7 @@
      caps 3.2cqw + role 4.4cqw, ink #181520, near-sharp corners */
   + ".alp-fcard{position:absolute;left:0;top:0;width:clamp(270px,21vw,370px);aspect-ratio:1140/1260;container-type:inline-size;cursor:default;will-change:transform;pointer-events:auto;}"
   + ".alp-fcard .alp-fin{position:absolute;inset:0;padding:8.2cqw;border-radius:3px;color:#181520;overflow:hidden;"
-  +   "background:linear-gradient(168deg,rgba(252,253,255,.29) 0%,rgba(237,239,246,.17) 42%,rgba(196,201,215,.26) 100%),rgba(237,239,246,.15);"
+  +   "background:linear-gradient(168deg,rgba(252,253,255,.25) 0%,rgba(237,239,246,.14) 42%,rgba(196,201,215,.22) 100%),rgba(237,239,246,.13);"
   +   "-webkit-backdrop-filter:blur(16px) saturate(1.12);backdrop-filter:blur(16px) saturate(1.12);"
   +   "border:1px solid rgba(255,255,255,.62);"
   +   "box-shadow:-5px 6px 0 -1px rgba(204,208,221,.85),-2px 3px 0 0 rgba(226,229,238,.95),0 34px 90px rgba(0,0,0,.42),0 6px 18px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.7),inset -1px -1px 0 rgba(150,156,175,.35);"

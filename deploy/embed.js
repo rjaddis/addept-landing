@@ -22,9 +22,9 @@
   var PHONE_TEL = "tel:+64274393403";
   var EMAIL = "addeptauto@gmail.com";
   var CAL_URL = "https://api.leadconnectorhq.com/widget/booking/jk0S1digTnc8PT4F1AmO";
-  var LOGO = "https://assets.cdn.filesafe.space/1lKkbgp032mJDSlEuKMu/media/66bab601cbbc6c959ddd0be1.jpeg"; // keep — still used by the loader
   var BADGE = SCRIPT_BASE + "/addept-logo-badge.svg";
   var MAPS = "https://maps.google.com/?q=35B+Brookes+Road,+Frankton,+Queenstown+9300";
+  var introActive = true; // gates input + section render until the loader's badge-burst hands off
 
   function frameSrc(i) {
     var n = String(i + 1); while (n.length < 4) n = "0" + n;
@@ -125,17 +125,30 @@
   /* meta row (Noomo style) */
   + ".alp-meta{display:flex;align-items:center;gap:12px;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.45);}"
   + ".alp-meta .alp-chip{padding:3px 10px;border:1px solid rgba(255,255,255,.25);border-radius:99px;color:rgba(255,255,255,.7);}"
-  /* loading */
-  + "#alp-loader{position:fixed;inset:0;z-index:999999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;background:#000;transition:opacity .5s ease;}"
-  + "#alp-loader img{width:74px;height:74px;border-radius:50%;animation:alp-pulse 1.6s ease-in-out infinite;}"
-  + "@keyframes alp-pulse{0%,100%{opacity:.45}50%{opacity:1}}"
-  + "#alp-loadbar{width:150px;height:3px;background:rgba(255,255,255,.08);border-radius:99px;overflow:hidden;}"
-  + "#alp-loadbar div{height:100%;width:0;background:rgba(255,255,255,.35);border-radius:99px;transition:width .3s ease;}"
+  /* loading — badge assembly: the emblem scales up with real progress under a
+     big rolling counter, then shatters into its traced pieces as the camera
+     pushes through into the film (Hubtown-style burst, automotive exploded view) */
+  + "#alp-loader{position:fixed;inset:0;z-index:999999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#000;transition:background .6s ease;}"
+  + "#alp-loader.alp-lout{background:rgba(0,0,0,0);}"
+  + "#alp-lbadge{width:clamp(300px,44vw,560px);opacity:0;transform-origin:50% 50%;will-change:transform;transition:opacity .9s ease;}"
+  + "#alp-lbadge.alp-lin{opacity:1;}"
+  + "#alp-lbadge svg{width:100%;height:auto;display:block;overflow:visible;}"
+  + "#alp-lbadge img{width:100%;display:block;}"
+  + "#alp-lpct{margin-top:4.5vh;font-size:clamp(2.4rem,6.5vw,4.4rem);font-weight:800;letter-spacing:-.02em;line-height:1;font-variant-numeric:tabular-nums;transition:opacity .35s;}"
+  + "#alp-lpct i{font-style:normal;font-size:.42em;font-weight:600;color:rgba(255,255,255,.45);margin-left:5px;}"
+  + "#alp-lrule{width:min(300px,60vw);height:1px;background:rgba(255,255,255,.12);margin:20px 0 16px;transition:opacity .35s;}"
+  + "#alp-lrule i{display:block;height:100%;background:rgba(255,255,255,.75);transform:scaleX(0);transform-origin:left;}"
+  + "#alp-lstat{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.4);transition:opacity .35s;}"
+  + "#alp-lflash{position:absolute;inset:0;background:radial-gradient(circle at 50% 47%,rgba(255,255,255,.95) 0%,rgba(255,255,255,.5) 28%,transparent 64%);opacity:0;pointer-events:none;}"
+  + "#alp-lflash.alp-on{animation:alp-lflash .55s ease-out forwards;}"
+  + "@keyframes alp-lflash{0%{opacity:0}18%{opacity:.9}100%{opacity:0}}"
+  + "@media (max-width:760px){#alp-lbadge{width:78vw;}}"
   /* nav */
   + "#alp-nav{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:18px 32px;}"
-  + "#alp-nav .alp-brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:#fff;}"
-  + "#alp-nav .alp-brand img{height:68px;width:auto;display:block;filter:drop-shadow(0 4px 14px rgba(0,0,0,.5));transition:opacity .25s;}"
-  + "#alp-nav .alp-brand:hover img{opacity:.85;}"
+  + "#alp-nav .alp-brand{font-size:15px;letter-spacing:.12em;text-transform:uppercase;color:#fff;text-decoration:none;white-space:nowrap;transition:opacity .25s;}"
+  + "#alp-nav .alp-brand:hover{opacity:.8;}"
+  + "#alp-nav .alp-brand b{font-weight:800;}"
+  + "#alp-nav .alp-brand span{font-weight:400;color:rgba(255,255,255,.75);}"
   + "#alp-nav a.alp-call{padding:9px 20px;border-radius:99px;border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.8);font-size:13px;font-weight:600;text-decoration:none;background:rgba(10,10,10,.45);transition:background .25s,color .25s,transform .25s;white-space:nowrap;}"
   + "#alp-nav a.alp-call:hover{background:#fff;color:#000;transform:scale(1.04);}"
   /* dots */
@@ -148,7 +161,7 @@
   + "#alp-dots button:hover span{opacity:1;}"
   /* type */
   + ".alp-eyebrow{display:inline-flex;align-items:center;gap:8px;padding:5px 13px;border-radius:99px;border:1px solid rgba(255,255,255,.12);background:rgba(10,10,10,.55);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:22px;}"
-  + ".alp-h1{font-weight:800;line-height:1.02;letter-spacing:-.03em;font-size:clamp(2.6rem,7vw,5rem);}"
+  + ".alp-h1{font-weight:800;line-height:1.08;letter-spacing:-.03em;font-size:clamp(1.5rem,3.2vw,2.4rem);}"
   + ".alp-h2{font-weight:800;line-height:1.05;letter-spacing:-.025em;font-size:clamp(1.9rem,4.5vw,3rem);}"
   + ".alp-giant{font-family:'Space Grotesk',Inter,sans-serif;font-weight:500;line-height:1.04;letter-spacing:.005em;text-transform:uppercase;font-size:clamp(2.6rem,6.2vw,5.6rem);}"
   + ".alp-lead{margin-top:18px;color:rgba(255,255,255,.58);line-height:1.65;font-size:clamp(.98rem,1.8vw,1.2rem);max-width:30em;}"
@@ -170,24 +183,23 @@
   + "#alp-svc-head{position:absolute;left:6vw;top:11vh;max-width:66vw;}"
   + "#alp-svc-side{position:absolute;right:6vw;top:17vh;width:min(21vw,300px);font-size:12.5px;line-height:1.7;color:rgba(255,255,255,.55);text-align:left;}"
   + "#alp-svc-meta{position:absolute;left:6vw;bottom:7vh;}"
-  /* card geometry measured from Noomo's actual WebGL textures (revs/rev1-4.png,
-     1140×1260): 8.2% padding, logo block 8.2cqw, quote 5.26cqw/1.25, footer
-     caps 3.2cqw + role 4.4cqw, ink #181520, near-sharp corners */
+  /* Monument layout on 1140×1260 panes: centered title top, split rule,
+     copy middle, caps footer at the base; thick double-glazed glass skin */
   + ".alp-fcard{position:absolute;left:0;top:0;width:clamp(270px,21vw,370px);aspect-ratio:1140/1260;container-type:inline-size;cursor:default;will-change:transform;pointer-events:auto;}"
-  + ".alp-fcard .alp-fin{position:absolute;inset:0;padding:8.2cqw;border-radius:3px;color:#181520;overflow:hidden;"
+  + ".alp-fcard .alp-fin{position:absolute;inset:0;padding:9.6cqw 8.4cqw 7cqw;border-radius:4px;color:#181520;overflow:hidden;display:flex;flex-direction:column;text-align:center;"
   +   "background:linear-gradient(168deg,rgba(252,253,255,.16) 0%,rgba(237,239,246,.085) 42%,rgba(196,201,215,.14) 100%),rgba(237,239,246,.085);"
-  +   "-webkit-backdrop-filter:blur(16px) saturate(1.12);backdrop-filter:blur(16px) saturate(1.12);"
-  +   "border:1px solid rgba(255,255,255,.22);"
-  +   "box-shadow:-5px 6px 0 -1px rgba(204,208,221,.38),-2px 3px 0 0 rgba(226,229,238,.42),0 34px 90px rgba(0,0,0,.42),0 6px 18px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.3),inset -1px -1px 0 rgba(150,156,175,.18);"
+  +   "-webkit-backdrop-filter:blur(18px) saturate(1.15);backdrop-filter:blur(18px) saturate(1.15);"
+  +   "border:1px solid rgba(255,255,255,.32);"
+  +   "box-shadow:-12px 14px 0 -1px rgba(196,214,209,.5),-6px 7px 0 0 rgba(225,236,233,.55),-2px 3px 0 0 rgba(245,250,248,.5),0 44px 110px rgba(0,0,0,.5),0 10px 26px rgba(0,0,0,.28),inset 0 2px 0 rgba(255,255,255,.5),inset 2px 0 0 rgba(255,255,255,.28),inset 0 -2px 0 rgba(120,128,150,.28),inset -2px 0 0 rgba(150,156,175,.2);"
   +   "transition:transform .45s cubic-bezier(.2,.8,.2,1),box-shadow .45s;}"
   /* specular sheen — a soft diagonal light streak across the glass */
   + ".alp-fcard .alp-fin::after{content:'';position:absolute;inset:-40% -60%;pointer-events:none;"
   +   "background:linear-gradient(115deg,transparent 38%,rgba(255,255,255,.10) 47%,rgba(255,255,255,.03) 52%,transparent 60%);}"
-  + ".alp-fcard svg.alp-fico{width:8.2cqw;height:8.2cqw;stroke:#181520;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;margin-bottom:8.4cqw;display:block;}"
-  + ".alp-fcard p{font-size:5.26cqw;line-height:1.25;font-weight:500;color:#181520;opacity:.68;letter-spacing:-.005em;}"
-  + ".alp-fcard .alp-ffoot{position:absolute;left:8.2cqw;right:8.2cqw;bottom:5cqw;}"
-  + ".alp-fcard .alp-ffoot span{display:block;font-size:3.2cqw;letter-spacing:.1em;font-weight:500;color:#181520;opacity:.5;text-transform:uppercase;}"
-  + ".alp-fcard .alp-ffoot b{display:block;margin-top:2.6cqw;font-size:4.4cqw;line-height:1.12;font-weight:600;letter-spacing:-.005em;color:#181520;opacity:.95;}"
+  + ".alp-fcard h3{margin:0;font-size:7.4cqw;font-weight:800;letter-spacing:-.015em;line-height:1.1;color:#181520;}"
+  + ".alp-frules{display:flex;align-items:center;gap:4cqw;margin:5.2cqw 0 0;}"
+  + ".alp-frules i{flex:1;height:1px;background:rgba(24,21,32,.28);}"
+  + ".alp-fcard p{margin:6.4cqw auto 0;font-size:4.5cqw;line-height:1.65;font-weight:500;color:#181520;opacity:.72;max-width:92%;letter-spacing:0;}"
+  + ".alp-fcard .alp-ffoot{margin-top:auto;padding-top:4.5cqw;font-size:2.9cqw;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:#181520;opacity:.68;}"
   + "@keyframes alp-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}"
   /* hours */
   + ".alp-hours{margin:30px auto 0;max-width:420px;width:100%;}"
@@ -241,7 +253,7 @@
   /* mobile */
   + "@media (max-width:760px){"
   +   "#alp-nav{padding:14px 16px;}"
-  +   "#alp-nav .alp-brand img{height:48px;}"
+  +   "#alp-nav .alp-brand{font-size:13px;}"
   +   "#alp-dots{display:none;}"
   +   "#alp-count{left:16px;}"
   +   ".alp-left,.alp-center{padding-left:22px;padding-right:22px;text-align:left;max-width:100%;}"
@@ -263,25 +275,14 @@
   var chevron = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
 
   var SERVICES = [
-    ["Service & Routine Maintenance", "Oil changes, tyre rotations, fluid checks and filter replacements — the regular care that keeps your vehicle reliable between visits."],
-    ["Brake Services", "Inspection, repair and replacement of brake pads, rotors and fluid — so you stop as confidently as you go."],
-    ["Engine Diagnostics & Repair", "We identify and fix engine issues promptly, tune-ups included, before small faults become big bills."],
-    ["Transmission Services", "Transmission fluid changes, repair and full replacement — deep work handled in-house by specialists."],
-    ["Suspension & Steering", "Repair and maintenance of shocks, struts and steering components for a tight, comfortable drive."],
-    ["Exhaust System Repairs", "Mufflers, catalytic converters and exhaust pipes — repaired or replaced, quietly and properly."],
-    ["Auto Electrical", "Battery testing and replacement, alternators, and professional fault-finding for stubborn electrical gremlins."],
-    ["WOF Repairs", "We don't do the WOF test itself — but we're fully equipped to fix any fails you've encountered."]
-  ];
-  /* minimal line icons, one per service (oil can, brake disc, check-engine, shifter, shock, muffler, bolt, magnifier) */
-  var ICONS = [
-    '<path d="M7.5 10.5h7v8.5a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1v-8.5Z"></path><path d="M7.5 13 3.2 9l1.6-1.6 4.7 3.1"></path><path d="M14.5 13h2a2 2 0 0 1 2 2v.6a2 2 0 0 1-2 2h-2"></path><path d="M9.8 10.5V8.6h2.4v1.9"></path>',
-    '<circle cx="12" cy="13" r="6.8"></circle><circle cx="12" cy="13" r="2.3"></circle><circle cx="12" cy="8.6" r=".35"></circle><circle cx="16" cy="11.6" r=".35"></circle><circle cx="14.5" cy="16.6" r=".35"></circle><circle cx="9.5" cy="16.6" r=".35"></circle><circle cx="8" cy="11.6" r=".35"></circle><path d="M5.4 7.4a9.3 9.3 0 0 1 13.2 0"></path>',
-    '<path d="M9 4h6M12 4v3"></path><path d="M8 7h4l2 2h3v3h2v-2h2v7h-2v-2h-2v3h-4l-2 2H8v-3H6v-3H4v-4h2V9h2V7Z"></path>',
-    '<circle cx="5" cy="5.4" r="1.7"></circle><circle cx="12" cy="5.4" r="1.7"></circle><circle cx="19" cy="5.4" r="1.7"></circle><circle cx="5" cy="18.6" r="1.7"></circle><circle cx="12" cy="18.6" r="1.7"></circle><path d="M5 7.1v9.8M12 7.1v9.8M19 7.1V12M5 12h14"></path>',
-    '<circle cx="12" cy="3.6" r="1.5"></circle><path d="M12 5.1v2.4"></path><path d="M16 7.5H8l8 1.9-8 1.9 8 1.9-8 1.9 8 1.9-8 1.9h8"></path><path d="M12 18.9v.5"></path><circle cx="12" cy="20.4" r="1.5"></circle>',
-    '<rect x="3.5" y="9.2" width="11.5" height="6" rx="3"></rect><path d="M8 9.2v6M11 9.2v6"></path><path d="M1.5 12.2h2M15 12.2h3.5"></path><circle cx="20.4" cy="10.6" r="1.1"></circle><circle cx="21.2" cy="14" r=".9"></circle>',
-    '<circle cx="12" cy="12" r="8.6"></circle><path d="M13 6.5 9.3 12.6h2.8L11 17.5l3.7-6.1h-2.8L13 6.5Z"></path>',
-    '<circle cx="10.5" cy="10.5" r="6.8"></circle><path d="m15.6 15.6 4.9 4.9"></path><path d="m7.6 10.6 2 2 3.8-4"></path>'
+    ["Service & Routine Maintenance", "Fresh oil, new filters and a careful once over of everything that wears. The quiet routine that keeps your car reliable between visits.", "Regular care · No surprises"],
+    ["Brake Services", "Pads, rotors and fluid inspected, machined or replaced. Feel the pedal firm up and trust every stop from the school run to the Crown Range.", "Stop as confidently as you go"],
+    ["Engine Diagnostics & Repair", "Check light on? We read what your engine is trying to say, trace the fault to its source and fix it before it grows into a bill.", "Find it early · Fix it once"],
+    ["Transmission Services", "Smooth shifts are no accident. We service, repair and rebuild manual and automatic gearboxes so every gear lands clean for years.", "Deep work · Done in house"],
+    ["Suspension & Steering", "Shocks, struts, bushes and springs tuned for our roads. Your car hugs the bends on the Crown Range and floats over the gravel.", "Comfort · Control"],
+    ["Exhaust System Repairs", "From a quiet hum to a clean burn. We repair and replace mufflers, converters and pipes so your car breathes the way it was built to.", "Quiet · Clean · Legal"],
+    ["Auto Electrical", "Flat battery, ghost faults, dead sensors. We chase the gremlins through every wire and put things right the first time.", "Starters · Alternators · Wiring"],
+    ["WOF Repairs", "Failed your WOF? Bring us the sheet. We fix every fail, big or small, and get you back on the road fully legal.", "We fix the fails"]
   ];
   /* fleet: evenly spaced cards riding one arc track like Noomo's — enter
      bottom-right, crest mid-screen, descend out left. Per-card: only jitter,
@@ -298,9 +299,10 @@
     var c = FLEET[i];
     return '<div class="alp-fcard" data-i="' + i + '" data-depth="' + c[3] + '" style="z-index:6;">'
       + '<div class="alp-fin" style="transform:perspective(900px) rotateY(' + c[2] + 'deg) rotateX(' + c[5] + 'deg) rotateZ(' + c[1] + 'deg);">'
-      + '<svg class="alp-fico" viewBox="0 0 24 24">' + ICONS[i] + "</svg>"
+      + "<h3>" + s[0] + "</h3>"
+      + '<div class="alp-frules"><i></i><i></i></div>'
       + "<p>" + s[1] + "</p>"
-      + '<div class="alp-ffoot"><span>Service 0' + (i + 1) + ' / 08 · Addept Workshop</span><b>' + s[0] + "</b></div>"
+      + '<div class="alp-ffoot">' + s[2] + "</div>"
       + "</div></div>";
   }).join("");
 
@@ -353,9 +355,9 @@
         + orn(57, 78, 3, 2) + orn(87, 12, 2, 7),
       html:
       '<div class="alp-inner alp-left">'
-      + '<div class="alp-eyebrow alp-rise">Queenstown · Independent Mechanics</div>'
+      + '<div class="alp-eyebrow alp-rise">Queenstown’s Independent Workshop</div>'
       + boxO("", "Unit 01 · Frankton")
-      + '<h1 class="alp-h1 alp-split">Your vehicle,\nrunning at its best.</h1>'
+      + '<h1 class="alp-h1 alp-split">We’ll tell you\nwhat’s actually wrong\nwith your car.\nWild concept, we know.</h1>'
       + "</div>"
       + '<i class="alp-hr" data-o="l"></i>'
       + '<p class="alp-lead alp-rise" style="margin-top:0;">First-rate servicing, diagnostics and repairs — specialising in European and Japanese vehicles, with top-tier customer care and respect for your budget.</p>'
@@ -519,7 +521,7 @@
         return '<div class="alp-section' + (s.top ? " alp-top" : "") + '" data-sec="' + s.id + '">' + s.html + (s.deco || "") + "</div>";
       }).join("")
     + '<div id="alp-nav">'
-    +   '<a class="alp-brand" href="#top"><img src="' + BADGE + '" alt="Addept Automotive"></a>'
+    +   '<a class="alp-brand" href="#top"><b>Addept</b> <span>Automotive</span></a>'
     +   '<a class="alp-call" href="' + PHONE_TEL + '">Call now</a>'
     + "</div>"
     + '<div id="alp-dots">' + SEC.map(function (s, i) {
@@ -551,7 +553,12 @@
     +   "</div>"
     +   '<div class="alp-footer">Copyright © Addept Automotive 2026. Full Rights Reserved.</div>'
     + "</div></div>"
-    + '<div id="alp-loader"><img src="' + LOGO + '" alt=""><div id="alp-loadbar"><div></div></div></div>';
+    + '<div id="alp-loader"><div id="alp-lbadge"></div>'
+    +   '<div id="alp-lpct">0<i>%</i></div>'
+    +   '<div id="alp-lrule"><i></i></div>'
+    +   '<div id="alp-lstat">Warming up the bay</div>'
+    +   '<div id="alp-lflash"></div>'
+    + "</div>";
   document.body.appendChild(root);
 
   Array.prototype.forEach.call(root.querySelectorAll(".alp-split"), function (el) {
@@ -613,7 +620,159 @@
   var loadedCount = 0, firstReady = false;
   var drawnFrame = -1;
   var loader = document.getElementById("alp-loader");
-  var loadbar = loader.querySelector("#alp-loadbar div");
+  var lBadge = document.getElementById("alp-lbadge");
+  var lPct = document.getElementById("alp-lpct");
+  var lRule = document.getElementById("alp-lrule");
+  var lStat = document.getElementById("alp-lstat");
+  var lFlash = document.getElementById("alp-lflash");
+  var batchLoaded = 0, badgeSvg = null, badgeTxt = null, badgeReady = false;
+  var loaderT0 = performance.now(), LOADER_MIN_MS = 2600, shownPct = 0, bursting = false;
+  var REDUCE = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  /* burst variant switch for comparison: #burst=shatter (default) | iris | mask */
+  var BURST_MODE = (location.hash.match(/burst=([a-z]+)/) || [])[1] || "shatter";
+
+  /* the badge svg is inlined so its 175 traced pieces can shatter individually;
+     if the fetch is blocked (cross-origin embed) fall back to an <img> and a
+     plain zoom-burst */
+  fetch(BADGE).then(function (r) { return r.text(); }).then(function (txt) {
+    badgeTxt = txt;
+    lBadge.innerHTML = txt;
+    badgeSvg = lBadge.querySelector("svg");
+    if (badgeSvg) { badgeSvg.removeAttribute("width"); badgeSvg.removeAttribute("height"); }
+    badgeReady = true; lBadge.classList.add("alp-lin");
+  }).catch(function () {
+    lBadge.innerHTML = '<img src="' + BADGE + '" alt="Addept Automotive">';
+    badgeReady = true; lBadge.classList.add("alp-lin");
+  });
+
+  /* variant A — hard camera push, shockwave, then the black shell irises open
+     from the centre (clip-path with an evenodd hole growing to the corners) */
+  function burstIris() {
+    lBadge.style.transition = "transform 1s cubic-bezier(.55,0,.85,1), opacity .6s ease .25s";
+    lBadge.style.transform = "scale(4.2)";
+    lBadge.style.opacity = "0";
+    setTimeout(function () { lFlash.classList.add("alp-on"); }, 300);
+    setTimeout(function () {
+      var w = window.innerWidth, h = window.innerHeight;
+      var cxp = w / 2, cyp = h * 0.47, R = Math.sqrt(w * w + h * h);
+      function ring(r) {
+        return "path(evenodd, 'M0 0H" + w + "V" + h + "H0Z M" + (cxp - r) + " " + cyp
+          + "a" + r + " " + r + " 0 1 0 " + (2 * r) + " 0a" + r + " " + r + " 0 1 0 " + (-2 * r) + " 0Z')";
+      }
+      loader.style.clipPath = ring(1);
+      requestAnimationFrame(function () { requestAnimationFrame(function () {
+        loader.style.transition = "clip-path .75s cubic-bezier(.6,0,.3,1)";
+        loader.style.clipPath = ring(R);
+      }); });
+    }, 380);
+    setTimeout(function () { introActive = false; startIntro(); }, 650);
+    setTimeout(function () { loader.style.display = "none"; }, 1180);
+  }
+
+  /* variant C — the emblem becomes the window: the loader is masked by an
+     inverted copy of the badge (white sheet, badge painted black), so the film
+     shows through the linework itself as it scales past the camera */
+  function burstMask() {
+    var inner = badgeTxt.replace(/^[\s\S]*?<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "");
+    var vb = badgeSvg.getAttribute("viewBox") || "143 165 769 485";
+    var vbp = vb.split(/\s+/);
+    var m = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="' + vb + '">'
+      + '<rect x="' + vbp[0] + '" y="' + vbp[1] + '" width="' + vbp[2] + '" height="' + vbp[3] + '" fill="#fff"/>'
+      + '<g style="filter:brightness(0)">' + inner + "</g></svg>";
+    var uri = 'url("data:image/svg+xml,' + encodeURIComponent(m) + '")';
+    var bw = lBadge.getBoundingClientRect().width || 520;
+    var bh = bw * vbp[3] / vbp[2];
+    var st = loader.style;
+    st.maskImage = uri; st.webkitMaskImage = uri;
+    st.maskMode = "luminance";
+    st.maskRepeat = "no-repeat"; st.webkitMaskRepeat = "no-repeat";
+    st.maskPosition = "center 47%"; st.webkitMaskPosition = "center 47%";
+    st.maskSize = bw + "px " + bh + "px"; st.webkitMaskSize = bw + "px " + bh + "px";
+    lBadge.style.transition = "opacity .25s ease";
+    lBadge.style.opacity = "0";
+    requestAnimationFrame(function () { requestAnimationFrame(function () {
+      st.transition = "mask-size 1.05s cubic-bezier(.55,0,.85,1), -webkit-mask-size 1.05s cubic-bezier(.55,0,.85,1)";
+      st.maskSize = (bw * 42) + "px " + (bh * 42) + "px";
+      st.webkitMaskSize = (bw * 42) + "px " + (bh * 42) + "px";
+    }); });
+    setTimeout(function () { lFlash.classList.add("alp-on"); }, 420);
+    setTimeout(function () { introActive = false; startIntro(); }, 680);
+    setTimeout(function () { loader.style.display = "none"; }, 1200);
+  }
+
+  function burst() {
+    bursting = true;
+    lPct.style.opacity = 0; lRule.style.opacity = 0; lStat.style.opacity = 0;
+    if (REDUCE) {
+      loader.style.transition = "opacity .5s ease";
+      loader.style.opacity = 0;
+      setTimeout(function () { loader.style.display = "none"; introActive = false; startIntro(); }, 520);
+      return;
+    }
+    if (BURST_MODE === "mask" && badgeTxt && badgeSvg) { burstMask(); return; }
+    if (BURST_MODE === "iris" || !badgeSvg) { burstIris(); return; }
+    if (badgeSvg) {
+      /* exploded view: every traced piece flies out radially from the emblem's
+         centre. Pieces keep their own matrix() attributes, so each is wrapped
+         in a fresh <g> and the wrapper animates (CSS transform on the path
+         itself would override the matrix and scramble the artwork). */
+      var vb = badgeSvg.viewBox.baseVal;
+      var cx = vb.x + vb.width / 2, cy = vb.y + vb.height / 2;
+      var maxR = Math.sqrt(vb.width * vb.width + vb.height * vb.height) / 2;
+      var pieces = Array.prototype.slice.call(badgeSvg.querySelectorAll("g path"));
+      var cap = window.innerWidth < 760 ? 150 : 400;
+      var every = Math.max(1, Math.ceil(pieces.length / cap));
+      var NS = "http://www.w3.org/2000/svg";
+      for (var i = 0; i < pieces.length; i++) {
+        var p = pieces[i];
+        var g = document.createElementNS(NS, "g");
+        p.parentNode.insertBefore(g, p); g.appendChild(p);
+        var bb; try { bb = g.getBBox(); } catch (e) { continue; }
+        var px = bb.x + bb.width / 2 - cx, py = bb.y + bb.height / 2 - cy;
+        var r = Math.sqrt(px * px + py * py) || 1;
+        var dist = i % every === 0 ? 380 + Math.random() * 540 : 130 + Math.random() * 170;
+        var dly = ((r / maxR) * 0.05 + Math.random() * 0.06).toFixed(2);
+        g.style.transformBox = "fill-box";
+        g.style.transformOrigin = "center";
+        g.style.transition = "transform .85s cubic-bezier(.25,.1,.3,1) " + dly + "s, opacity .8s linear " + dly + "s";
+        g.style.transform = "translate(" + (px / r * dist).toFixed(1) + "px," + (py / r * dist).toFixed(1) + "px) rotate(" + ((Math.random() * 2 - 1) * 150).toFixed(0) + "deg)";
+        g.style.opacity = "0";
+      }
+    } else {
+      lBadge.style.opacity = "0";
+    }
+    /* camera push through the breach + shockwave + the black shell dissolving */
+    lBadge.style.transition = "transform 1s cubic-bezier(.55,0,.85,1)" + (badgeSvg ? "" : ", opacity .7s ease .15s");
+    lBadge.style.transform = "scale(3.4)";
+    setTimeout(function () { lFlash.classList.add("alp-on"); }, 360);
+    setTimeout(function () { loader.classList.add("alp-lout"); }, 420);
+    /* hero choreography starts while the last shards are still flying so the
+       film never sits bare */
+    setTimeout(function () { introActive = false; startIntro(); }, 650);
+    setTimeout(function () { loader.style.display = "none"; }, 1040);
+  }
+
+  /* loader heartbeat: the counter tracks min(real batch progress, a minimum
+     dwell) so a warm cache still gets the moment; stops itself at the burst */
+  (function loaderTick() {
+    if (bursting) return;
+    requestAnimationFrame(loaderTick);
+    var tq = Math.min((performance.now() - loaderT0) / LOADER_MIN_MS, 1);
+    var dq = Math.min(batchLoaded / Math.min(INITIAL_BATCH, TOTAL_FRAMES), 1);
+    var target = Math.min(tq, dq) * 100;
+    shownPct += (target - shownPct) * 0.14;
+    if (target >= 100 && shownPct > 99.1) shownPct = 100;
+    lPct.innerHTML = Math.floor(shownPct) + "<i>%</i>";
+    lRule.firstElementChild.style.transform = "scaleX(" + (shownPct / 100).toFixed(3) + ")";
+    /* warm caches load all frames instantly — keep the readout honest to the
+       rolling counter rather than jumping straight to 238/238 */
+    var shownFrames = Math.min(loadedCount, Math.ceil(shownPct / 100 * TOTAL_FRAMES));
+    lStat.textContent = shownPct >= 100 ? "Ready · Frankton, Queenstown"
+      : shownFrames > 0 ? "Loading footage · " + ("00" + shownFrames).slice(-3) + " / " + TOTAL_FRAMES
+      : "Warming up the bay";
+    if (!REDUCE) lBadge.style.transform = "scale(" + (1 + shownPct / 100 * 0.32).toFixed(4) + ")";
+    if (shownPct >= 100 && firstReady && badgeReady) burst();
+  })();
   var crop = { sx: 0, sy: 0, scale: 1, imgW: 1600, imgH: 900 };
   var DPR = Math.min(window.devicePixelRatio || 1, 1.5);
 
@@ -697,13 +856,9 @@
     var img = new Image();
     img.onload = function () {
       frames[i] = img; loadedCount++;
-      loadbar.style.width = Math.round((loadedCount / TOTAL_FRAMES) * 100) + "%";
       if (i === 0 && !firstReady) {
         firstReady = true;
-        drawImageCover(img); drawnFrame = 0;
-        loader.style.opacity = "0";
-        setTimeout(function () { loader.style.display = "none"; }, 550);
-        startIntro();
+        drawImageCover(img); drawnFrame = 0; // frame 0 waits beneath the loader
       }
       cb && cb();
     };
@@ -712,9 +867,9 @@
   }
 
   (function preload() {
-    var done = 0, batch = Math.min(INITIAL_BATCH, TOTAL_FRAMES);
+    var batch = Math.min(INITIAL_BATCH, TOTAL_FRAMES);
     for (var i = 0; i < batch; i++) loadFrame(i, function () {
-      if (++done === batch) {
+      if (++batchLoaded === batch) {
         var next = batch;
         (function chain() { if (next >= TOTAL_FRAMES) return; loadFrame(next++, chain); })();
       }
@@ -949,6 +1104,7 @@
 
   // ── Input ──────────────────────────────────────────────────────────────────
   root.addEventListener("wheel", function (e) {
+    if (introActive) { e.preventDefault(); return; }
     if (MODE === "flow") {
       if (root.scrollTop <= 0 && e.deltaY < -40 && !transitioning) { e.preventDefault(); exitFlow(); }
       return;
@@ -980,6 +1136,7 @@
     touchY = e.touches[0].clientY; touchUsed = false;
   }, { passive: true });
   root.addEventListener("touchmove", function (e) {
+    if (introActive) { e.preventDefault(); return; }
     if (MODE === "flow") {
       if (root.scrollTop <= 0 && touchY !== null && e.touches[0].clientY - touchY > 70 && !transitioning && !touchUsed) {
         touchUsed = true; exitFlow();
@@ -1007,6 +1164,7 @@
   }, { passive: false });
 
   window.addEventListener("keydown", function (e) {
+    if (introActive) return;
     if (MODE !== "story" || transitioning) return;
     var down = e.key === "ArrowDown" || e.key === "PageDown" || e.key === " ";
     var up = e.key === "ArrowUp" || e.key === "PageUp";
@@ -1202,7 +1360,7 @@
           if (secEls[i].style.visibility !== "hidden") { secEls[i].style.opacity = 0; secEls[i].style.visibility = "hidden"; }
           if (i === svcIdx) hideSvcLayer();
         }
-      } else if (i === cur && MODE === "story") {
+      } else if (i === cur && MODE === "story" && !introActive) {
         styleSectionState(i, 1, 0);
       } else {
         if (secEls[i].style.visibility !== "hidden") { secEls[i].style.opacity = 0; secEls[i].style.visibility = "hidden"; }

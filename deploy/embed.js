@@ -121,14 +121,14 @@
      caps 3.2cqw + role 4.4cqw, ink #181520, near-sharp corners */
   + ".alp-fcard{position:absolute;left:0;top:0;width:clamp(270px,21vw,370px);aspect-ratio:1140/1260;container-type:inline-size;cursor:default;will-change:transform;pointer-events:auto;}"
   + ".alp-fcard .alp-fin{position:absolute;inset:0;padding:8.2cqw;border-radius:3px;color:#181520;overflow:hidden;"
-  +   "background:linear-gradient(168deg,rgba(252,253,255,.25) 0%,rgba(237,239,246,.14) 42%,rgba(196,201,215,.22) 100%),rgba(237,239,246,.13);"
+  +   "background:linear-gradient(168deg,rgba(252,253,255,.19) 0%,rgba(237,239,246,.10) 42%,rgba(196,201,215,.17) 100%),rgba(237,239,246,.10);"
   +   "-webkit-backdrop-filter:blur(16px) saturate(1.12);backdrop-filter:blur(16px) saturate(1.12);"
-  +   "border:1px solid rgba(255,255,255,.62);"
+  +   "border:1px solid rgba(255,255,255,.48);"
   +   "box-shadow:-5px 6px 0 -1px rgba(204,208,221,.85),-2px 3px 0 0 rgba(226,229,238,.95),0 34px 90px rgba(0,0,0,.42),0 6px 18px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.7),inset -1px -1px 0 rgba(150,156,175,.35);"
   +   "transition:transform .45s cubic-bezier(.2,.8,.2,1),box-shadow .45s;}"
   /* specular sheen — a soft diagonal light streak across the glass */
   + ".alp-fcard .alp-fin::after{content:'';position:absolute;inset:-40% -60%;pointer-events:none;"
-  +   "background:linear-gradient(115deg,transparent 38%,rgba(255,255,255,.16) 47%,rgba(255,255,255,.05) 52%,transparent 60%);}"
+  +   "background:linear-gradient(115deg,transparent 38%,rgba(255,255,255,.10) 47%,rgba(255,255,255,.03) 52%,transparent 60%);}"
   + ".alp-fcard svg.alp-fico{width:8.2cqw;height:8.2cqw;stroke:#181520;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;margin-bottom:8.4cqw;display:block;}"
   + ".alp-fcard p{font-size:5.26cqw;line-height:1.25;font-weight:500;color:#181520;opacity:.68;letter-spacing:-.005em;}"
   + ".alp-fcard .alp-ffoot{position:absolute;left:8.2cqw;right:8.2cqw;bottom:5cqw;}"

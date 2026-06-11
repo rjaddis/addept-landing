@@ -236,7 +236,7 @@
   + ".alp-h2{font-weight:800;line-height:1.05;letter-spacing:-.025em;font-size:clamp(1.9rem,4.5vw,3rem);}"
   + ".alp-giant{font-family:'Space Grotesk',Inter,sans-serif;font-weight:500;line-height:1.04;letter-spacing:.005em;text-transform:uppercase;font-size:clamp(2.6rem,6.2vw,5.6rem);}"
   + ".alp-heroh{font-family:'Space Grotesk',Inter,sans-serif;font-weight:500;line-height:1.04;letter-spacing:.005em;text-transform:uppercase;font-size:38px;}"
-  + ".alp-herodim{color:rgba(255,255,255,.45);margin-top:26px;font-size:40px;}"
+  + ".alp-herodim{color:rgba(255,255,255,.7);margin-top:26px;font-size:40px;}"
   + ".alp-hbrk{position:relative;display:inline-block;padding:14px 16px 12px;margin:18px 0 0 -16px;}"
   + ".alp-hbrk i{position:absolute;width:15px;height:15px;border-style:solid;border-color:rgba(255,255,255,.85);border-width:0;}"
   + ".alp-hbrk i.tl{top:0;left:0;border-top-width:2px;border-left-width:2px;}"
@@ -246,6 +246,7 @@
   + ".alp-section.alp-hero-low{align-items:flex-end;}"
   + ".alp-section.alp-hero-low .alp-inner{box-sizing:border-box;width:clamp(480px,48%,620px);max-width:none;padding:0 0 14vh 56px;position:relative;left:100px;top:-25px;}"
   + ".alp-hwrap{transform:scale(1.13);transform-origin:left bottom;}"
+  + ".alp-hwrap .alp-hr{height:2px;}"
   + ".alp-lead{margin-top:18px;color:rgba(255,255,255,.58);line-height:1.65;font-size:clamp(.98rem,1.8vw,1.2rem);max-width:30em;}"
   + ".alp-ticks{margin-top:26px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 20px;font-size:11px;letter-spacing:.05em;color:#fff;}"
   + ".alp-ticks span{display:inline-flex;align-items:center;gap:6px;}"
@@ -1272,6 +1273,10 @@
     root.appendChild(c);
     root.classList.add("alp-nocursor");
     var fctx = c.getContext("2d");
+    /* offscreen burn layer: the pointer sears a scorch trail into it, and a
+       gentle destination-out erosion cools it away over a few seconds */
+    var burn = document.createElement("canvas");
+    var bctx = burn.getContext("2d");
     var W = 0, H = 0, FDPR = 1;
     /* canvas is a replaced element: inset:0 does NOT stretch it, so the CSS
        size must be set explicitly or the bitmap displays at intrinsic size
@@ -1282,10 +1287,11 @@
       W = window.innerWidth; H = window.innerHeight;
       c.width = W * FDPR; c.height = H * FDPR;
       c.style.width = W + "px"; c.style.height = H + "px";
+      burn.width = c.width; burn.height = c.height;
     }
     fxSize(); window.addEventListener("resize", fxSize);
     var tx = -100, ty = -100, ox = -100, oy = -100, lvx = 0, lvy = 0;
-    var sparks = [], fxRun = false, lastMove = 0;
+    var sparks = [], fxRun = false, lastMove = 0, lastBurnT = 0;
     function addSpark(x, y, vx, vy, hot) {
       if (sparks.length > 680) return;
       sparks.push({ x: x, y: y, vx: vx, vy: vy, life: 1,
@@ -1330,8 +1336,34 @@
           spawnTail(pox + mvx * tt, poy + mvy * tt, lvx, lvy, speed);
         }
       }
+      /* cool the existing scorch, then sear this frame's travel into it —
+         lingering (slow movement) burns deeper, like holding a torch still */
+      var nowB = performance.now();
+      if (lastBurnT && nowB - lastBurnT < 9500) {
+        bctx.setTransform(FDPR, 0, 0, FDPR, 0, 0);
+        bctx.globalCompositeOperation = "destination-out";
+        bctx.fillStyle = "rgba(0,0,0,.012)";
+        bctx.fillRect(0, 0, W, H);
+      }
+      if (pox > -50 && (mvx * mvx + mvy * mvy) > 0.09) {
+        var heat = Math.max(0.5, 1.5 - speed * 0.03);
+        bctx.setTransform(FDPR, 0, 0, FDPR, 0, 0);
+        bctx.globalCompositeOperation = "source-over";
+        bctx.lineCap = "round";
+        var BR = [[15, "rgba(96,26,8,", 0.16], [8, "rgba(225,82,24,", 0.13], [3.5, "rgba(255,168,84,", 0.16]];
+        for (var b3 = 0; b3 < 3; b3++) {
+          bctx.strokeStyle = BR[b3][1] + (BR[b3][2] * heat).toFixed(3) + ")";
+          bctx.lineWidth = BR[b3][0];
+          bctx.beginPath(); bctx.moveTo(pox, poy); bctx.lineTo(ox, oy); bctx.stroke();
+        }
+        lastBurnT = nowB;
+      }
       fctx.setTransform(FDPR, 0, 0, FDPR, 0, 0);
       fctx.clearRect(0, 0, W, H);
+      if (lastBurnT && nowB - lastBurnT < 9500) {
+        fctx.globalCompositeOperation = "source-over";
+        fctx.drawImage(burn, 0, 0, W, H);
+      }
       fctx.globalCompositeOperation = "lighter";
       fctx.lineCap = "round";
       if (ox > -50) {
@@ -1377,7 +1409,11 @@
           fctx.beginPath(); fctx.arc(s.x, s.y, s.r * (0.4 + s.life * 0.6), 0, 6.283); fctx.fill();
         }
       }
-      if (performance.now() - lastMove > 300 && sparks.length === 0) {
+      if (performance.now() - lastMove > 300 && sparks.length === 0
+          && (!lastBurnT || performance.now() - lastBurnT > 9500)) {
+        bctx.setTransform(1, 0, 0, 1, 0, 0);
+        bctx.clearRect(0, 0, burn.width, burn.height);
+        lastBurnT = 0;
         fxRun = false;
         return;
       }

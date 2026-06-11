@@ -243,7 +243,7 @@
   + ".alp-section.alp-hero-low{align-items:flex-end;}"
   + ".alp-section.alp-hero-low .alp-inner{box-sizing:border-box;width:clamp(480px,48%,620px);max-width:none;padding:0 0 14vh 56px;position:relative;left:100px;top:-25px;}"
   + ".alp-hwrap{transform:scale(1.13);transform-origin:left bottom;}"
-  + ".alp-hwrap .alp-eyebrow{position:relative;top:15px;}"
+  + ".alp-hwrap .alp-eyebrow{position:relative;top:30px;font-size:7px;}"
   + ".alp-lead{margin-top:18px;color:rgba(255,255,255,.58);line-height:1.65;font-size:clamp(.98rem,1.8vw,1.2rem);max-width:30em;}"
   + ".alp-ticks{margin-top:26px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 20px;font-size:11px;letter-spacing:.05em;color:#fff;}"
   + ".alp-ticks span{display:inline-flex;align-items:center;gap:6px;}"
@@ -771,12 +771,9 @@
       setTimeout(function () { loader.style.display = "none"; introActive = false; startIntro(); }, 520);
       return;
     }
-    /* wind-up: the amber tip whips one full lap while the emblem swells —
-       anticipation before the drop */
-    var curOff = parseFloat(arcT.style.strokeDashoffset || "34") || 0;
-    arcT.style.opacity = 1;
-    arcT.style.transition = "stroke-dashoffset .42s cubic-bezier(.45,0,.55,1)";
-    arcT.style.strokeDashoffset = (curOff - 1000).toFixed(1);
+    /* wind-up: the emblem swells with anticipation before the drop — the
+       tracer stays finished, no encore lap */
+    arcT.style.opacity = 0;
     lCore.style.transition = "transform .42s cubic-bezier(.55,-.25,.65,1)";
     lCore.style.transform = "scale(1.26)";
     /* collapse into the point */

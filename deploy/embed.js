@@ -32,6 +32,10 @@
   function clamp01(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
   function ease(t) { return t * t * (3 - 2 * t); }
   function easeIO(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+  /* expo pair snaps to exactly 0/1 at the bounds — the parked render runs once
+     and freezes, so settled states must not hold residual sub-pixel values */
+  function expoOut(t) { return t >= 1 ? 1 : 1 - Math.pow(2, -10 * t); }
+  function expoIn(t) { return t <= 0 ? 0 : t >= 1 ? 1 : Math.pow(2, 10 * (t - 1)); }
   function lerp(a, b, t) { return a + (b - a) * t; }
 
   // ── Styles ─────────────────────────────────────────────────────────────────
@@ -64,7 +68,11 @@
   + ".alp-section.alp-top{align-items:flex-start;}"
   + ".alp-section.alp-top .alp-inner{padding-top:max(13vh,100px);}"
   + ".alp-section .alp-inner{pointer-events:auto;will-change:transform;width:100%;}"
-  + ".alp-w{display:inline-block;}"
+  /* masked word reveal: .alp-wm clips, .alp-w slides within it. Vertical
+     padding + negative margin widen the clip window for ascenders/descenders
+     without affecting layout; no horizontal padding (would eat word spacing) */
+  + ".alp-wm{display:inline-block;overflow:hidden;vertical-align:top;padding:.12em 0 .18em;margin:-.12em 0 -.18em;}"
+  + ".alp-w{display:inline-block;transform:translateY(130%);}"
   /* hairline rules that draw across */
   + ".alp-hr{display:block;height:1px;background:rgba(255,255,255,.22);margin:26px 0;transform:scaleX(0);will-change:transform;}"
   /* meta row (Noomo style) */
@@ -432,7 +440,7 @@
     var lines = el.textContent.split("\n");
     el.innerHTML = lines.map(function (line) {
       return line.split(" ").map(function (w) {
-        return '<span class="alp-w">' + w + "</span>";
+        return '<span class="alp-wm"><span class="alp-w">' + w + "</span></span>";
       }).join(" ");
     }).join("<br>");
   });
@@ -595,8 +603,11 @@
   var dotEls = Array.prototype.slice.call(root.querySelectorAll("#alp-dots button"));
   var spacer = document.getElementById("alp-spacer");
 
-  var secKids = secEls.map(function (el) {
-    return Array.prototype.slice.call(el.querySelectorAll(".alp-w, .alp-rise"));
+  var secHeads = secEls.map(function (el) {
+    return Array.prototype.slice.call(el.querySelectorAll(".alp-w"));
+  });
+  var secCopy = secEls.map(function (el) {
+    return Array.prototype.slice.call(el.querySelectorAll(".alp-rise"));
   });
   var secLines = secEls.map(function (el) {
     return Array.prototype.slice.call(el.querySelectorAll(".alp-hr"));
@@ -605,26 +616,79 @@
   SEC.forEach(function (s, i) { if (s.svc) svcIdx = i; });
   var svcCardEls = Array.prototype.slice.call(root.querySelectorAll(".alp-fcard"));
   var svcLayer = document.getElementById("alp-svc-layer");
-  var svcLayerKids = Array.prototype.slice.call(svcLayer.querySelectorAll(".alp-w, .alp-rise"));
+  var svcHeads = Array.prototype.slice.call(svcLayer.querySelectorAll(".alp-w"));
+  var svcCopy = Array.prototype.slice.call(svcLayer.querySelectorAll(".alp-rise"));
   var svcLayerLines = Array.prototype.slice.call(svcLayer.querySelectorAll(".alp-hr"));
 
   function hideSvcLayer() {
     if (svcLayer.style.visibility !== "hidden") { svcLayer.style.opacity = 0; svcLayer.style.visibility = "hidden"; }
   }
+  /* Text choreography — the single source of truth for how copy populates and
+     leaves. Headings (.alp-w) ride a masked slide: up from below the clip on
+     enter (expo-out), staggered lift out on exit (expo-in), travel direction
+     and stagger order following scrollDir. Supporting copy (.alp-rise) focuses
+     in from a blur and blurs back out. Every channel keeps
+     last-start + window <= 1 so enterQ=1/exitQ=0 is exactly settled — the
+     parked render runs once and freezes there. */
+  function styleTextFx(heads, copy, lines, enterQ, exitQ, dirX) {
+    var n = heads.length, k, st;
+    if (exitQ > 0) {
+      var stagO = Math.min(0.055, 0.5 / Math.max(n - 1, 1));
+      for (k = 0; k < n; k++) {
+        var o = scrollDir > 0 ? k : n - 1 - k;
+        var e = expoIn(clamp01((exitQ - o * stagO) / 0.45));
+        heads[k].style.transform = "translateY(" + (-scrollDir * e * 130).toFixed(2) + "%)";
+      }
+    } else {
+      var stag = Math.min(0.05, 0.45 / Math.max(n - 1, 1));
+      for (k = 0; k < n; k++) {
+        var r = expoOut(clamp01((enterQ - k * stag) / 0.5));
+        heads[k].style.transform = "translateY(" + ((1 - r) * 130).toFixed(2) + "%)";
+      }
+    }
+    var m = copy.length;
+    if (exitQ > 0) {
+      var stagCO = 0.3 / Math.max(m, 1);
+      for (k = 0; k < m; k++) {
+        var oc = scrollDir > 0 ? k : m - 1 - k;
+        var ec = expoIn(clamp01((exitQ - oc * stagCO) / 0.5));
+        st = copy[k].style;
+        st.opacity = (1 - ec).toFixed(3);
+        st.transform = "translateY(" + (-scrollDir * ec * 0.5).toFixed(3) + "em)";
+        st.filter = ec <= 0 ? "" : "blur(" + (ec * 6).toFixed(2) + "px)";
+      }
+    } else {
+      var stagC = 0.55 / Math.max(m, 1);
+      for (k = 0; k < m; k++) {
+        var rc = expoOut(clamp01((enterQ - k * stagC) / 0.45));
+        st = copy[k].style;
+        st.opacity = rc.toFixed(3);
+        st.transform = "translate(" + (dirX * (1 - rc) * 1.6).toFixed(2) + "vw," + ((1 - rc) * 0.6).toFixed(3) + "em)";
+        st.filter = rc >= 1 ? "" : "blur(" + ((1 - rc) * 6).toFixed(2) + "px)";
+      }
+    }
+    var nL = lines.length, lstag = Math.min(0.12, 0.15 / Math.max(nL - 1, 1));
+    for (k = 0; k < nL; k++) {
+      var lq = ease(clamp01((enterQ - 0.35 - k * lstag) / 0.5));
+      var le = exitQ > 0 ? expoIn(clamp01((exitQ - k * 0.1) / 0.45)) : 0;
+      var oR = lines[k].getAttribute("data-o") === "r";
+      /* exit collapses toward the side opposite the draw-in origin */
+      lines[k].style.transformOrigin = (exitQ > 0 ? !oR : oR) ? "right" : "left";
+      lines[k].style.transform = "scaleX(" + (lq * (1 - le)).toFixed(3) + ")";
+    }
+  }
+
+  var svcTextSettled = false;
   function showSvcLayer(enterQ, exitQ, vis, dx, dy) {
     svcLayer.style.visibility = "visible";
     svcLayer.style.opacity = vis.toFixed(3);
     svcLayer.style.transform = "translate(" + dx.toFixed(2) + "vw," + dy.toFixed(2) + "vh)";
-    var n = svcLayerKids.length, stag = 0.55 / Math.max(n, 1);
-    for (var k = 0; k < n; k++) {
-      var r = ease(clamp01((enterQ - k * stag) / 0.45));
-      svcLayerKids[k].style.opacity = r.toFixed(3);
-      svcLayerKids[k].style.transform = "translateY(" + ((1 - r) * 0.9).toFixed(3) + "em)";
-    }
-    for (var L = 0; L < svcLayerLines.length; L++) {
-      var lq = ease(clamp01((enterQ - 0.35 - L * 0.12) / 0.5)) * (1 - exitQ);
-      svcLayerLines[L].style.transformOrigin = svcLayerLines[L].getAttribute("data-o") === "r" ? "right" : "left";
-      svcLayerLines[L].style.transform = "scaleX(" + lq.toFixed(3) + ")";
+    /* parked at services the RAF loop runs every frame for the card fleet —
+       skip the text loops once they've settled */
+    var settled = enterQ >= 1 && exitQ <= 0;
+    if (!settled || !svcTextSettled) {
+      styleTextFx(svcHeads, svcCopy, svcLayerLines, enterQ, exitQ, 0);
+      svcTextSettled = settled;
     }
   }
 
@@ -876,29 +940,15 @@
     var dx = s.enter[0] * (1 - enterQ) + s.exit[0] * exitQ;
     var dy = s.enter[1] * (1 - enterQ) + s.exit[1] * exitQ;
     inner.style.transform = "translate(" + dx.toFixed(2) + "vw," + dy.toFixed(2) + "vh)";
-    inner.style.opacity = vis.toFixed(3);
+    /* the staggered word/copy exit is the fade — the block itself only lets go
+       at the very end, otherwise the choreography would leave half-transparent */
+    inner.style.opacity = exitQ > 0 ? (1 - expoIn(exitQ)).toFixed(3) : 1;
 
-    var kids = secKids[i], n = kids.length;
-    if (n) {
-      var stag = 0.55 / n;
-      for (var k = 0; k < n; k++) {
-        var r = ease(clamp01((enterQ - k * stag) / 0.45));
-        var ks = kids[k].style;
-        var kdx = s.enter[0] !== 0 ? (s.enter[0] > 0 ? 1 : -1) * (1 - r) * 1.6 : 0;
-        var kdy = (1 - r) * 0.9;
-        ks.opacity = r.toFixed(3);
-        ks.transform = "translate(" + kdx.toFixed(2) + "vw," + kdy.toFixed(3) + "em)";
-      }
-    }
+    styleTextFx(secHeads[i], secCopy[i], secLines[i], enterQ, exitQ,
+      s.enter[0] > 0 ? 1 : s.enter[0] < 0 ? -1 : 0);
     if (s.svc) {
       showSvcLayer(enterQ, exitQ, vis, dx, dy);
       renderFleet(vis);
-    }
-    var lines = secLines[i];
-    for (var L = 0; L < lines.length; L++) {
-      var lq = ease(clamp01((enterQ - 0.35 - L * 0.12) / 0.5)) * (1 - exitQ);
-      lines[L].style.transformOrigin = lines[L].getAttribute("data-o") === "r" ? "right" : "left";
-      lines[L].style.transform = "scaleX(" + lq.toFixed(3) + ")";
     }
   }
 

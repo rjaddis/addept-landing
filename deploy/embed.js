@@ -143,6 +143,12 @@
   /* bare counter, bottom centre; the workshop line takes its place at 100 */
   + "#alp-lpct{position:absolute;bottom:26px;left:0;right:0;text-align:center;font-size:13px;font-weight:600;letter-spacing:.18em;font-variant-numeric:tabular-nums;color:rgba(255,255,255,.85);transition:opacity .35s;}"
   + "#alp-lstat{position:absolute;bottom:25px;left:0;right:0;text-align:center;font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.5);opacity:0;transition:opacity .45s;}"
+  /* the trailing dots count up one by one in the beat before the burst */
+  + "#alp-lstat i{font-style:normal;display:inline-block;margin-left:2px;opacity:0;}"
+  + "#alp-lstat.alp-on i:nth-child(1){animation:alp-dot .16s ease .12s forwards;}"
+  + "#alp-lstat.alp-on i:nth-child(2){animation:alp-dot .16s ease .34s forwards;}"
+  + "#alp-lstat.alp-on i:nth-child(3){animation:alp-dot .16s ease .56s forwards;}"
+  + "@keyframes alp-dot{to{opacity:1}}"
   /* the point everything collapses into, then streaks out of */
   + "#alp-ldot{position:absolute;left:50%;top:50%;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:99px;background:radial-gradient(circle,#fff 0%,#fff 32%,#ffb877 62%,rgba(255,150,60,0) 100%);box-shadow:0 0 22px 6px rgba(255,166,77,.55);opacity:0;transform:scale(.2);will-change:transform,opacity,filter;}"
   + "#alp-ldot.alp-on{transition:transform .2s cubic-bezier(.2,.8,.3,1.4),opacity .18s ease;opacity:1;transform:scale(1);}"
@@ -151,12 +157,14 @@
      parent breathe modulate the whole thing. Flares on burst. */
   + "#alp-lglow{position:absolute;inset:0;pointer-events:none;opacity:0;overflow:hidden;box-shadow:inset 0 0 150px 12px rgba(255,166,77,.28),inset 0 0 60px 4px rgba(255,120,40,.16);}"
   + "#alp-lglow i{position:absolute;display:block;border-radius:50%;filter:blur(46px);will-change:transform;}"
-  + "#alp-lglow i:nth-child(1){width:70vw;height:46vh;left:-12vw;top:-30vh;background:radial-gradient(ellipse,rgba(255,166,77,.5),transparent 65%);animation:alp-aur1 9s ease-in-out infinite alternate;}"
-  + "#alp-lglow i:nth-child(2){width:55vw;height:44vh;right:-18vw;top:24vh;background:radial-gradient(ellipse,rgba(255,120,40,.42),transparent 65%);animation:alp-aur2 11.5s ease-in-out infinite alternate;}"
-  + "#alp-lglow i:nth-child(3){width:64vw;height:42vh;left:-10vw;bottom:-26vh;background:radial-gradient(ellipse,rgba(255,196,112,.38),transparent 65%);animation:alp-aur3 8s ease-in-out infinite alternate;}"
-  + "@keyframes alp-aur1{from{transform:translate(-6vw,0) scale(1)}to{transform:translate(14vw,3vh) scale(1.25)}}"
-  + "@keyframes alp-aur2{from{transform:translate(0,-4vh) scale(1.15)}to{transform:translate(-6vw,6vh) scale(.9)}}"
-  + "@keyframes alp-aur3{from{transform:translate(10vw,2vh) scale(1.1)}to{transform:translate(-8vw,-2vh) scale(1.3)}}"
+  + "#alp-lglow i:nth-child(1){width:70vw;height:46vh;left:-12vw;top:-30vh;background:radial-gradient(ellipse,rgba(255,166,77,.5),transparent 65%);animation:alp-aur1 7.5s ease-in-out infinite alternate;}"
+  + "#alp-lglow i:nth-child(2){width:46vw;height:40vh;right:-26vw;top:22vh;background:radial-gradient(ellipse,rgba(255,120,40,.42),transparent 65%);animation:alp-aur2 9s ease-in-out infinite alternate;}"
+  + "#alp-lglow i:nth-child(3){width:64vw;height:42vh;left:-10vw;bottom:-26vh;background:radial-gradient(ellipse,rgba(255,196,112,.38),transparent 65%);animation:alp-aur3 6.5s ease-in-out infinite alternate;}"
+  /* multi-stop wander paths with a little rotation so the lobes change shape
+     as they roam — the right blob stays mostly offscreen, dancing vertically */
+  + "@keyframes alp-aur1{0%{transform:translate(-9vw,1vh) rotate(-4deg) scale(1)}35%{transform:translate(4vw,-3vh) rotate(5deg) scale(1.16)}70%{transform:translate(11vw,4vh) rotate(-3deg) scale(1.04)}100%{transform:translate(16vw,-2vh) rotate(8deg) scale(1.26)}}"
+  + "@keyframes alp-aur2{0%{transform:translate(2vw,-7vh) rotate(3deg) scale(1.1)}40%{transform:translate(-2vw,3vh) rotate(-6deg) scale(.92)}75%{transform:translate(1vw,9vh) rotate(4deg) scale(1.06)}100%{transform:translate(0,-4vh) rotate(-3deg) scale(1.18)}}"
+  + "@keyframes alp-aur3{0%{transform:translate(12vw,2vh) rotate(5deg) scale(1.06)}30%{transform:translate(2vw,-3vh) rotate(-4deg) scale(1.22)}65%{transform:translate(-6vw,1vh) rotate(6deg) scale(1)}100%{transform:translate(-10vw,-3vh) rotate(-7deg) scale(1.3)}}"
   + "#alp-lglow.alp-on{animation:alp-glowin 1.6s ease .4s forwards,alp-lbreathe 5.6s ease-in-out 2.2s infinite;}"
   + "@keyframes alp-glowin{to{opacity:1}}"
   + "@keyframes alp-lbreathe{0%,100%{opacity:1}50%{opacity:.6}}"
@@ -580,7 +588,7 @@
     +   "</div>"
     +   '<div id="alp-ldot"></div>'
     +   '<div id="alp-lpct">00</div>'
-    +   '<div id="alp-lstat">Queenstown’s Independent Workshop</div>'
+    +   '<div id="alp-lstat">Quicker than your last quote<i>.</i><i>.</i><i>.</i></div>'
     + "</div>";
   document.body.appendChild(root);
 
@@ -678,6 +686,7 @@
     loader.style.pointerEvents = "none";
     lPct.style.opacity = 0;
     lStat.style.opacity = 1;
+    lStat.classList.add("alp-on"); // dots tick up in the beat before the streak
     if (REDUCE) {
       loader.style.transition = "opacity .5s ease";
       loader.style.opacity = 0;

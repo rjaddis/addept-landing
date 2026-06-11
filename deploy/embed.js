@@ -131,27 +131,64 @@
   + "#alp-loader{position:fixed;inset:0;z-index:999999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#000;transition:background .6s ease;}"
   + "#alp-loader.alp-lout{background:rgba(0,0,0,0);}"
   + "#alp-lcore{position:relative;transform-origin:50% 50%;will-change:transform;}"
-  + "#alp-lbadge{width:clamp(300px,44vw,560px);opacity:0;transition:opacity .9s ease;}"
-  + "#alp-lbadge.alp-lin{opacity:1;}"
+  /* the emblem develops in from a blur, then floats; a light sheen sweeps
+     across the artwork once (masked to the badge shape) as it arrives */
+  + "#alp-lbadge{width:clamp(300px,44vw,560px);opacity:0;will-change:transform,filter;}"
+  + "#alp-lbadge.alp-lin{animation:alp-bdev 1s cubic-bezier(.2,.7,.3,1) forwards,alp-bfloat 7s ease-in-out 1.4s infinite;}"
+  + "@keyframes alp-bdev{0%{opacity:0;filter:blur(12px);transform:scale(.94)}100%{opacity:1;filter:blur(0);transform:scale(1)}}"
+  + "@keyframes alp-bfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}"
   + "#alp-lbadge svg{width:100%;height:auto;display:block;overflow:visible;}"
   + "#alp-lbadge img{width:100%;display:block;}"
+  + "#alp-lsheen{position:absolute;inset:0;pointer-events:none;opacity:0;"
+  +   "background:linear-gradient(105deg,transparent 32%,rgba(255,255,255,.3) 46%,rgba(255,255,255,.07) 52%,transparent 64%);background-size:240% 100%;background-position:130% 0;"
+  +   "-webkit-mask:url(" + BADGE + ") center/contain no-repeat;mask:url(" + BADGE + ") center/contain no-repeat;}"
+  + "#alp-lsheen.alp-on{animation:alp-sheen 1.7s cubic-bezier(.45,0,.3,1) .5s forwards;}"
+  + "@keyframes alp-sheen{0%{opacity:0;background-position:130% 0}12%{opacity:1}85%{opacity:.8}100%{opacity:0;background-position:-50% 0}}"
+  /* drifting amber embers behind the emblem */
+  + "#alp-lembers{position:absolute;inset:0;pointer-events:none;overflow:hidden;}"
+  + "#alp-lembers i{position:absolute;top:60%;border-radius:99px;background:#ffb877;box-shadow:0 0 8px 2px rgba(255,150,60,.45);opacity:0;animation:alp-ember linear infinite;}"
+  + "#alp-lembers i:nth-child(1){left:24%;width:3px;height:3px;animation-duration:9s;animation-delay:-2s;}"
+  + "#alp-lembers i:nth-child(2){left:32%;width:2px;height:2px;animation-duration:12s;animation-delay:-7s;}"
+  + "#alp-lembers i:nth-child(3){left:41%;width:4px;height:4px;animation-duration:8s;animation-delay:-4.5s;}"
+  + "#alp-lembers i:nth-child(4){left:48%;width:2px;height:2px;animation-duration:11s;animation-delay:-1s;}"
+  + "#alp-lembers i:nth-child(5){left:55%;width:3px;height:3px;animation-duration:9.5s;animation-delay:-6s;}"
+  + "#alp-lembers i:nth-child(6){left:63%;width:2px;height:2px;animation-duration:13s;animation-delay:-9s;}"
+  + "#alp-lembers i:nth-child(7){left:70%;width:4px;height:4px;animation-duration:8.5s;animation-delay:-3s;}"
+  + "#alp-lembers i:nth-child(8){left:77%;width:2px;height:2px;animation-duration:10.5s;animation-delay:-5s;}"
+  + "#alp-lembers i:nth-child(9){left:18%;width:2px;height:2px;animation-duration:11.5s;animation-delay:-8s;}"
+  + "#alp-lembers i:nth-child(10){left:85%;width:3px;height:3px;animation-duration:10s;animation-delay:-2.5s;}"
+  + "@keyframes alp-ember{0%{transform:translateY(24vh) translateX(0) scale(1);opacity:0}8%{opacity:.75}30%{transform:translateY(6vh) translateX(8px) scale(.95);opacity:.45}60%{transform:translateY(-12vh) translateX(-6px) scale(.8);opacity:.5}100%{transform:translateY(-32vh) translateX(5px) scale(.5);opacity:0}}"
   /* orbit stroke that draws itself around the emblem with an amber pen-tip */
   + "#alp-larc{position:absolute;left:-16%;top:-20%;width:132%;height:140%;pointer-events:none;overflow:visible;}"
   + "#alp-larc path{fill:none;stroke-linecap:round;}"
   + "#alp-larc .alp-arcb{stroke:rgba(255,255,255,.32);stroke-width:2.2;}"
   + "#alp-larc .alp-arct{stroke:#ffa64d;stroke-width:3;filter:drop-shadow(0 0 6px rgba(255,166,77,.8));}"
-  /* bare counter, bottom centre; the workshop line takes its place at 100 */
+  /* odometer counter, bottom centre — each digit rolls in a masked column;
+     the workshop line takes its place at 100 */
   + "#alp-lpct{position:absolute;bottom:26px;left:0;right:0;text-align:center;font-size:13px;font-weight:600;letter-spacing:.18em;font-variant-numeric:tabular-nums;color:rgba(255,255,255,.85);transition:opacity .35s;}"
-  + "#alp-lstat{position:absolute;bottom:25px;left:0;right:0;text-align:center;font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.5);opacity:0;transition:opacity .45s;}"
-  /* the trailing dots count up one by one in the beat before the burst */
-  + "#alp-lstat i{font-style:normal;display:inline-block;margin-left:2px;opacity:0;}"
-  + "#alp-lstat.alp-on i:nth-child(1){animation:alp-dot .16s ease .12s forwards;}"
-  + "#alp-lstat.alp-on i:nth-child(2){animation:alp-dot .16s ease .34s forwards;}"
-  + "#alp-lstat.alp-on i:nth-child(3){animation:alp-dot .16s ease .56s forwards;}"
+  + ".alp-odc{display:inline-block;height:1.1em;overflow:hidden;vertical-align:top;}"
+  + ".alp-odw{display:block;transition:transform .55s cubic-bezier(.22,.85,.3,1);}"
+  + ".alp-odw b{display:block;height:1.1em;line-height:1.1em;font-weight:600;}"
+  /* tagline matches the counter's cut; letters drop into place one by one,
+     then the trailing dots count up in the beat before the burst */
+  + "#alp-lstat{position:absolute;bottom:26px;left:0;right:0;text-align:center;font-size:13px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.85);opacity:0;}"
+  + "#alp-lstat.alp-on{opacity:1;}"
+  + "#alp-lstat em{font-style:normal;display:inline-block;opacity:0;transform:translateY(-.9em);}"
+  + "#alp-lstat.alp-on em{animation:alp-lfall .24s cubic-bezier(.25,.9,.3,1.18) forwards;}"
+  + "@keyframes alp-lfall{to{opacity:1;transform:translateY(0)}}"
+  + "#alp-lstat i{font-style:normal;display:inline-block;margin-left:3px;opacity:0;}"
+  + "#alp-lstat.alp-on i:nth-child(1){animation:alp-dot .14s ease .46s forwards;}"
+  + "#alp-lstat.alp-on i:nth-child(2){animation:alp-dot .14s ease .66s forwards;}"
+  + "#alp-lstat.alp-on i:nth-child(3){animation:alp-dot .14s ease .86s forwards;}"
   + "@keyframes alp-dot{to{opacity:1}}"
-  /* the point everything collapses into, then streaks out of */
-  + "#alp-ldot{position:absolute;left:50%;top:50%;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:99px;background:radial-gradient(circle,#fff 0%,#fff 32%,#ffb877 62%,rgba(255,150,60,0) 100%);box-shadow:0 0 22px 6px rgba(255,166,77,.55);opacity:0;transform:scale(.2);will-change:transform,opacity,filter;}"
+  /* the point everything collapses into, then streaks out of — the offset
+     warm/cool shadows smear into chromatic fringes when the beam stretches */
+  + "#alp-ldot{position:absolute;left:50%;top:50%;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:99px;background:radial-gradient(circle,#fff 0%,#fff 32%,#ffb877 62%,rgba(255,150,60,0) 100%);box-shadow:0 0 22px 6px rgba(255,166,77,.55),0 -3px 9px rgba(255,84,36,.5),0 3px 9px rgba(255,224,168,.5);opacity:0;transform:scale(.2);will-change:transform,opacity,filter;}"
   + "#alp-ldot.alp-on{transition:transform .2s cubic-bezier(.2,.8,.3,1.4),opacity .18s ease;opacity:1;transform:scale(1);}"
+  /* one-frame exposure breath as the film takes over */
+  + "#alp-lveil{position:absolute;inset:0;pointer-events:none;background:#fff;opacity:0;}"
+  + "#alp-lveil.alp-on{animation:alp-veil 1s ease-out forwards;}"
+  + "@keyframes alp-veil{0%{opacity:0}22%{opacity:.12}100%{opacity:0}}"
   /* amber aurora around the edges — three blurred blobs lapping in from
      offscreen, each drifting on its own slow orbit; a soft rim glow and the
      parent breathe modulate the whole thing. Flares on burst. */
@@ -175,7 +212,7 @@
   + "#alp-nav .alp-brand:hover{opacity:.8;}"
   + "#alp-nav .alp-brand b{font-weight:800;}"
   + "#alp-nav .alp-brand span{font-weight:400;color:rgba(255,255,255,.75);}"
-  + "#alp-nav a.alp-call{padding:9px 20px;border-radius:99px;border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.8);font-size:13px;font-weight:600;text-decoration:none;background:rgba(10,10,10,.45);transition:background .25s,color .25s,transform .25s;white-space:nowrap;}"
+  + "#alp-nav a.alp-call{padding:9px 20px;border-radius:99px;border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.8);font-family:'Space Grotesk',Inter,sans-serif;font-weight:600;text-transform:uppercase;font-size:12px;letter-spacing:.14em;text-decoration:none;background:rgba(10,10,10,.45);transition:background .25s,color .25s,transform .25s;white-space:nowrap;}"
   + "#alp-nav a.alp-call:hover{background:#fff;color:#000;transform:scale(1.04);}"
   /* dots */
   + "#alp-dots{position:fixed;right:14px;top:50%;transform:translateY(-50%);z-index:30;display:flex;flex-direction:column;gap:9px;transition:opacity .4s;}"
@@ -190,12 +227,22 @@
   + ".alp-h1{font-weight:800;line-height:1.08;letter-spacing:-.03em;font-size:clamp(1.5rem,3.2vw,2.4rem);}"
   + ".alp-h2{font-weight:800;line-height:1.05;letter-spacing:-.025em;font-size:clamp(1.9rem,4.5vw,3rem);}"
   + ".alp-giant{font-family:'Space Grotesk',Inter,sans-serif;font-weight:500;line-height:1.04;letter-spacing:.005em;text-transform:uppercase;font-size:clamp(2.6rem,6.2vw,5.6rem);}"
+  + ".alp-heroh{font-family:'Space Grotesk',Inter,sans-serif;font-weight:500;line-height:1.04;letter-spacing:.005em;text-transform:uppercase;font-size:38px;}"
+  + ".alp-herodim{color:rgba(255,255,255,.45);margin-top:26px;font-size:40px;}"
+  + ".alp-hbrk{position:relative;display:inline-block;padding:14px 16px 12px;margin:18px 0 0 -16px;}"
+  + ".alp-hbrk i{position:absolute;width:15px;height:15px;border-style:solid;border-color:rgba(255,255,255,.85);border-width:0;}"
+  + ".alp-hbrk i.tl{top:0;left:0;border-top-width:2px;border-left-width:2px;}"
+  + ".alp-hbrk i.tr{top:0;right:72px;border-top-width:2px;border-right-width:2px;}"
+  + ".alp-hbrk i.bl{bottom:0;left:0;border-bottom-width:2px;border-left-width:2px;}"
+  + ".alp-hbrk i.br{bottom:5px;right:72px;border-bottom-width:2px;border-right-width:2px;}"
+  + ".alp-section.alp-hero-low{align-items:flex-end;}"
+  + ".alp-section.alp-hero-low .alp-inner{box-sizing:border-box;width:clamp(480px,48%,620px);max-width:none;padding:0 0 14vh 56px;}"
   + ".alp-lead{margin-top:18px;color:rgba(255,255,255,.58);line-height:1.65;font-size:clamp(.98rem,1.8vw,1.2rem);max-width:30em;}"
   + ".alp-ticks{margin-top:26px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 20px;font-size:11px;letter-spacing:.05em;color:rgba(255,255,255,.38);}"
   + ".alp-ticks span{display:inline-flex;align-items:center;gap:6px;}"
   + ".alp-ticks svg{width:12px;height:12px;}"
   /* buttons */
-  + ".alp-btn{display:inline-flex;align-items:center;gap:10px;padding:14px 30px;border-radius:99px;font-size:14px;font-weight:700;letter-spacing:.02em;text-decoration:none;cursor:pointer;border:none;transition:transform .3s cubic-bezier(.2,.8,.2,1),background .3s,color .3s,box-shadow .3s;}"
+  + ".alp-btn{display:inline-flex;align-items:center;gap:10px;padding:15px 30px;border-radius:99px;font-family:'Space Grotesk',Inter,sans-serif;font-weight:600;text-transform:uppercase;font-size:12px;letter-spacing:.14em;text-decoration:none;cursor:pointer;border:none;transition:transform .3s cubic-bezier(.2,.8,.2,1),background .3s,color .3s,box-shadow .3s;}"
   + ".alp-btn-light{background:#fff;color:#000;box-shadow:0 18px 50px rgba(0,0,0,.35);}"
   + ".alp-btn-light:hover{transform:translateY(-3px) scale(1.04);box-shadow:0 26px 60px rgba(0,0,0,.5);}"
   + ".alp-btn-ghost{background:rgba(20,20,20,.55);color:#fff;border:1px solid rgba(255,255,255,.22);}"
@@ -278,6 +325,9 @@
   + ".alp-center .alp-hr{margin-left:auto;margin-right:auto;max-width:420px;}"
   /* mobile */
   + "@media (max-width:760px){"
+  +   ".alp-heroh{font-size:26px;}"
+  +   ".alp-herodim{font-size:27px;}"
+  +   ".alp-section.alp-hero-low .alp-inner{width:100%;padding:0 22px 12vh;}"
   +   "#alp-nav{padding:14px 16px;}"
   +   "#alp-nav .alp-brand{font-size:13px;}"
   +   "#alp-dots{display:none;}"
@@ -366,6 +416,22 @@
     for (var oi = 0; oi < n; oi++) plus += "<i>+</i>";
     return '<div class="alp-orn" style="left:' + x + 'vw;top:' + y + 'vh;"><span style="animation-delay:-' + dly + 's;">' + plus + "</span></div>";
   }
+  var ODIGITS = (function () {
+    var s = "";
+    for (var d = 0; d < 10; d++) s += "<b>" + d + "</b>";
+    return s;
+  })();
+  /* tagline pre-split into letters, each with its own fall delay (~13ms apart) */
+  var TAG_HTML = (function () {
+    var t = "Quicker than your last quote", s = "", k = 0;
+    for (var i = 0; i < t.length; i++) {
+      var c = t.charAt(i);
+      if (c === " ") { s += " "; continue; }
+      s += '<em style="animation-delay:' + (k * 13) + 'ms">' + c + "</em>";
+      k++;
+    }
+    return s;
+  })();
   function boxO(cls, tab, style) {
     return '<div class="alp-box' + (cls ? " " + cls : "") + '"' + (style ? ' style="' + style + '"' : "") + ">"
       + '<i class="alp-be t"></i><i class="alp-be r"></i><i class="alp-be b"></i><i class="alp-be l"></i>'
@@ -375,21 +441,18 @@
 
   /* Sections: each parks the video at a scene; transitions play the footage. */
   var SEC = [
-    { id: "hero", stop: 2.9536, enter: [0, 10], exit: [0, -11],
-      deco: flo(67, 22, 0.9, 7.5, 1.2, '<span class="alp-fchip"><b class="alp-dot"></b>WOF Repair Specialists</span>')
-        + flo(73, 60, 0.6, 9, 3.4, '<span class="alp-fchip">' + check + "Diesel · Euro · JDM</span>")
-        + orn(57, 78, 3, 2) + orn(87, 12, 2, 7),
-      html:
+    { id: "hero", stop: 2.9536, enter: [0, 10], exit: [0, -11], html:
       '<div class="alp-inner alp-left">'
       + '<div class="alp-eyebrow alp-rise">Queenstown’s Independent Workshop</div>'
-      + boxO("", "Unit 01 · Frankton")
-      + '<h1 class="alp-h1 alp-split">We’ll tell you\nwhat’s actually wrong\nwith your car.\nWild concept, we know.</h1>'
+      + '<div class="alp-hbrk">'
+      +   '<i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>'
+      +   '<h1 class="alp-heroh alp-split">We’ll tell you\nwhat’s actually\nwrong with your\ncar.</h1>'
       + "</div>"
-      + '<i class="alp-hr" data-o="l"></i>'
-      + '<p class="alp-lead alp-rise" style="margin-top:0;">First-rate servicing, diagnostics and repairs — specialising in European and Japanese vehicles, with top-tier customer care and respect for your budget.</p>'
+      + '<h2 class="alp-heroh alp-herodim alp-split">Wild concept, we\nknow.</h2>'
+      + '<i class="alp-hr" data-o="l" style="max-width:360px;"></i>'
       + '<div class="alp-btnrow alp-rise"><a class="alp-btn alp-btn-light" href="#alp-booking">Make a booking</a>'
-      + '<a class="alp-btn alp-btn-ghost" href="' + PHONE_TEL + '">Call ' + PHONE_DISPLAY + "</a></div>"
-      + '<div class="alp-ticks alp-rise"><span>' + check + "WOF repair specialists</span><span>" + check + "Diesel engine solutions</span><span>" + check + "Frankton, Queenstown</span></div>"
+      + '<a class="alp-btn alp-btn-ghost" href="#alp-booking">Request estimate</a></div>'
+      + '<div class="alp-ticks alp-rise"><span>' + check + "Euro &amp; Japanese specialists</span><span>" + check + "Tuning &amp; emissions solutions</span></div>"
       + "</div>" },
     { id: "about", stop: 15.6118, enter: [22, 0], exit: [-18, 0],
       deco: flo(9, 30, 0.8, 8, 0.8, '<span class="alp-fchip">' + check + "Comprehensive Diagnostics</span>")
@@ -520,7 +583,7 @@
 
   var fontLink = document.createElement("link");
   fontLink.rel = "stylesheet";
-  fontLink.href = "https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Space+Grotesk:wght@500;700&display=swap";
+  fontLink.href = "https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap";
   document.head.appendChild(fontLink);
 
   var root = document.createElement("div");
@@ -544,7 +607,7 @@
     +   orn(68, 12, 2, 3) + orn(44, 76, 3, 8)
     + "</div>"
     + SEC.map(function (s) {
-        return '<div class="alp-section' + (s.top ? " alp-top" : "") + '" data-sec="' + s.id + '">' + s.html + (s.deco || "") + "</div>";
+        return '<div class="alp-section' + (s.top ? " alp-top" : "") + (s.id === "hero" ? " alp-hero-low" : "") + '" data-sec="' + s.id + '">' + s.html + (s.deco || "") + "</div>";
       }).join("")
     + '<div id="alp-nav">'
     +   '<a class="alp-brand" href="#top"><b>Addept</b> <span>Automotive</span></a>'
@@ -580,15 +643,17 @@
     +   '<div class="alp-footer">Copyright © Addept Automotive 2026. Full Rights Reserved.</div>'
     + "</div></div>"
     + '<div id="alp-loader"><div id="alp-lglow"><i></i><i></i><i></i></div>'
-    +   '<div id="alp-lcore"><div id="alp-lbadge"></div>'
+    +   '<div id="alp-lembers"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>'
+    +   '<div id="alp-lcore"><div id="alp-lbadge"></div><div id="alp-lsheen"></div>'
     +     '<svg id="alp-larc" viewBox="0 0 1000 640" preserveAspectRatio="none">'
     +       '<path class="alp-arcb" d="M 96 522 A 442 224 -11 1 1 916 426" pathLength="1000"/>'
     +       '<path class="alp-arct" d="M 96 522 A 442 224 -11 1 1 916 426" pathLength="1000"/>'
     +     "</svg>"
     +   "</div>"
     +   '<div id="alp-ldot"></div>'
-    +   '<div id="alp-lpct">00</div>'
-    +   '<div id="alp-lstat">Quicker than your last quote<i>.</i><i>.</i><i>.</i></div>'
+    +   '<div id="alp-lpct"><span class="alp-odc"><span class="alp-odw" id="alp-odt">' + ODIGITS + '</span></span><span class="alp-odc"><span class="alp-odw" id="alp-odo">' + ODIGITS + "</span></span></div>"
+    +   '<div id="alp-lstat">' + TAG_HTML + "<i>.</i><i>.</i><i>.</i></div>"
+    +   '<div id="alp-lveil"></div>'
     + "</div>";
   document.body.appendChild(root);
 
@@ -653,10 +718,14 @@
   var loader = document.getElementById("alp-loader");
   var lCore = document.getElementById("alp-lcore");
   var lBadge = document.getElementById("alp-lbadge");
+  var lSheen = document.getElementById("alp-lsheen");
   var lPct = document.getElementById("alp-lpct");
+  var lOdT = document.getElementById("alp-odt");
+  var lOdO = document.getElementById("alp-odo");
   var lStat = document.getElementById("alp-lstat");
   var lGlow = document.getElementById("alp-lglow");
   var lDot = document.getElementById("alp-ldot");
+  var lVeil = document.getElementById("alp-lveil");
   var arcB = loader.querySelector(".alp-arcb");
   var arcT = loader.querySelector(".alp-arct");
   var batchLoaded = 0, badgeSvg = null, badgeReady = false;
@@ -669,10 +738,10 @@
     lBadge.innerHTML = txt;
     badgeSvg = lBadge.querySelector("svg");
     if (badgeSvg) { badgeSvg.removeAttribute("width"); badgeSvg.removeAttribute("height"); }
-    badgeReady = true; lBadge.classList.add("alp-lin"); lGlow.classList.add("alp-on");
+    badgeReady = true; lBadge.classList.add("alp-lin"); lSheen.classList.add("alp-on"); lGlow.classList.add("alp-on");
   }).catch(function () {
     lBadge.innerHTML = '<img src="' + BADGE + '" alt="Addept Automotive">';
-    badgeReady = true; lBadge.classList.add("alp-lin"); lGlow.classList.add("alp-on");
+    badgeReady = true; lBadge.classList.add("alp-lin"); lSheen.classList.add("alp-on"); lGlow.classList.add("alp-on");
   });
 
   /* the handoff, in three beats: the emblem and its orbit stroke collapse
@@ -693,24 +762,37 @@
       setTimeout(function () { loader.style.display = "none"; introActive = false; startIntro(); }, 520);
       return;
     }
-    lCore.style.transition = "transform .5s cubic-bezier(.7,0,.95,.7)";
-    lCore.style.transform = "scale(.012)";
+    /* wind-up: the amber tip whips one full lap while the emblem swells —
+       anticipation before the drop */
+    var curOff = parseFloat(arcT.style.strokeDashoffset || "34") || 0;
+    arcT.style.opacity = 1;
+    arcT.style.transition = "stroke-dashoffset .42s cubic-bezier(.45,0,.55,1)";
+    arcT.style.strokeDashoffset = (curOff - 1000).toFixed(1);
+    lCore.style.transition = "transform .42s cubic-bezier(.55,-.25,.65,1)";
+    lCore.style.transform = "scale(1.26)";
+    /* collapse into the point */
+    setTimeout(function () {
+      lCore.style.transition = "transform .5s cubic-bezier(.7,0,.95,.7)";
+      lCore.style.transform = "scale(.012)";
+    }, 400);
     setTimeout(function () {
       lCore.style.visibility = "hidden";
       lDot.classList.add("alp-on");
-    }, 480);
+    }, 880);
+    /* the beam: chromatic-fringed light streak + a one-frame exposure breath */
     setTimeout(function () {
       lDot.style.transition = "transform .55s cubic-bezier(.8,0,.9,.55), opacity .3s ease .25s, filter .55s ease";
       lDot.style.transform = "scale(220,.4)";
       lDot.style.filter = "blur(6px)";
       lDot.style.opacity = "0";
+      lVeil.classList.add("alp-on");
       loader.classList.add("alp-lout");
       lGlow.style.animation = "none";
       lGlow.style.opacity = "1";
-    }, 700);
-    setTimeout(function () { introActive = false; startIntro(); tT = tDur * 0.46; }, 800);
-    setTimeout(function () { lGlow.style.transition = "opacity .8s ease"; lGlow.style.opacity = "0"; lStat.style.opacity = 0; }, 1250);
-    setTimeout(function () { loader.style.display = "none"; }, 1900);
+    }, 1100);
+    setTimeout(function () { introActive = false; startIntro(); tT = tDur * 0.46; }, 1200);
+    setTimeout(function () { lGlow.style.transition = "opacity .8s ease"; lGlow.style.opacity = "0"; lStat.style.opacity = 0; }, 1650);
+    setTimeout(function () { loader.style.display = "none"; }, 2300);
   }
 
   /* loader heartbeat: a bare zero-padded counter tracking min(real batch
@@ -724,8 +806,9 @@
     var target = Math.min(tq, dq) * 100;
     shownPct += (target - shownPct) * 0.14;
     if (target >= 100 && shownPct > 99.1) shownPct = 100;
-    var pInt = Math.floor(shownPct);
-    lPct.textContent = pInt >= 100 ? "100" : ("0" + pInt).slice(-2);
+    var pInt = Math.min(Math.floor(shownPct), 99);
+    lOdT.style.transform = "translateY(-" + Math.floor(pInt / 10) * 1.1 + "em)";
+    lOdO.style.transform = "translateY(-" + (pInt % 10) * 1.1 + "em)";
     var p = shownPct / 100;
     arcB.style.strokeDasharray = "1000";
     arcB.style.strokeDashoffset = (1000 * (1 - p)).toFixed(1);

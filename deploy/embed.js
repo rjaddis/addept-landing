@@ -130,18 +130,22 @@
      pushes through into the film (Hubtown-style burst, automotive exploded view) */
   + "#alp-loader{position:fixed;inset:0;z-index:999999;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#000;transition:background .6s ease;}"
   + "#alp-loader.alp-lout{background:rgba(0,0,0,0);}"
-  + "#alp-lbadge{width:clamp(300px,44vw,560px);opacity:0;transform-origin:50% 50%;will-change:transform;transition:opacity .9s ease;}"
+  + "#alp-lcore{position:relative;transform-origin:50% 50%;will-change:transform;}"
+  + "#alp-lbadge{width:clamp(300px,44vw,560px);opacity:0;transition:opacity .9s ease;}"
   + "#alp-lbadge.alp-lin{opacity:1;}"
   + "#alp-lbadge svg{width:100%;height:auto;display:block;overflow:visible;}"
   + "#alp-lbadge img{width:100%;display:block;}"
-  + "#alp-lpct{margin-top:calc(4.5vh + 42px);font-size:clamp(1rem,2.2vw,1.5rem);font-weight:800;letter-spacing:.02em;line-height:1;font-variant-numeric:tabular-nums;transition:opacity .35s;}"
-  + "#alp-lpct i{font-style:normal;font-size:.6em;font-weight:600;color:rgba(255,255,255,.45);margin-left:4px;}"
-  + "#alp-lrule{width:min(300px,60vw);height:1px;background:rgba(255,255,255,.12);margin:20px 0 16px;transition:opacity .35s;}"
-  + "#alp-lrule i{display:block;height:100%;background:rgba(255,255,255,.75);transform:scaleX(0);transform-origin:left;}"
-  + "#alp-lstat{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.4);transition:opacity .35s;}"
-  + "#alp-lflash{position:absolute;inset:0;background:radial-gradient(circle at 50% 47%,rgba(255,255,255,.95) 0%,rgba(255,255,255,.5) 28%,transparent 64%);opacity:0;pointer-events:none;}"
-  + "#alp-lflash.alp-on{animation:alp-lflash .55s ease-out forwards;}"
-  + "@keyframes alp-lflash{0%{opacity:0}18%{opacity:.9}100%{opacity:0}}"
+  /* orbit stroke that draws itself around the emblem with an amber pen-tip */
+  + "#alp-larc{position:absolute;left:-16%;top:-20%;width:132%;height:140%;pointer-events:none;overflow:visible;}"
+  + "#alp-larc path{fill:none;stroke-linecap:round;}"
+  + "#alp-larc .alp-arcb{stroke:rgba(255,255,255,.32);stroke-width:2.2;}"
+  + "#alp-larc .alp-arct{stroke:#ffa64d;stroke-width:3;filter:drop-shadow(0 0 6px rgba(255,166,77,.8));}"
+  /* bare counter, bottom centre; the workshop line takes its place at 100 */
+  + "#alp-lpct{position:absolute;bottom:26px;left:0;right:0;text-align:center;font-size:13px;font-weight:600;letter-spacing:.18em;font-variant-numeric:tabular-nums;color:rgba(255,255,255,.85);transition:opacity .35s;}"
+  + "#alp-lstat{position:absolute;bottom:25px;left:0;right:0;text-align:center;font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.5);opacity:0;transition:opacity .45s;}"
+  /* the point everything collapses into, then streaks out of */
+  + "#alp-ldot{position:absolute;left:50%;top:50%;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:99px;background:radial-gradient(circle,#fff 0%,#fff 32%,#ffb877 62%,rgba(255,150,60,0) 100%);box-shadow:0 0 22px 6px rgba(255,166,77,.55);opacity:0;transform:scale(.2);will-change:transform,opacity,filter;}"
+  + "#alp-ldot.alp-on{transition:transform .2s cubic-bezier(.2,.8,.3,1.4),opacity .18s ease;opacity:1;transform:scale(1);}"
   /* amber aurora around the edges — three blurred blobs lapping in from
      offscreen, each drifting on its own slow orbit; a soft rim glow and the
      parent breathe modulate the whole thing. Flares on burst. */
@@ -567,11 +571,16 @@
     +   "</div>"
     +   '<div class="alp-footer">Copyright © Addept Automotive 2026. Full Rights Reserved.</div>'
     + "</div></div>"
-    + '<div id="alp-loader"><div id="alp-lglow"><i></i><i></i><i></i></div><div id="alp-lbadge"></div>'
-    +   '<div id="alp-lpct">0<i>%</i></div>'
-    +   '<div id="alp-lrule"><i></i></div>'
-    +   '<div id="alp-lstat">Warming up the bay</div>'
-    +   '<div id="alp-lflash"></div>'
+    + '<div id="alp-loader"><div id="alp-lglow"><i></i><i></i><i></i></div>'
+    +   '<div id="alp-lcore"><div id="alp-lbadge"></div>'
+    +     '<svg id="alp-larc" viewBox="0 0 1000 640" preserveAspectRatio="none">'
+    +       '<path class="alp-arcb" d="M 96 522 A 442 224 -11 1 1 916 426" pathLength="1000"/>'
+    +       '<path class="alp-arct" d="M 96 522 A 442 224 -11 1 1 916 426" pathLength="1000"/>'
+    +     "</svg>"
+    +   "</div>"
+    +   '<div id="alp-ldot"></div>'
+    +   '<div id="alp-lpct">00</div>'
+    +   '<div id="alp-lstat">Queenstown’s Independent Workshop</div>'
     + "</div>";
   document.body.appendChild(root);
 
@@ -634,19 +643,20 @@
   var loadedCount = 0, firstReady = false;
   var drawnFrame = -1;
   var loader = document.getElementById("alp-loader");
+  var lCore = document.getElementById("alp-lcore");
   var lBadge = document.getElementById("alp-lbadge");
   var lPct = document.getElementById("alp-lpct");
-  var lRule = document.getElementById("alp-lrule");
   var lStat = document.getElementById("alp-lstat");
-  var lFlash = document.getElementById("alp-lflash");
   var lGlow = document.getElementById("alp-lglow");
+  var lDot = document.getElementById("alp-ldot");
+  var arcB = loader.querySelector(".alp-arcb");
+  var arcT = loader.querySelector(".alp-arct");
   var batchLoaded = 0, badgeSvg = null, badgeReady = false;
   var loaderT0 = performance.now(), LOADER_MIN_MS = 2600, shownPct = 0, bursting = false;
   var REDUCE = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  /* the badge svg is inlined so its 175 traced pieces can shatter individually;
-     if the fetch is blocked (cross-origin embed) fall back to an <img> and a
-     plain zoom-burst */
+  /* badge svg is inlined for crisp scaling; cross-origin embeds fall back to
+     an <img> — the collapse animates the wrapper either way */
   fetch(BADGE).then(function (r) { return r.text(); }).then(function (txt) {
     lBadge.innerHTML = txt;
     badgeSvg = lBadge.querySelector("svg");
@@ -657,64 +667,46 @@
     badgeReady = true; lBadge.classList.add("alp-lin"); lGlow.classList.add("alp-on");
   });
 
+  /* the handoff, in three beats: the emblem and its orbit stroke collapse
+     into a single glowing point; the point holds for a blink; then it streaks
+     out horizontally like a light trail while the black shell dissolves and
+     the hero choreography populates beneath (startIntro gets a head start
+     past the transition's empty lead-in). The counter hands its spot to the
+     workshop line for the ride out. */
   function burst() {
     bursting = true;
     loader.style.pointerEvents = "none";
-    lPct.style.opacity = 0; lRule.style.opacity = 0; lStat.style.opacity = 0;
+    lPct.style.opacity = 0;
+    lStat.style.opacity = 1;
     if (REDUCE) {
       loader.style.transition = "opacity .5s ease";
       loader.style.opacity = 0;
       setTimeout(function () { loader.style.display = "none"; introActive = false; startIntro(); }, 520);
       return;
     }
-    if (badgeSvg) {
-      /* exploded view: every traced piece flies out radially from the emblem's
-         centre. Pieces keep their own matrix() attributes, so each is wrapped
-         in a fresh <g> and the wrapper animates (CSS transform on the path
-         itself would override the matrix and scramble the artwork). */
-      var vb = badgeSvg.viewBox.baseVal;
-      var cx = vb.x + vb.width / 2, cy = vb.y + vb.height / 2;
-      var maxR = Math.sqrt(vb.width * vb.width + vb.height * vb.height) / 2;
-      var pieces = Array.prototype.slice.call(badgeSvg.querySelectorAll("g path"));
-      var cap = window.innerWidth < 760 ? 150 : 400;
-      var every = Math.max(1, Math.ceil(pieces.length / cap));
-      var NS = "http://www.w3.org/2000/svg";
-      for (var i = 0; i < pieces.length; i++) {
-        var p = pieces[i];
-        var g = document.createElementNS(NS, "g");
-        p.parentNode.insertBefore(g, p); g.appendChild(p);
-        var bb; try { bb = g.getBBox(); } catch (e) { continue; }
-        var px = bb.x + bb.width / 2 - cx, py = bb.y + bb.height / 2 - cy;
-        var r = Math.sqrt(px * px + py * py) || 1;
-        var dist = i % every === 0 ? 380 + Math.random() * 540 : 130 + Math.random() * 170;
-        var dly = ((r / maxR) * 0.05 + Math.random() * 0.07).toFixed(2);
-        g.style.transformBox = "fill-box";
-        g.style.transformOrigin = "center";
-        g.style.transition = "transform .95s cubic-bezier(.25,.1,.3,1) " + dly + "s, opacity .9s linear " + dly + "s";
-        g.style.transform = "translate(" + (px / r * dist).toFixed(1) + "px," + (py / r * dist).toFixed(1) + "px) rotate(" + ((Math.random() * 2 - 1) * 150).toFixed(0) + "deg)";
-        g.style.opacity = "0";
-      }
-    } else {
-      lBadge.style.opacity = "0";
-    }
-    /* camera push through the breach: the shell dissolves early and the hero
-       choreography begins with a head start (tT jumps past the empty lead-in
-       of the intro transition) so the words rise WHILE the shards are still
-       flying — the explosion itself populates the page. The amber glow flares
-       with the blast, lingers over the film, then dies with the loader. */
-    lBadge.style.transition = "transform 1.1s cubic-bezier(.55,0,.85,1)" + (badgeSvg ? "" : ", opacity .7s ease .15s");
-    lBadge.style.transform = "scale(3.4)";
-    lGlow.style.animation = "none";
-    lGlow.style.opacity = "1";
-    setTimeout(function () { loader.classList.add("alp-lout"); }, 260);
-    setTimeout(function () { lFlash.classList.add("alp-on"); }, 340);
-    setTimeout(function () { introActive = false; startIntro(); tT = tDur * 0.46; }, 400);
-    setTimeout(function () { lGlow.style.transition = "opacity .7s ease"; lGlow.style.opacity = "0"; }, 850);
-    setTimeout(function () { loader.style.display = "none"; }, 1600);
+    lCore.style.transition = "transform .5s cubic-bezier(.7,0,.95,.7)";
+    lCore.style.transform = "scale(.012)";
+    setTimeout(function () {
+      lCore.style.visibility = "hidden";
+      lDot.classList.add("alp-on");
+    }, 480);
+    setTimeout(function () {
+      lDot.style.transition = "transform .55s cubic-bezier(.8,0,.9,.55), opacity .3s ease .25s, filter .55s ease";
+      lDot.style.transform = "scale(220,.4)";
+      lDot.style.filter = "blur(6px)";
+      lDot.style.opacity = "0";
+      loader.classList.add("alp-lout");
+      lGlow.style.animation = "none";
+      lGlow.style.opacity = "1";
+    }, 700);
+    setTimeout(function () { introActive = false; startIntro(); tT = tDur * 0.46; }, 800);
+    setTimeout(function () { lGlow.style.transition = "opacity .8s ease"; lGlow.style.opacity = "0"; lStat.style.opacity = 0; }, 1250);
+    setTimeout(function () { loader.style.display = "none"; }, 1900);
   }
 
-  /* loader heartbeat: the counter tracks min(real batch progress, a minimum
-     dwell) so a warm cache still gets the moment; stops itself at the burst */
+  /* loader heartbeat: a bare zero-padded counter tracking min(real batch
+     progress, a minimum dwell); the orbit stroke draws around the emblem with
+     an amber tip leading the line. Stops itself at the burst. */
   (function loaderTick() {
     if (bursting) return;
     requestAnimationFrame(loaderTick);
@@ -723,15 +715,15 @@
     var target = Math.min(tq, dq) * 100;
     shownPct += (target - shownPct) * 0.14;
     if (target >= 100 && shownPct > 99.1) shownPct = 100;
-    lPct.innerHTML = Math.floor(shownPct) + "<i>%</i>";
-    lRule.firstElementChild.style.transform = "scaleX(" + (shownPct / 100).toFixed(3) + ")";
-    /* warm caches load all frames instantly — keep the readout honest to the
-       rolling counter rather than jumping straight to 238/238 */
-    var shownFrames = Math.min(loadedCount, Math.ceil(shownPct / 100 * TOTAL_FRAMES));
-    lStat.textContent = shownPct >= 100 ? "Ready · Frankton, Queenstown"
-      : shownFrames > 0 ? "Loading footage · " + ("00" + shownFrames).slice(-3) + " / " + TOTAL_FRAMES
-      : "Warming up the bay";
-    if (!REDUCE) lBadge.style.transform = "scale(" + (1 + shownPct / 100 * 0.32).toFixed(4) + ")";
+    var pInt = Math.floor(shownPct);
+    lPct.textContent = pInt >= 100 ? "100" : ("0" + pInt).slice(-2);
+    var p = shownPct / 100;
+    arcB.style.strokeDasharray = "1000";
+    arcB.style.strokeDashoffset = (1000 * (1 - p)).toFixed(1);
+    arcT.style.strokeDasharray = "34 966";
+    arcT.style.strokeDashoffset = (34 - 1000 * p).toFixed(1);
+    arcT.style.opacity = p > 0.02 && p < 0.995 ? 1 : 0;
+    if (!REDUCE) lCore.style.transform = "scale(" + (1 + p * 0.18).toFixed(4) + ")";
     if (shownPct >= 100 && firstReady && badgeReady) burst();
   })();
   var crop = { sx: 0, sy: 0, scale: 1, imgW: 1600, imgH: 900 };

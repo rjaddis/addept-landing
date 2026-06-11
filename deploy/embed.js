@@ -244,7 +244,8 @@
   + ".alp-hbrk i.bl{bottom:0;left:0;border-bottom-width:2px;border-left-width:2px;}"
   + ".alp-hbrk i.br{bottom:5px;right:0;border-bottom-width:2px;border-right-width:2px;}"
   + ".alp-section.alp-hero-low{align-items:flex-end;}"
-  + ".alp-section.alp-hero-low .alp-inner{box-sizing:border-box;width:clamp(480px,48%,620px);max-width:none;padding:0 0 14vh 56px;position:relative;left:50px;top:-25px;}"
+  + ".alp-section.alp-hero-low .alp-inner{box-sizing:border-box;width:clamp(480px,48%,620px);max-width:none;padding:0 0 14vh 56px;position:relative;left:100px;top:-25px;}"
+  + ".alp-hwrap{transform:scale(1.4);transform-origin:left bottom;}"
   + ".alp-lead{margin-top:18px;color:rgba(255,255,255,.58);line-height:1.65;font-size:clamp(.98rem,1.8vw,1.2rem);max-width:30em;}"
   + ".alp-ticks{margin-top:26px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 20px;font-size:11px;letter-spacing:.05em;color:rgba(255,255,255,.38);}"
   + ".alp-ticks span{display:inline-flex;align-items:center;gap:6px;}"
@@ -336,6 +337,7 @@
   +   ".alp-heroh{font-size:26px;}"
   +   ".alp-herodim{font-size:27px;}"
   +   ".alp-section.alp-hero-low .alp-inner{width:100%;padding:0 22px 12vh;left:0;top:0;}"
+  +   ".alp-hwrap{transform:none;}"
   +   "#alp-nav{padding:14px 16px;}"
   +   "#alp-nav .alp-brand{font-size:13px;}"
   +   "#alp-dots{display:none;}"
@@ -451,6 +453,7 @@
   var SEC = [
     { id: "hero", stop: 2.9536, enter: [0, 10], exit: [0, -11], html:
       '<div class="alp-inner alp-left">'
+      + '<div class="alp-hwrap">'
       + '<div class="alp-eyebrow alp-rise">Queenstown’s Independent Workshop</div>'
       + '<div class="alp-hbrk">'
       +   '<i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>'
@@ -461,6 +464,7 @@
       + '<div class="alp-btnrow alp-rise"><a class="alp-btn alp-btn-light" href="#alp-booking">Make a booking</a>'
       + '<a class="alp-btn alp-btn-ghost" href="#alp-booking">Request estimate</a></div>'
       + '<div class="alp-ticks alp-rise"><span>' + check + "Euro &amp; Japanese specialists</span><span>" + check + "Tuning &amp; emissions solutions</span></div>"
+      + "</div>"
       + "</div>" },
     { id: "about", stop: 15.6118, enter: [22, 0], exit: [-18, 0],
       deco: flo(9, 30, 0.8, 8, 0.8, '<span class="alp-fchip">' + check + "Comprehensive Diagnostics</span>")
@@ -1256,38 +1260,35 @@
     }
   });
 
-  // ── Molten cursor companion (desktop): a glowing amber droplet chases the
-  // pointer with springy lag, stretching along its velocity like hot metal and
-  // shedding sparks when it moves fast. The rAF loop sleeps whenever the
-  // pointer is still and no sparks are alive, so parked idle stays free.
+  // ── Molten cursor companion (desktop): the droplet IS the pointer — pinned
+  // dead-on it, stretching along velocity like hot metal — shedding long-lived
+  // physical sparks: white-hot streaks that cool through amber to ember red,
+  // fall under gravity, flicker, and occasionally pop and split mid-air.
+  // The rAF loop sleeps when the pointer rests and the last spark has died.
   var FINE = window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
   if (FINE && !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches)) (function () {
     var c = document.createElement("canvas");
     c.id = "alp-fx";
     root.appendChild(c);
-    root.classList.add("alp-nocursor"); // the droplet IS the cursor now
+    root.classList.add("alp-nocursor");
     var fctx = c.getContext("2d");
     var W = 0, H = 0, FDPR = Math.min(window.devicePixelRatio || 1, 2);
     function fxSize() { W = window.innerWidth; H = window.innerHeight; c.width = W * FDPR; c.height = H * FDPR; }
     fxSize(); window.addEventListener("resize", fxSize);
     var tx = -100, ty = -100, ox = -100, oy = -100, lvx = 0, lvy = 0;
     var sparks = [], fxRun = false, lastMove = 0;
-    function spawn(x, y, pow) {
-      if (sparks.length > 240) return;
-      var a = Math.random() * 6.283, sp = (0.4 + Math.random() * 1.4) * pow;
-      sparks.push({ x: x, y: y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 0.3,
-        life: 1, dk: 0.02 + Math.random() * 0.025, r: 0.8 + Math.random() * 1.8, w: Math.random() < 0.3 });
+    function addSpark(x, y, vx, vy, hot) {
+      if (sparks.length > 420) return;
+      sparks.push({ x: x, y: y, vx: vx, vy: vy, life: 1,
+        dk: 0.0045 + Math.random() * 0.009,
+        r: hot ? 1.3 + Math.random() * 1.5 : 0.6 + Math.random() * 1.1 });
     }
-    function spawnTail(x, y, vx, vy, sp) {
-      if (sparks.length > 240) return;
-      var m = Math.sqrt(vx * vx + vy * vy) || 1;
-      var bx = -vx / m, by = -vy / m;        /* flung backward along travel */
-      var j = (Math.random() - 0.5) * 1.4;   /* sideways scatter */
-      var s2 = 0.5 + Math.random() * 1.6 + sp * 0.04;
-      sparks.push({ x: x, y: y,
-        vx: bx * s2 - by * j, vy: by * s2 + bx * j - 0.15,
-        life: 1, dk: 0.012 + Math.random() * 0.022,
-        r: 0.7 + Math.random() * 1.9, w: Math.random() < 0.35 });
+    function spawnTail(x, y, dirx, diry, sp) {
+      var m = Math.sqrt(dirx * dirx + diry * diry) || 1;
+      var bx = -dirx / m, by = -diry / m;
+      var j = (Math.random() - 0.5) * 1.8;
+      var v = 0.7 + Math.random() * 2.1 + sp * 0.05;
+      addSpark(x, y, bx * v - by * j, by * v + bx * j - 0.25, Math.random() < 0.2);
     }
     function wake() { if (!fxRun) { fxRun = true; requestAnimationFrame(fxStep); } }
     window.addEventListener("mousemove", function (e) {
@@ -1296,51 +1297,78 @@
       wake();
     }, { passive: true });
     window.addEventListener("mousedown", function (e) {
-      for (var i = 0; i < 12; i++) spawn(e.clientX, e.clientY, 2.2);
+      for (var i = 0; i < 18; i++) {
+        var a = Math.random() * 6.283, sp2 = 1.2 + Math.random() * 3.4;
+        addSpark(e.clientX, e.clientY, Math.cos(a) * sp2, Math.sin(a) * sp2 - 0.8, Math.random() < 0.4);
+      }
       lastMove = performance.now();
       wake();
     }, { passive: true });
+    /* colour cools with life: white-hot -> amber -> ember red */
+    function tone(life) {
+      return life > 0.75 ? "255,246,222" : life > 0.45 ? "255,198,112" : life > 0.22 ? "255,138,56" : "206,82,40";
+    }
     function fxStep() {
-      var dx = tx - ox, dy = ty - oy;
       var pox = ox, poy = oy;
-      ox += dx * 0.55; oy += dy * 0.55;
-      lvx = lvx * 0.75 + dx * 0.25; lvy = lvy * 0.75 + dy * 0.25;
+      ox = tx; oy = ty; /* pinned dead-on the pointer */
+      var mvx = ox - pox, mvy = oy - poy;
+      lvx = lvx * 0.7 + mvx * 0.3; lvy = lvy * 0.7 + mvy * 0.3;
       var speed = Math.sqrt(lvx * lvx + lvy * lvy);
-      /* comet tail: seed sparks all along this frame's travel so fast sweeps
-         leave a continuous blazing trail */
-      if (speed > 0.6 && pox > -50) {
-        var nT = Math.min(10, 1 + Math.ceil(speed * 0.5));
+      if (speed > 0.5 && pox > -50) {
+        var nT = Math.min(14, 1 + Math.ceil(speed * 0.6));
         for (var sT = 0; sT < nT; sT++) {
           var tt = Math.random();
-          spawnTail(pox + (ox - pox) * tt, poy + (oy - poy) * tt, lvx, lvy, speed);
+          spawnTail(pox + mvx * tt, poy + mvy * tt, lvx, lvy, speed);
         }
       }
       fctx.setTransform(FDPR, 0, 0, FDPR, 0, 0);
       fctx.clearRect(0, 0, W, H);
       fctx.globalCompositeOperation = "lighter";
+      fctx.lineCap = "round";
       if (ox > -50) {
         var ang = Math.atan2(lvy, lvx), st = Math.min(speed * 0.045, 1.6);
         fctx.save();
         fctx.translate(ox, oy); fctx.rotate(ang); fctx.scale(1 + st, Math.max(1 - st * 0.35, 0.55));
-        var g = fctx.createRadialGradient(0, 0, 0, 0, 0, 13);
-        g.addColorStop(0, "rgba(255,236,200,.8)");
-        g.addColorStop(0.35, "rgba(255,166,77,.35)");
+        var g = fctx.createRadialGradient(0, 0, 0, 0, 0, 12);
+        g.addColorStop(0, "rgba(255,240,210,.9)");
+        g.addColorStop(0.35, "rgba(255,166,77,.38)");
         g.addColorStop(1, "rgba(255,120,40,0)");
         fctx.fillStyle = g;
-        fctx.beginPath(); fctx.arc(0, 0, 13, 0, 6.283); fctx.fill();
+        fctx.beginPath(); fctx.arc(0, 0, 12, 0, 6.283); fctx.fill();
         fctx.restore();
       }
       for (var i = sparks.length - 1; i >= 0; i--) {
         var s = sparks[i];
-        s.x += s.vx; s.y += s.vy; s.vy += 0.015; s.vx *= 0.985; s.vy *= 0.985;
+        s.vy += 0.05;                  /* gravity */
+        s.vx *= 0.988; s.vy *= 0.988;  /* drag */
+        s.x += s.vx; s.y += s.vy;
         s.life -= s.dk;
-        if (s.life <= 0) { sparks.splice(i, 1); continue; }
-        var al = s.life * s.life;
-        fctx.fillStyle = s.w ? "rgba(255,240,214," + (al * 0.9).toFixed(3) + ")" : "rgba(255,166,77," + (al * 0.8).toFixed(3) + ")";
-        fctx.beginPath(); fctx.arc(s.x, s.y, s.r * (0.5 + s.life * 0.5), 0, 6.283); fctx.fill();
+        if (s.life <= 0 || s.y > H + 50 || s.x < -60 || s.x > W + 60) { sparks.splice(i, 1); continue; }
+        /* a spark occasionally pops and splits mid-flight */
+        if (s.life < 0.85 && s.life > 0.25 && sparks.length < 400 && Math.random() < 0.005) {
+          for (var k2 = 0; k2 < 2; k2++) {
+            var ra = (Math.random() - 0.5) * 1.6;
+            var ca = Math.cos(ra), sa = Math.sin(ra);
+            addSpark(s.x, s.y, (s.vx * ca - s.vy * sa) * 0.7, (s.vx * sa + s.vy * ca) * 0.7 - 0.3, false);
+          }
+          s.dk *= 1.8; /* the parent burns out quicker after popping */
+        }
+        var al = Math.pow(s.life, 1.4) * (0.72 + Math.random() * 0.28); /* flicker */
+        var spd2 = s.vx * s.vx + s.vy * s.vy;
+        if (spd2 > 0.04) {
+          /* motion streak along the velocity — how real sparks read */
+          fctx.strokeStyle = "rgba(" + tone(s.life) + "," + al.toFixed(3) + ")";
+          fctx.lineWidth = s.r * (0.5 + s.life * 0.9);
+          fctx.beginPath();
+          fctx.moveTo(s.x, s.y);
+          fctx.lineTo(s.x - s.vx * 2.4, s.y - s.vy * 2.4);
+          fctx.stroke();
+        } else {
+          fctx.fillStyle = "rgba(" + tone(s.life) + "," + al.toFixed(3) + ")";
+          fctx.beginPath(); fctx.arc(s.x, s.y, s.r * (0.4 + s.life * 0.6), 0, 6.283); fctx.fill();
+        }
       }
-      // sleep once settled: companion parked on the cursor, no sparks left
-      if (performance.now() - lastMove > 300 && sparks.length === 0 && Math.abs(dx) + Math.abs(dy) < 0.4) {
+      if (performance.now() - lastMove > 300 && sparks.length === 0) {
         fxRun = false;
         return;
       }

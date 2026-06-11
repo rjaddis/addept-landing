@@ -262,7 +262,7 @@
 
   /* Sections: each parks the video at a scene; transitions play the footage. */
   var SEC = [
-    { id: "hero", stop: 1, enter: [0, 10], exit: [0, -11], html:
+    { id: "hero", stop: 0.846, enter: [0, 10], exit: [0, -11], html:
       '<div class="alp-inner alp-left">'
       + '<div class="alp-eyebrow alp-rise">Queenstown · Independent Mechanics</div>'
       + '<h1 class="alp-h1 alp-split">Your vehicle,\nrunning at its best.</h1>'
@@ -272,18 +272,18 @@
       + '<a class="alp-btn alp-btn-ghost" href="' + PHONE_TEL + '">Call ' + PHONE_DISPLAY + "</a></div>"
       + '<div class="alp-ticks alp-rise"><span>' + check + "WOF repair specialists</span><span>" + check + "Diesel engine solutions</span><span>" + check + "Frankton, Queenstown</span></div>"
       + "</div>" },
-    { id: "about", stop: 16, enter: [22, 0], exit: [-18, 0], html:
+    { id: "about", stop: 16.88, enter: [22, 0], exit: [-18, 0], html:
       '<div class="alp-inner alp-center">'
       + '<i class="alp-hr" data-o="r"></i>'
       + '<h2 class="alp-giant alp-split">First-rate repairs.\nTop-tier care.</h2>'
       + '<i class="alp-hr" data-o="l"></i>'
       + '<p class="alp-lead alp-rise" style="margin-top:0;">Your go-to for peak vehicle performance and reliability — comprehensive diagnostics, routine maintenance, diesel engine solutions and WOF repairs, plus a tyre &amp; battery marketplace.</p>'
       + "</div>" },
-    { id: "services", stop: 30, enter: [0, -12], exit: [0, -12], svc: true, html:
+    { id: "services", stop: 27.006, enter: [0, -12], exit: [0, -12], svc: true, html:
       '<div class="alp-inner" style="position:absolute;inset:0;">'
       + '<div id="alp-svc-cards">' + svcCards + "</div>"
       + "</div>" },
-    { id: "inspections", stop: 42.2, enter: [-22, 0], exit: [16, 0], html:
+    { id: "inspections", stop: 42.196, enter: [-22, 0], exit: [16, 0], html:
       '<div class="alp-inner alp-left">'
       + '<div class="alp-eyebrow alp-rise">Pre-Purchase Inspections</div>'
       + '<h2 class="alp-h2 alp-split">Buying? Selling?\nKnow first.</h2>'
@@ -291,14 +291,14 @@
       + '<p class="alp-lead alp-rise" style="margin-top:0;">We give any vehicle you’re about to buy or sell a thorough inspection — and list anything it needs now or in the near future. No surprises after the handshake.</p>'
       + '<div class="alp-btnrow alp-rise"><a class="alp-btn alp-btn-ghost" href="' + PHONE_TEL + '">Call ' + PHONE_DISPLAY + "</a></div>"
       + "</div>" },
-    { id: "overhauls", stop: 60, enter: [0, 14], exit: [0, -12], top: true, html:
+    { id: "overhauls", stop: 58.652, enter: [0, 14], exit: [0, -12], top: true, html:
       '<div class="alp-inner alp-left" style="max-width:600px;">'
       + '<div class="alp-eyebrow alp-rise">European & Japanese Specialists</div>'
       + '<h2 class="alp-h2 alp-split">Overhauls are\nour specialty.</h2>'
       + '<i class="alp-hr" data-o="l" style="max-width:380px;"></i>'
       + '<p class="alp-lead alp-rise" style="margin-top:0;font-size:clamp(.92rem,1.5vw,1.05rem);">Engine and transmission overhauls and intricate auto electrical work — the deep jobs other shops send away.</p>'
       + "</div>" },
-    { id: "hours", stop: 81, enter: [20, 0], exit: [-16, 0], html:
+    { id: "hours", stop: 80.171, enter: [20, 0], exit: [-16, 0], html:
       '<div class="alp-inner alp-center">'
       + '<h2 class="alp-giant alp-split">Drop in.\nWe’ll sort it.</h2>'
       + '<div class="alp-hours">'
@@ -312,7 +312,7 @@
       + "</div>"
       + '<p class="alp-lead alp-rise" style="font-size:13px;margin-top:22px;color:rgba(255,255,255,.35);">35B Brookes Road, Frankton, Queenstown 9300</p>'
       + "</div>" },
-    { id: "cta", stop: 93, enter: [0, 13], exit: [0, -10], html:
+    { id: "cta", stop: 93.673, enter: [0, 13], exit: [0, -10], html:
       '<div class="alp-inner alp-center">'
       + '<h2 class="alp-h1 alp-split" style="font-size:clamp(2.2rem,5.5vw,3.8rem);">Book your\nvehicle in.</h2>'
       + '<i class="alp-hr" data-o="l"></i>'

@@ -1368,8 +1368,8 @@
       }
       for (var i = sparks.length - 1; i >= 0; i--) {
         var s = sparks[i];
-        s.vy += 0.04;                  /* gravity */
-        s.vx *= 0.99; s.vy *= 0.99;    /* drag */
+        s.vy += 0.085;                 /* gravity */
+        s.vx *= 0.986; s.vy *= 0.992;  /* drag */
         s.x += s.vx; s.y += s.vy;
         s.life -= s.dk;
         if (s.life <= 0 || s.y > H + 50 || s.x < -60 || s.x > W + 60) { sparks.splice(i, 1); continue; }

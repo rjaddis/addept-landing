@@ -178,6 +178,22 @@
   + "#alp-lembers i:nth-child(26){left:71%;width:2px;height:2px;animation-duration:7.4s;animation-delay:-4.8s;}"
   + "#alp-lembers i:nth-child(27){left:22%;width:2px;height:2px;animation-duration:8.4s;animation-delay:-5.8s;}"
   + "#alp-lembers i:nth-child(28){left:78%;width:2px;height:2px;animation-duration:6.6s;animation-delay:-2.2s;}"
+  + "#alp-lembers i:nth-child(29){left:4%;top:62%;width:2px;height:2px;animation-duration:8.4s;animation-delay:-3.1s;}"
+  + "#alp-lembers i:nth-child(30){left:9%;top:48%;width:2px;height:2px;animation-duration:7.1s;animation-delay:-5.7s;}"
+  + "#alp-lembers i:nth-child(31){left:14%;top:70%;width:3px;height:3px;animation-duration:9.3s;animation-delay:-1.2s;}"
+  + "#alp-lembers i:nth-child(32){left:18%;top:40%;width:2px;height:2px;animation-duration:6.2s;animation-delay:-4.4s;}"
+  + "#alp-lembers i:nth-child(33){left:82%;top:64%;width:2px;height:2px;animation-duration:8.9s;animation-delay:-2.6s;}"
+  + "#alp-lembers i:nth-child(34){left:87%;top:46%;width:3px;height:3px;animation-duration:7.7s;animation-delay:-6.3s;}"
+  + "#alp-lembers i:nth-child(35){left:92%;top:72%;width:2px;height:2px;animation-duration:9.8s;animation-delay:-0.9s;}"
+  + "#alp-lembers i:nth-child(36){left:96%;top:52%;width:2px;height:2px;animation-duration:6.8s;animation-delay:-5.1s;}"
+  + "#alp-lembers i:nth-child(37){left:6%;top:82%;width:2px;height:2px;animation-duration:10.2s;animation-delay:-7.4s;}"
+  + "#alp-lembers i:nth-child(38){left:38%;top:78%;width:2px;height:2px;animation-duration:7.9s;animation-delay:-2.1s;}"
+  + "#alp-lembers i:nth-child(39){left:47%;top:84%;width:3px;height:3px;animation-duration:8.7s;animation-delay:-5.9s;}"
+  + "#alp-lembers i:nth-child(40){left:56%;top:76%;width:2px;height:2px;animation-duration:6.5s;animation-delay:-3.8s;}"
+  + "#alp-lembers i:nth-child(41){left:64%;top:82%;width:2px;height:2px;animation-duration:9.1s;animation-delay:-1.7s;}"
+  + "#alp-lembers i:nth-child(42){left:72%;top:80%;width:2px;height:2px;animation-duration:7.3s;animation-delay:-6.6s;}"
+  + "#alp-lembers i:nth-child(43){left:90%;top:34%;width:2px;height:2px;animation-duration:8.1s;animation-delay:-4.9s;}"
+  + "#alp-lembers i:nth-child(44){left:11%;top:30%;width:2px;height:2px;animation-duration:9.6s;animation-delay:-2.4s;}"
   + "@keyframes alp-ember{0%{transform:translateY(16vh) translateX(0) scale(1);opacity:0}7%{opacity:.9}28%{transform:translateY(2vh) translateX(7px) scale(.95);opacity:.55}55%{transform:translateY(-12vh) translateX(-6px) scale(.8);opacity:.65}100%{transform:translateY(-28vh) translateX(4px) scale(.45);opacity:0}}"
   /* orbit stroke that draws itself around the emblem with an amber pen-tip */
   + "#alp-larc{position:absolute;left:-16%;top:-20%;width:132%;height:140%;pointer-events:none;overflow:visible;}"
@@ -655,7 +671,7 @@
     +   '<div class="alp-footer">Copyright © Addept Automotive 2026. Full Rights Reserved.</div>'
     + "</div></div>"
     + '<div id="alp-loader">'
-    +   '<div id="alp-lembers"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>'
+    +   '<div id="alp-lembers"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>'
     +   '<div id="alp-lcore"><div id="alp-lbadge"></div><div id="alp-lsheen"></div>'
     +     '<svg id="alp-larc" viewBox="0 0 1000 640" preserveAspectRatio="none">'
     +       '<path class="alp-arcb" d="M 96 522 A 442 224 -11 1 1 916 426" pathLength="1000"/>'

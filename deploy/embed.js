@@ -142,6 +142,11 @@
   + "#alp-lflash{position:absolute;inset:0;background:radial-gradient(circle at 50% 47%,rgba(255,255,255,.95) 0%,rgba(255,255,255,.5) 28%,transparent 64%);opacity:0;pointer-events:none;}"
   + "#alp-lflash.alp-on{animation:alp-lflash .55s ease-out forwards;}"
   + "@keyframes alp-lflash{0%{opacity:0}18%{opacity:.9}100%{opacity:0}}"
+  /* amber workshop glow around the edges — breathes while loading, flares on burst */
+  + "#alp-lglow{position:absolute;inset:0;pointer-events:none;opacity:0;box-shadow:inset 0 0 150px 12px rgba(255,166,77,.45),inset 0 0 60px 4px rgba(255,120,40,.26);}"
+  + "#alp-lglow.alp-on{animation:alp-glowin 1.6s ease .4s forwards,alp-lbreathe 5.6s ease-in-out 2.2s infinite;}"
+  + "@keyframes alp-glowin{to{opacity:1}}"
+  + "@keyframes alp-lbreathe{0%,100%{opacity:1}50%{opacity:.6}}"
   + "@media (max-width:760px){#alp-lbadge{width:78vw;}}"
   /* nav */
   + "#alp-nav{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:18px 32px;}"
@@ -553,7 +558,7 @@
     +   "</div>"
     +   '<div class="alp-footer">Copyright © Addept Automotive 2026. Full Rights Reserved.</div>'
     + "</div></div>"
-    + '<div id="alp-loader"><div id="alp-lbadge"></div>'
+    + '<div id="alp-loader"><div id="alp-lglow"></div><div id="alp-lbadge"></div>'
     +   '<div id="alp-lpct">0<i>%</i></div>'
     +   '<div id="alp-lrule"><i></i></div>'
     +   '<div id="alp-lstat">Warming up the bay</div>'
@@ -625,83 +630,27 @@
   var lRule = document.getElementById("alp-lrule");
   var lStat = document.getElementById("alp-lstat");
   var lFlash = document.getElementById("alp-lflash");
-  var batchLoaded = 0, badgeSvg = null, badgeTxt = null, badgeReady = false;
+  var lGlow = document.getElementById("alp-lglow");
+  var batchLoaded = 0, badgeSvg = null, badgeReady = false;
   var loaderT0 = performance.now(), LOADER_MIN_MS = 2600, shownPct = 0, bursting = false;
   var REDUCE = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  /* burst variant switch for comparison: #burst=shatter (default) | iris | mask */
-  var BURST_MODE = (location.hash.match(/burst=([a-z]+)/) || [])[1] || "shatter";
 
   /* the badge svg is inlined so its 175 traced pieces can shatter individually;
      if the fetch is blocked (cross-origin embed) fall back to an <img> and a
      plain zoom-burst */
   fetch(BADGE).then(function (r) { return r.text(); }).then(function (txt) {
-    badgeTxt = txt;
     lBadge.innerHTML = txt;
     badgeSvg = lBadge.querySelector("svg");
     if (badgeSvg) { badgeSvg.removeAttribute("width"); badgeSvg.removeAttribute("height"); }
-    badgeReady = true; lBadge.classList.add("alp-lin");
+    badgeReady = true; lBadge.classList.add("alp-lin"); lGlow.classList.add("alp-on");
   }).catch(function () {
     lBadge.innerHTML = '<img src="' + BADGE + '" alt="Addept Automotive">';
-    badgeReady = true; lBadge.classList.add("alp-lin");
+    badgeReady = true; lBadge.classList.add("alp-lin"); lGlow.classList.add("alp-on");
   });
-
-  /* variant A — hard camera push, shockwave, then the black shell irises open
-     from the centre (clip-path with an evenodd hole growing to the corners) */
-  function burstIris() {
-    lBadge.style.transition = "transform 1s cubic-bezier(.55,0,.85,1), opacity .6s ease .25s";
-    lBadge.style.transform = "scale(4.2)";
-    lBadge.style.opacity = "0";
-    setTimeout(function () { lFlash.classList.add("alp-on"); }, 300);
-    setTimeout(function () {
-      var w = window.innerWidth, h = window.innerHeight;
-      var cxp = w / 2, cyp = h * 0.47, R = Math.sqrt(w * w + h * h);
-      function ring(r) {
-        return "path(evenodd, 'M0 0H" + w + "V" + h + "H0Z M" + (cxp - r) + " " + cyp
-          + "a" + r + " " + r + " 0 1 0 " + (2 * r) + " 0a" + r + " " + r + " 0 1 0 " + (-2 * r) + " 0Z')";
-      }
-      loader.style.clipPath = ring(1);
-      requestAnimationFrame(function () { requestAnimationFrame(function () {
-        loader.style.transition = "clip-path .75s cubic-bezier(.6,0,.3,1)";
-        loader.style.clipPath = ring(R);
-      }); });
-    }, 380);
-    setTimeout(function () { introActive = false; startIntro(); }, 650);
-    setTimeout(function () { loader.style.display = "none"; }, 1180);
-  }
-
-  /* variant C — the emblem becomes the window: the loader is masked by an
-     inverted copy of the badge (white sheet, badge painted black), so the film
-     shows through the linework itself as it scales past the camera */
-  function burstMask() {
-    var inner = badgeTxt.replace(/^[\s\S]*?<svg[^>]*>/, "").replace(/<\/svg>\s*$/, "");
-    var vb = badgeSvg.getAttribute("viewBox") || "143 165 769 485";
-    var vbp = vb.split(/\s+/);
-    var m = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="' + vb + '">'
-      + '<rect x="' + vbp[0] + '" y="' + vbp[1] + '" width="' + vbp[2] + '" height="' + vbp[3] + '" fill="#fff"/>'
-      + '<g style="filter:brightness(0)">' + inner + "</g></svg>";
-    var uri = 'url("data:image/svg+xml,' + encodeURIComponent(m) + '")';
-    var bw = lBadge.getBoundingClientRect().width || 520;
-    var bh = bw * vbp[3] / vbp[2];
-    var st = loader.style;
-    st.maskImage = uri; st.webkitMaskImage = uri;
-    st.maskMode = "luminance";
-    st.maskRepeat = "no-repeat"; st.webkitMaskRepeat = "no-repeat";
-    st.maskPosition = "center 47%"; st.webkitMaskPosition = "center 47%";
-    st.maskSize = bw + "px " + bh + "px"; st.webkitMaskSize = bw + "px " + bh + "px";
-    lBadge.style.transition = "opacity .25s ease";
-    lBadge.style.opacity = "0";
-    requestAnimationFrame(function () { requestAnimationFrame(function () {
-      st.transition = "mask-size 1.05s cubic-bezier(.55,0,.85,1), -webkit-mask-size 1.05s cubic-bezier(.55,0,.85,1)";
-      st.maskSize = (bw * 42) + "px " + (bh * 42) + "px";
-      st.webkitMaskSize = (bw * 42) + "px " + (bh * 42) + "px";
-    }); });
-    setTimeout(function () { lFlash.classList.add("alp-on"); }, 420);
-    setTimeout(function () { introActive = false; startIntro(); }, 680);
-    setTimeout(function () { loader.style.display = "none"; }, 1200);
-  }
 
   function burst() {
     bursting = true;
+    loader.style.pointerEvents = "none";
     lPct.style.opacity = 0; lRule.style.opacity = 0; lStat.style.opacity = 0;
     if (REDUCE) {
       loader.style.transition = "opacity .5s ease";
@@ -709,8 +658,6 @@
       setTimeout(function () { loader.style.display = "none"; introActive = false; startIntro(); }, 520);
       return;
     }
-    if (BURST_MODE === "mask" && badgeTxt && badgeSvg) { burstMask(); return; }
-    if (BURST_MODE === "iris" || !badgeSvg) { burstIris(); return; }
     if (badgeSvg) {
       /* exploded view: every traced piece flies out radially from the emblem's
          centre. Pieces keep their own matrix() attributes, so each is wrapped
@@ -731,25 +678,30 @@
         var px = bb.x + bb.width / 2 - cx, py = bb.y + bb.height / 2 - cy;
         var r = Math.sqrt(px * px + py * py) || 1;
         var dist = i % every === 0 ? 380 + Math.random() * 540 : 130 + Math.random() * 170;
-        var dly = ((r / maxR) * 0.05 + Math.random() * 0.06).toFixed(2);
+        var dly = ((r / maxR) * 0.05 + Math.random() * 0.07).toFixed(2);
         g.style.transformBox = "fill-box";
         g.style.transformOrigin = "center";
-        g.style.transition = "transform .85s cubic-bezier(.25,.1,.3,1) " + dly + "s, opacity .8s linear " + dly + "s";
+        g.style.transition = "transform .95s cubic-bezier(.25,.1,.3,1) " + dly + "s, opacity .9s linear " + dly + "s";
         g.style.transform = "translate(" + (px / r * dist).toFixed(1) + "px," + (py / r * dist).toFixed(1) + "px) rotate(" + ((Math.random() * 2 - 1) * 150).toFixed(0) + "deg)";
         g.style.opacity = "0";
       }
     } else {
       lBadge.style.opacity = "0";
     }
-    /* camera push through the breach + shockwave + the black shell dissolving */
-    lBadge.style.transition = "transform 1s cubic-bezier(.55,0,.85,1)" + (badgeSvg ? "" : ", opacity .7s ease .15s");
+    /* camera push through the breach: the shell dissolves early and the hero
+       choreography begins with a head start (tT jumps past the empty lead-in
+       of the intro transition) so the words rise WHILE the shards are still
+       flying — the explosion itself populates the page. The amber glow flares
+       with the blast, lingers over the film, then dies with the loader. */
+    lBadge.style.transition = "transform 1.1s cubic-bezier(.55,0,.85,1)" + (badgeSvg ? "" : ", opacity .7s ease .15s");
     lBadge.style.transform = "scale(3.4)";
-    setTimeout(function () { lFlash.classList.add("alp-on"); }, 360);
-    setTimeout(function () { loader.classList.add("alp-lout"); }, 420);
-    /* hero choreography starts while the last shards are still flying so the
-       film never sits bare */
-    setTimeout(function () { introActive = false; startIntro(); }, 650);
-    setTimeout(function () { loader.style.display = "none"; }, 1040);
+    lGlow.style.animation = "none";
+    lGlow.style.opacity = "1";
+    setTimeout(function () { loader.classList.add("alp-lout"); }, 260);
+    setTimeout(function () { lFlash.classList.add("alp-on"); }, 340);
+    setTimeout(function () { introActive = false; startIntro(); tT = tDur * 0.46; }, 400);
+    setTimeout(function () { lGlow.style.transition = "opacity .7s ease"; lGlow.style.opacity = "0"; }, 850);
+    setTimeout(function () { loader.style.display = "none"; }, 1600);
   }
 
   /* loader heartbeat: the counter tracks min(real batch progress, a minimum

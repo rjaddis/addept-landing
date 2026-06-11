@@ -38,6 +38,7 @@
      and freezes, so settled states must not hold residual sub-pixel values */
   function expoOut(t) { return t >= 1 ? 1 : 1 - Math.pow(2, -10 * t); }
   function expoIn(t) { return t <= 0 ? 0 : t >= 1 ? 1 : Math.pow(2, 10 * (t - 1)); }
+  function backOut(t) { t = clamp01(t) - 1; return 1 + 2.70158 * t * t * t + 1.70158 * t * t; }
   function lerp(a, b, t) { return a + (b - a) * t; }
 
   // ── Styles ─────────────────────────────────────────────────────────────────
@@ -75,6 +76,7 @@
      without affecting layout; no horizontal padding (would eat word spacing) */
   + ".alp-wm{display:inline-block;overflow:hidden;vertical-align:top;padding:.12em 0 .18em;margin:-.12em 0 -.18em;}"
   + ".alp-w{display:inline-block;transform:translateY(130%);}"
+  + ".alp-ln{display:inline-block;will-change:transform;}"
   /* deco: blueprint boxes that draw themselves around key content */
   + ".alp-box{position:relative;display:inline-block;padding:30px 34px;}"
   + ".alp-box .alp-be{position:absolute;display:block;background:rgba(255,255,255,.16);transform:scaleX(0);}"
@@ -670,9 +672,9 @@
   Array.prototype.forEach.call(root.querySelectorAll(".alp-split"), function (el) {
     var lines = el.textContent.split("\n");
     el.innerHTML = lines.map(function (line) {
-      return line.split(" ").map(function (w) {
+      return '<span class="alp-ln">' + line.split(" ").map(function (w) {
         return '<span class="alp-wm"><span class="alp-w">' + w + "</span></span>";
-      }).join(" ");
+      }).join(" ") + "</span>";
     }).join("<br>");
   });
 
@@ -999,6 +1001,11 @@
     return Array.prototype.slice.call(el.querySelectorAll(".alp-float")).map(function (f) {
       return { el: f.querySelector(".alp-fpx"), d: parseFloat(f.getAttribute("data-fd")) || 0.6 };
     });
+  });
+  /* hero entrance caches: line wrappers + their words, for per-line vectors */
+  var heroLns = Array.prototype.slice.call(secEls[0].querySelectorAll(".alp-ln"));
+  var heroLnWords = heroLns.map(function (ln) {
+    return Array.prototype.slice.call(ln.querySelectorAll(".alp-w"));
   });
 
   function hideSvcLayer() {
@@ -1496,6 +1503,58 @@
     return last;
   }
 
+  /* Hero entrance: every element arrives on its own vector. Headline lines
+     slide in from alternating sides with a touch of rotation while their words
+     do a short masked rise; the eyebrow drops from above; the lead is pushed
+     in from the viewer through a blur; the buttons are pulled in from below
+     with an overshoot; the ticks rise last. Scrub-driven and exactly settled
+     at q=1 like every other channel. */
+  function styleHeroFx(q) {
+    var n = heroLns.length, st = Math.min(0.11, 0.38 / Math.max(n - 1, 1));
+    for (var k = 0; k < n; k++) {
+      var lk = expoOut(clamp01((q - 0.12 - k * st) / 0.5));
+      var dir = k % 2 ? 1 : -1;
+      var ls = heroLns[k].style;
+      ls.opacity = lk.toFixed(3);
+      ls.transform = "translateX(" + (dir * (1 - lk) * 7).toFixed(2) + "vw) rotate(" + (dir * (1 - lk) * 2.2).toFixed(2) + "deg)";
+      var ws = heroLnWords[k];
+      for (var w2 = 0; w2 < ws.length; w2++) {
+        var wr = expoOut(clamp01((q - 0.12 - k * st - w2 * 0.02) / 0.42));
+        ws[w2].style.transform = "translateY(" + ((1 - wr) * 70).toFixed(1) + "%)";
+      }
+    }
+    var copy = secCopy[0];
+    for (var c2 = 0; c2 < copy.length; c2++) {
+      var el2 = copy[c2], cl = el2.className, s3 = el2.style;
+      if (cl.indexOf("alp-eyebrow") !== -1) {
+        var e0 = expoOut(clamp01(q / 0.42));
+        s3.opacity = e0.toFixed(3);
+        s3.transform = "translateY(" + ((1 - e0) * -2.4).toFixed(2) + "em) scale(" + (0.92 + 0.08 * e0).toFixed(3) + ")";
+        s3.filter = e0 >= 1 ? "" : "blur(" + ((1 - e0) * 6).toFixed(2) + "px)";
+      } else if (cl.indexOf("alp-lead") !== -1) {
+        var l1 = expoOut(clamp01((q - 0.55) / 0.4));
+        s3.opacity = l1.toFixed(3);
+        s3.transform = "scale(" + (1.1 - 0.1 * l1).toFixed(3) + ") translateY(" + ((1 - l1) * 0.4).toFixed(3) + "em)";
+        s3.filter = l1 >= 1 ? "" : "blur(" + ((1 - l1) * 8).toFixed(2) + "px)";
+      } else if (cl.indexOf("alp-btnrow") !== -1) {
+        var bq = clamp01((q - 0.64) / 0.36), b1 = backOut(bq);
+        s3.opacity = Math.min(1, bq * 2.5).toFixed(3);
+        s3.transform = "translateY(" + ((1 - b1) * 1.6).toFixed(3) + "em) scale(" + (0.82 + 0.18 * b1).toFixed(3) + ")";
+        s3.filter = "";
+      } else if (cl.indexOf("alp-ticks") !== -1) {
+        var t1 = expoOut(clamp01((q - 0.78) / 0.22));
+        s3.opacity = t1.toFixed(3);
+        s3.transform = "translateY(" + ((1 - t1) * 1.2).toFixed(3) + "em)";
+        s3.filter = "";
+      } else {
+        var d1 = expoOut(clamp01((q - 0.6) / 0.4));
+        s3.opacity = d1.toFixed(3);
+        s3.transform = "translateY(" + ((1 - d1) * 0.6).toFixed(3) + "em)";
+        s3.filter = d1 >= 1 ? "" : "blur(" + ((1 - d1) * 6).toFixed(2) + "px)";
+      }
+    }
+  }
+
   function styleSectionState(i, enterQ, exitQ) {
     var s = SEC[i], el = secEls[i];
     var vis = enterQ * (1 - exitQ);
@@ -1514,8 +1573,16 @@
        at the very end, otherwise the choreography would leave half-transparent */
     inner.style.opacity = exitQ > 0 ? (1 - expoIn(exitQ)).toFixed(3) : 1;
 
-    styleTextFx(secHeads[i], secCopy[i], secLines[i], secBoxes[i], secFloats[i], enterQ, exitQ,
-      s.enter[0] > 0 ? 1 : s.enter[0] < 0 ? -1 : 0);
+    if (i === 0 && exitQ <= 0) {
+      /* hero arrival: boxes/hairlines/floats ride the generic channels while
+         the headline lines, copy and buttons fly their own vectors */
+      styleTextFx([], [], secLines[i], secBoxes[i], secFloats[i], enterQ, exitQ, 0);
+      styleHeroFx(enterQ);
+      /* line wrappers hold identity on exit, so the generic exit stays clean */
+    } else {
+      styleTextFx(secHeads[i], secCopy[i], secLines[i], secBoxes[i], secFloats[i], enterQ, exitQ,
+        s.enter[0] > 0 ? 1 : s.enter[0] < 0 ? -1 : 0);
+    }
     if (s.svc) {
       showSvcLayer(enterQ, exitQ, vis, dx, dy);
       renderFleet(vis);

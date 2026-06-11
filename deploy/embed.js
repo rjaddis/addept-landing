@@ -22,7 +22,8 @@
   var PHONE_TEL = "tel:+64274393403";
   var EMAIL = "addeptauto@gmail.com";
   var CAL_URL = "https://api.leadconnectorhq.com/widget/booking/jk0S1digTnc8PT4F1AmO";
-  var LOGO = "https://assets.cdn.filesafe.space/1lKkbgp032mJDSlEuKMu/media/66bab601cbbc6c959ddd0be1.jpeg";
+  var LOGO = "https://assets.cdn.filesafe.space/1lKkbgp032mJDSlEuKMu/media/66bab601cbbc6c959ddd0be1.jpeg"; // keep — still used by the loader
+  var BADGE = SCRIPT_BASE + "/addept-logo-badge.svg";
   var MAPS = "https://maps.google.com/?q=35B+Brookes+Road,+Frankton,+Queenstown+9300";
 
   function frameSrc(i) {
@@ -62,7 +63,7 @@
   + ".alp-anno .alp-alabel.top{bottom:calc(100% + 12px);}"
   + ".alp-anno .alp-aline{position:absolute;left:24px;width:1px;background:rgba(255,255,255,.3);height:12px;}"
   + ".alp-anno .alp-aline.top{bottom:100%;}"
-  + "@media (max-width:900px){.alp-anno{display:none;}}"
+  + "@media (max-width:900px){.alp-anno,.alp-float,.alp-orn{display:none;}}"
   /* sections */
   + ".alp-section{position:fixed;inset:0;z-index:10;display:flex;align-items:center;pointer-events:none;opacity:0;visibility:hidden;}"
   + ".alp-section.alp-top{align-items:flex-start;}"
@@ -73,6 +74,52 @@
      without affecting layout; no horizontal padding (would eat word spacing) */
   + ".alp-wm{display:inline-block;overflow:hidden;vertical-align:top;padding:.12em 0 .18em;margin:-.12em 0 -.18em;}"
   + ".alp-w{display:inline-block;transform:translateY(130%);}"
+  /* deco: blueprint boxes that draw themselves around key content */
+  + ".alp-box{position:relative;display:inline-block;padding:30px 34px;}"
+  + ".alp-box .alp-be{position:absolute;display:block;background:rgba(255,255,255,.16);transform:scaleX(0);}"
+  + ".alp-box .alp-be.t{left:0;right:0;top:0;height:1px;}"
+  + ".alp-box .alp-be.b{left:0;right:0;bottom:0;height:1px;}"
+  + ".alp-box .alp-be.l{top:0;bottom:0;left:0;width:1px;transform:scaleY(0);}"
+  + ".alp-box .alp-be.r{top:0;bottom:0;right:0;width:1px;transform:scaleY(0);}"
+  + ".alp-box.alp-dash .alp-be.t,.alp-box.alp-dash .alp-be.b{background:repeating-linear-gradient(90deg,rgba(255,255,255,.3) 0 5px,transparent 5px 11px);}"
+  + ".alp-box.alp-dash .alp-be.l,.alp-box.alp-dash .alp-be.r{background:repeating-linear-gradient(180deg,rgba(255,255,255,.3) 0 5px,transparent 5px 11px);}"
+  + ".alp-box.alp-corners .alp-be{display:none;}"
+  + ".alp-box .alp-bc{position:absolute;width:13px;height:13px;border-style:solid;border-color:rgba(255,255,255,.8);border-width:0;opacity:0;}"
+  + ".alp-box .alp-bc.tl{top:-2px;left:-2px;border-top-width:2px;border-left-width:2px;}"
+  + ".alp-box .alp-bc.tr{top:-2px;right:-2px;border-top-width:2px;border-right-width:2px;}"
+  + ".alp-box .alp-bc.bl{bottom:-2px;left:-2px;border-bottom-width:2px;border-left-width:2px;}"
+  + ".alp-box .alp-bc.br{bottom:-2px;right:-2px;border-bottom-width:2px;border-right-width:2px;}"
+  + ".alp-box .alp-btab{position:absolute;top:0;left:22px;transform:translateY(-50%);display:inline-flex;align-items:center;gap:7px;padding:4px 11px;border-radius:6px;background:rgba(5,5,5,.85);border:1px solid rgba(255,255,255,.14);font-size:9px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.6);white-space:nowrap;opacity:0;}"
+  /* floating frosted micro-cards, drifting ornaments, pulse dots */
+  + ".alp-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#9ef0b4;box-shadow:0 0 10px rgba(158,240,180,.75);animation:alp-pdot 2.2s ease-in-out infinite;flex-shrink:0;}"
+  + ".alp-dot.alp-off{background:#f0a89e;box-shadow:0 0 10px rgba(240,168,158,.7);}"
+  + "@keyframes alp-pdot{0%,100%{opacity:.35}50%{opacity:1}}"
+  + ".alp-float{position:absolute;z-index:14;pointer-events:none;opacity:0;will-change:transform,opacity,filter;}"
+  + ".alp-float a{pointer-events:auto;color:inherit;text-decoration:none;}"
+  + ".alp-fbob{animation:alp-bob 8s ease-in-out infinite;}"
+  + ".alp-fpx{transition:transform 1.1s cubic-bezier(.16,.8,.26,1);}"
+  + ".alp-fchip{display:inline-flex;align-items:center;gap:9px;padding:11px 16px;border-radius:10px;font-size:10.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.85);"
+  +   "background:linear-gradient(165deg,rgba(255,255,255,.13),rgba(255,255,255,.05));-webkit-backdrop-filter:blur(12px) saturate(1.1);backdrop-filter:blur(12px) saturate(1.1);"
+  +   "border:1px solid rgba(255,255,255,.2);box-shadow:0 18px 50px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.25);white-space:nowrap;}"
+  + ".alp-fchip svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;}"
+  + ".alp-fcard2{display:block;min-width:178px;padding:14px 16px;border-radius:12px;background:linear-gradient(165deg,rgba(255,255,255,.13),rgba(255,255,255,.05));-webkit-backdrop-filter:blur(14px) saturate(1.1);backdrop-filter:blur(14px) saturate(1.1);border:1px solid rgba(255,255,255,.2);box-shadow:0 22px 60px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.25);}"
+  + ".alp-fcard2 .alp-ft{display:flex;align-items:center;gap:7px;font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:9px;}"
+  + ".alp-fcard2 .alp-fr{display:flex;align-items:center;gap:8px;padding:3.5px 0;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.85);}"
+  + ".alp-fcard2 .alp-fr svg{width:12px;height:12px;stroke:#9ef0b4;fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;}"
+  + ".alp-clock{display:block;width:46px;height:46px;margin:2px auto 8px;}"
+  + ".alp-clock .alp-hand-h{animation:alp-rot 43200s linear infinite;transform-origin:22px 22px;}"
+  + ".alp-clock .alp-hand-m{animation:alp-rot 3600s linear infinite;transform-origin:22px 22px;}"
+  + "@keyframes alp-rot{to{transform:rotate(360deg)}}"
+  + ".alp-orn{position:absolute;z-index:5;pointer-events:none;opacity:0;color:rgba(255,255,255,.15);font-size:19px;font-weight:300;will-change:transform,opacity;}"
+  + ".alp-orn span{display:flex;gap:28px;animation:alp-drift 17s ease-in-out infinite;}"
+  + ".alp-orn i{font-style:normal;}"
+  + "@keyframes alp-drift{0%,100%{transform:translate(0,0)}50%{transform:translate(12px,-15px)}}"
+  /* cta sonar rings */
+  + ".alp-ringwrap{position:absolute;left:50%;top:50%;width:130px;height:130px;transform:translate(-50%,-50%);pointer-events:none;}"
+  + ".alp-ringwrap i{position:absolute;inset:0;border-radius:50%;border:1px solid rgba(255,255,255,.35);opacity:0;animation:alp-ring 3.3s cubic-bezier(.2,.6,.4,1) infinite;}"
+  + ".alp-ringwrap i:nth-child(2){animation-delay:1.1s;}"
+  + ".alp-ringwrap i:nth-child(3){animation-delay:2.2s;}"
+  + "@keyframes alp-ring{0%{transform:scale(.5);opacity:0}16%{opacity:.45}70%,100%{transform:scale(1.6);opacity:0}}"
   /* hairline rules that draw across */
   + ".alp-hr{display:block;height:1px;background:rgba(255,255,255,.22);margin:26px 0;transform:scaleX(0);will-change:transform;}"
   /* meta row (Noomo style) */
@@ -87,9 +134,8 @@
   /* nav */
   + "#alp-nav{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:18px 32px;}"
   + "#alp-nav .alp-brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:#fff;}"
-  + "#alp-nav .alp-brand img{width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.2);transition:transform .35s cubic-bezier(.2,.8,.2,1);}"
-  + "#alp-nav .alp-brand:hover img{transform:rotate(-12deg) scale(1.06);}"
-  + "#alp-nav .alp-brand span{font-size:13px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.9);}"
+  + "#alp-nav .alp-brand img{height:68px;width:auto;display:block;filter:drop-shadow(0 4px 14px rgba(0,0,0,.5));transition:opacity .25s;}"
+  + "#alp-nav .alp-brand:hover img{opacity:.85;}"
   + "#alp-nav a.alp-call{padding:9px 20px;border-radius:99px;border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.8);font-size:13px;font-weight:600;text-decoration:none;background:rgba(10,10,10,.45);transition:background .25s,color .25s,transform .25s;white-space:nowrap;}"
   + "#alp-nav a.alp-call:hover{background:#fff;color:#000;transform:scale(1.04);}"
   /* dots */
@@ -195,7 +241,7 @@
   /* mobile */
   + "@media (max-width:760px){"
   +   "#alp-nav{padding:14px 16px;}"
-  +   "#alp-nav .alp-brand span{display:none;}"
+  +   "#alp-nav .alp-brand img{height:48px;}"
   +   "#alp-dots{display:none;}"
   +   "#alp-count{left:16px;}"
   +   ".alp-left,.alp-center{padding-left:22px;padding-right:22px;text-align:left;max-width:100%;}"
@@ -208,6 +254,8 @@
   +   ".alp-fcard{width:74vw;filter:none!important;}"
   +   ".alp-contact{grid-template-columns:1fr;}"
   +   ".alp-fsec{padding:48px 16px;}"
+  +   ".alp-box{padding:22px 18px;}"
+  +   ".alp-box .alp-btab{left:12px;}"
   + "}";
 
   // ── Content ────────────────────────────────────────────────────────────────
@@ -224,16 +272,16 @@
     ["Auto Electrical", "Battery testing and replacement, alternators, and professional fault-finding for stubborn electrical gremlins."],
     ["WOF Repairs", "We don't do the WOF test itself — but we're fully equipped to fix any fails you've encountered."]
   ];
-  /* minimal line icons, one per service (oil, brake, engine, gearbox, spring, exhaust, battery, inspection) */
+  /* minimal line icons, one per service (oil can, brake disc, check-engine, shifter, shock, muffler, bolt, magnifier) */
   var ICONS = [
-    '<path d="M12 3c3.5 4.5 6 7.8 6 11a6 6 0 0 1-12 0c0-3.2 2.5-6.5 6-11Z"/><path d="M9.5 14a2.5 2.5 0 0 0 2.5 2.5"/>',
-    '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.4"/><circle cx="12" cy="6.4" r=".4"/><circle cx="17" cy="9.4" r=".4"/><circle cx="17" cy="14.7" r=".4"/><circle cx="12" cy="17.6" r=".4"/><circle cx="7" cy="14.7" r=".4"/><circle cx="7" cy="9.4" r=".4"/>',
-    '<path d="M7 8h4l1.5-2H17v2h2.5v3H21v4h-1.5v3H8l-2-2H4.5v-6H6l1-2Z"/><path d="M4.5 12H3"/>',
-    '<circle cx="7" cy="7" r="2.4"/><circle cx="17" cy="7" r="2.4"/><circle cx="7" cy="17" r="2.4"/><path d="M7 9.4v5.2M9.4 7H17M17 9.4V12a3 3 0 0 1-3 3H9.4"/>',
-    '<path d="M6 4h12M6 20h12M8 4c4 2.2-4 3.4 0 5.6 4 2.2-4 3.4 0 5.6 4 2.2-4 3.2 0 4.8M16 4c4 2.2-4 3.4 0 5.6 4 2.2-4 3.4 0 5.6 4 2.2-4 3.2 0 4.8"/>',
-    '<path d="M3 15h9a4 4 0 0 0 4-4V8h5"/><circle cx="18.5" cy="8" r="1.6"/><path d="M3 18h6M3 12h4"/>',
-    '<rect x="4" y="7" width="16" height="12" rx="2"/><path d="M8 7V5h3v2M13 7V5h3v2M9.5 13h2.2l-1.4 3 3.2-4h-2.2l1.4-3-3.2 4Z"/>',
-    '<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4.2V3h6v1.2M9 10l2 2 4-4M9 16h6"/>'
+    '<path d="M7.5 10.5h7v8.5a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1v-8.5Z"></path><path d="M7.5 13 3.2 9l1.6-1.6 4.7 3.1"></path><path d="M14.5 13h2a2 2 0 0 1 2 2v.6a2 2 0 0 1-2 2h-2"></path><path d="M9.8 10.5V8.6h2.4v1.9"></path>',
+    '<circle cx="12" cy="13" r="6.8"></circle><circle cx="12" cy="13" r="2.3"></circle><circle cx="12" cy="8.6" r=".35"></circle><circle cx="16" cy="11.6" r=".35"></circle><circle cx="14.5" cy="16.6" r=".35"></circle><circle cx="9.5" cy="16.6" r=".35"></circle><circle cx="8" cy="11.6" r=".35"></circle><path d="M5.4 7.4a9.3 9.3 0 0 1 13.2 0"></path>',
+    '<path d="M9 4h6M12 4v3"></path><path d="M8 7h4l2 2h3v3h2v-2h2v7h-2v-2h-2v3h-4l-2 2H8v-3H6v-3H4v-4h2V9h2V7Z"></path>',
+    '<circle cx="5" cy="5.4" r="1.7"></circle><circle cx="12" cy="5.4" r="1.7"></circle><circle cx="19" cy="5.4" r="1.7"></circle><circle cx="5" cy="18.6" r="1.7"></circle><circle cx="12" cy="18.6" r="1.7"></circle><path d="M5 7.1v9.8M12 7.1v9.8M19 7.1V12M5 12h14"></path>',
+    '<circle cx="12" cy="3.6" r="1.5"></circle><path d="M12 5.1v2.4"></path><path d="M16 7.5H8l8 1.9-8 1.9 8 1.9-8 1.9 8 1.9-8 1.9h8"></path><path d="M12 18.9v.5"></path><circle cx="12" cy="20.4" r="1.5"></circle>',
+    '<rect x="3.5" y="9.2" width="11.5" height="6" rx="3"></rect><path d="M8 9.2v6M11 9.2v6"></path><path d="M1.5 12.2h2M15 12.2h3.5"></path><circle cx="20.4" cy="10.6" r="1.1"></circle><circle cx="21.2" cy="14" r=".9"></circle>',
+    '<circle cx="12" cy="12" r="8.6"></circle><path d="M13 6.5 9.3 12.6h2.8L11 17.5l3.7-6.1h-2.8L13 6.5Z"></path>',
+    '<circle cx="10.5" cy="10.5" r="6.8"></circle><path d="m15.6 15.6 4.9 4.9"></path><path d="m7.6 10.6 2 2 3.8-4"></path>'
   ];
   /* fleet: evenly spaced cards riding one arc track like Noomo's — enter
      bottom-right, crest mid-screen, descend out left. Per-card: only jitter,
@@ -268,48 +316,110 @@
       + '<span class="alp-qarrow">+</span></button><div class="alp-a"><p>' + qa[1] + "</p></div></div>";
   }).join("");
 
+  /* deco builders: floating frosted chips, drifting "+" ornaments, draw-in
+     boxes. Floats nest three wrappers so the layers never fight over one
+     transform: outer = scrub choreography, middle = CSS bob, inner = mouse
+     parallax (damped by a CSS transition). */
+  var IC_PHONE = '<svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.08 4.18 2 2 0 0 1 4.06 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>';
+  var IC_MAIL = '<svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>';
+  var CLOCK_SVG = '<svg class="alp-clock" viewBox="0 0 44 44"><circle cx="22" cy="22" r="20" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.25)"/>'
+    + '<line x1="22" y1="4" x2="22" y2="7" stroke="rgba(255,255,255,.4)"/><line x1="40" y1="22" x2="37" y2="22" stroke="rgba(255,255,255,.4)"/>'
+    + '<line x1="22" y1="40" x2="22" y2="37" stroke="rgba(255,255,255,.4)"/><line x1="4" y1="22" x2="7" y2="22" stroke="rgba(255,255,255,.4)"/>'
+    + '<g id="alp-hh"><g class="alp-hand-h"><line x1="22" y1="22" x2="22" y2="13.5" stroke="rgba(255,255,255,.9)" stroke-width="2.4" stroke-linecap="round"/></g></g>'
+    + '<g id="alp-mh"><g class="alp-hand-m"><line x1="22" y1="22" x2="22" y2="8.5" stroke="rgba(255,255,255,.55)" stroke-width="1.6" stroke-linecap="round"/></g></g>'
+    + '<circle cx="22" cy="22" r="1.8" fill="#fff"/></svg>';
+  function flo(x, y, depth, dur, dly, html) {
+    return '<div class="alp-float" data-fd="' + depth + '" style="left:' + x + 'vw;top:' + y + 'vh;">'
+      + '<div class="alp-fbob" style="animation-duration:' + dur + 's;animation-delay:-' + dly + 's;">'
+      + '<div class="alp-fpx">' + html + "</div></div></div>";
+  }
+  function orn(x, y, n, dly) {
+    var plus = "";
+    for (var oi = 0; oi < n; oi++) plus += "<i>+</i>";
+    return '<div class="alp-orn" style="left:' + x + 'vw;top:' + y + 'vh;"><span style="animation-delay:-' + dly + 's;">' + plus + "</span></div>";
+  }
+  function boxO(cls, tab, style) {
+    return '<div class="alp-box' + (cls ? " " + cls : "") + '"' + (style ? ' style="' + style + '"' : "") + ">"
+      + '<i class="alp-be t"></i><i class="alp-be r"></i><i class="alp-be b"></i><i class="alp-be l"></i>'
+      + '<i class="alp-bc tl"></i><i class="alp-bc tr"></i><i class="alp-bc bl"></i><i class="alp-bc br"></i>'
+      + (tab ? '<span class="alp-btab"><b style="display:inline-block;width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.8);animation:alp-pdot 2.4s ease-in-out infinite;"></b>' + tab + "</span>" : "");
+  }
+
   /* Sections: each parks the video at a scene; transitions play the footage. */
   var SEC = [
-    { id: "hero", stop: 1, enter: [0, 10], exit: [0, -11], html:
+    { id: "hero", stop: 1, enter: [0, 10], exit: [0, -11],
+      deco: flo(67, 22, 0.9, 7.5, 1.2, '<span class="alp-fchip"><b class="alp-dot"></b>WOF Repair Specialists</span>')
+        + flo(73, 60, 0.6, 9, 3.4, '<span class="alp-fchip">' + check + "Diesel · Euro · JDM</span>")
+        + orn(57, 78, 3, 2) + orn(87, 12, 2, 7),
+      html:
       '<div class="alp-inner alp-left">'
       + '<div class="alp-eyebrow alp-rise">Queenstown · Independent Mechanics</div>'
+      + boxO("", "Unit 01 · Frankton")
       + '<h1 class="alp-h1 alp-split">Your vehicle,\nrunning at its best.</h1>'
+      + "</div>"
       + '<i class="alp-hr" data-o="l"></i>'
       + '<p class="alp-lead alp-rise" style="margin-top:0;">First-rate servicing, diagnostics and repairs — specialising in European and Japanese vehicles, with top-tier customer care and respect for your budget.</p>'
       + '<div class="alp-btnrow alp-rise"><a class="alp-btn alp-btn-light" href="#alp-booking">Make a booking</a>'
       + '<a class="alp-btn alp-btn-ghost" href="' + PHONE_TEL + '">Call ' + PHONE_DISPLAY + "</a></div>"
       + '<div class="alp-ticks alp-rise"><span>' + check + "WOF repair specialists</span><span>" + check + "Diesel engine solutions</span><span>" + check + "Frankton, Queenstown</span></div>"
       + "</div>" },
-    { id: "about", stop: 16, enter: [22, 0], exit: [-18, 0], html:
+    { id: "about", stop: 16, enter: [22, 0], exit: [-18, 0],
+      deco: flo(9, 30, 0.8, 8, 0.8, '<span class="alp-fchip">' + check + "Comprehensive Diagnostics</span>")
+        + flo(76, 60, 0.9, 9.5, 2.9, '<span class="alp-fchip">' + check + "Tyre &amp; Battery Marketplace</span>")
+        + orn(14, 70, 2, 4) + orn(83, 22, 3, 9),
+      html:
       '<div class="alp-inner alp-center">'
+      + boxO("", "02 · The Workshop")
       + '<i class="alp-hr" data-o="r"></i>'
       + '<h2 class="alp-giant alp-split">First-rate repairs.\nTop-tier care.</h2>'
       + '<i class="alp-hr" data-o="l"></i>'
       + '<p class="alp-lead alp-rise" style="margin-top:0;">Your go-to for peak vehicle performance and reliability — comprehensive diagnostics, routine maintenance, diesel engine solutions and WOF repairs, plus a tyre &amp; battery marketplace.</p>'
+      + "</div>"
       + "</div>" },
     { id: "services", stop: 30, enter: [0, -12], exit: [0, -12], svc: true, html:
       '<div class="alp-inner" style="position:absolute;inset:0;">'
       + '<div id="alp-svc-cards">' + svcCards + "</div>"
       + "</div>" },
-    { id: "inspections", stop: 42.2, enter: [-22, 0], exit: [16, 0], html:
+    { id: "inspections", stop: 42.2, enter: [-22, 0], exit: [16, 0],
+      deco: flo(69, 26, 0.9, 8, 2, '<div class="alp-fcard2"><div class="alp-ft">Inspection Report</div>'
+          + '<div class="alp-fr">' + check + "Mechanical</div>"
+          + '<div class="alp-fr">' + check + "Structural</div>"
+          + '<div class="alp-fr">' + check + "Service history</div></div>")
+        + flo(63, 68, 0.6, 9.5, 4.2, '<span class="alp-fchip"><b class="alp-dot"></b>No surprises</span>')
+        + orn(88, 52, 2, 3),
+      html:
       '<div class="alp-inner alp-left">'
+      + boxO("alp-dash", "04 · Inspection Bay")
       + '<div class="alp-eyebrow alp-rise">Pre-Purchase Inspections</div>'
       + '<h2 class="alp-h2 alp-split">Buying? Selling?\nKnow first.</h2>'
+      + "</div>"
       + '<i class="alp-hr" data-o="l" style="max-width:420px;"></i>'
       + '<p class="alp-lead alp-rise" style="margin-top:0;">We give any vehicle you’re about to buy or sell a thorough inspection — and list anything it needs now or in the near future. No surprises after the handshake.</p>'
       + '<div class="alp-btnrow alp-rise"><a class="alp-btn alp-btn-ghost" href="' + PHONE_TEL + '">Call ' + PHONE_DISPLAY + "</a></div>"
       + "</div>" },
-    { id: "overhauls", stop: 60, enter: [0, 14], exit: [0, -12], top: true, html:
+    { id: "overhauls", stop: 60, enter: [0, 14], exit: [0, -12], top: true,
+      deco: flo(63, 74, 0.85, 8.5, 1.8, '<span class="alp-fchip">' + check + "Engine &amp; Gearbox Rebuilds</span>")
+        + flo(81, 62, 0.6, 10, 5, '<span class="alp-fchip">' + check + "Intricate Auto Electrical</span>")
+        + orn(8, 80, 3, 6),
+      html:
       '<div class="alp-inner alp-left" style="max-width:600px;">'
       + '<div class="alp-eyebrow alp-rise">European & Japanese Specialists</div>'
       + '<h2 class="alp-h2 alp-split">Overhauls are\nour specialty.</h2>'
       + '<i class="alp-hr" data-o="l" style="max-width:380px;"></i>'
       + '<p class="alp-lead alp-rise" style="margin-top:0;font-size:clamp(.92rem,1.5vw,1.05rem);">Engine and transmission overhauls and intricate auto electrical work — the deep jobs other shops send away.</p>'
       + "</div>" },
-    { id: "hours", stop: 81, enter: [20, 0], exit: [-16, 0], html:
+    { id: "hours", stop: 81, enter: [20, 0], exit: [-16, 0],
+      deco: flo(73, 26, 0.95, 8, 2.6, '<div class="alp-fcard2" style="text-align:center;">'
+          + '<div class="alp-ft" style="justify-content:center;">Frankton · Queenstown</div>'
+          + CLOCK_SVG
+          + '<div class="alp-fr" id="alp-open" style="justify-content:center;"><b class="alp-dot"></b>Mon – Thu · 7am – 5pm</div></div>')
+        + flo(10, 58, 0.7, 9, 4.4, '<a class="alp-fchip" href="' + MAPS + '" target="_blank" rel="noopener"><b class="alp-dot"></b>35B Brookes Rd</a>')
+        + orn(85, 74, 2, 5),
+      html:
       '<div class="alp-inner alp-center">'
       + '<h2 class="alp-giant alp-split">Drop in.\nWe’ll sort it.</h2>'
-      + '<div class="alp-hours">'
+      + boxO("", "06 · Workshop Hours", "width:min(480px,100%);margin-top:26px;")
+      + '<div class="alp-hours" style="margin-top:0;">'
       + '<i class="alp-hr" data-o="l" style="margin:18px 0 0;"></i>'
       + '<div class="alp-hrow alp-rise"><b>Monday – Thursday</b><span>7:00am – 5:00pm</span></div>'
       + '<i class="alp-hr" data-o="r" style="margin:0;"></i>'
@@ -318,15 +428,22 @@
       + '<div class="alp-hrow alp-rise"><b>Saturday – Sunday</b><span>Closed</span></div>'
       + '<i class="alp-hr" data-o="r" style="margin:0;"></i>'
       + "</div>"
+      + "</div>"
       + '<p class="alp-lead alp-rise" style="font-size:13px;margin-top:22px;color:rgba(255,255,255,.35);">35B Brookes Road, Frankton, Queenstown 9300</p>'
       + "</div>" },
-    { id: "cta", stop: 93, enter: [0, 13], exit: [0, -10], html:
+    { id: "cta", stop: 93, enter: [0, 13], exit: [0, -10],
+      deco: flo(70, 30, 0.85, 8, 1, '<a class="alp-fchip" href="' + PHONE_TEL + '">' + IC_PHONE + "Call " + PHONE_DISPLAY + "</a>")
+        + flo(13, 60, 0.7, 9.5, 3.8, '<a class="alp-fchip" href="mailto:' + EMAIL + '">' + IC_MAIL + "Email the workshop</a>")
+        + orn(82, 72, 3, 8) + orn(7, 16, 2, 2),
+      html:
       '<div class="alp-inner alp-center">'
+      + boxO("alp-corners", "07 · Book It In")
       + '<h2 class="alp-h1 alp-split" style="font-size:clamp(2.2rem,5.5vw,3.8rem);">Book your\nvehicle in.</h2>'
       + '<i class="alp-hr" data-o="l"></i>'
       + '<p class="alp-lead alp-rise" style="margin-top:0;">One more scroll — or pick up the phone for an estimate first.</p>'
-      + '<div class="alp-btnrow alp-rise" style="justify-content:center;"><a class="alp-btn alp-btn-light" href="#alp-booking">Make a booking</a></div>'
+      + '<div class="alp-btnrow alp-rise" style="justify-content:center;position:relative;"><span class="alp-ringwrap"><i></i><i></i><i></i></span><a class="alp-btn alp-btn-light" href="#alp-booking">Make a booking</a></div>'
       + '<p class="alp-rise" style="margin-top:18px;font-size:12px;color:rgba(255,255,255,.3);">' + PHONE_DISPLAY + " &nbsp;·&nbsp; " + EMAIL + "</p>"
+      + "</div>"
       + "</div>" }
   ];
 
@@ -396,12 +513,13 @@
     +   '<h2 class="alp-giant alp-split" style="font-size:clamp(2.9rem,7.3vw,6.6rem);">Everything\nunder the\nhood — and\naround it.</h2></div>'
     +   '<div id="alp-svc-side" class="alp-rise">Eight specialties, one workshop. From routine servicing to the deep jobs other shops send away — handled in-house by people who care about doing it properly.</div>'
     +   '<div id="alp-svc-meta"><i class="alp-hr" data-o="l" style="margin:0 0 14px;width:min(420px,38vw);"></i><div class="alp-meta alp-rise"><span class="alp-chip">08 Services</span><span>European &amp; Japanese specialists</span></div></div>'
+    +   orn(68, 12, 2, 3) + orn(44, 76, 3, 8)
     + "</div>"
     + SEC.map(function (s) {
-        return '<div class="alp-section' + (s.top ? " alp-top" : "") + '" data-sec="' + s.id + '">' + s.html + "</div>";
+        return '<div class="alp-section' + (s.top ? " alp-top" : "") + '" data-sec="' + s.id + '">' + s.html + (s.deco || "") + "</div>";
       }).join("")
     + '<div id="alp-nav">'
-    +   '<a class="alp-brand" href="#top"><img src="' + LOGO + '" alt="Addept Automotive"><span>Addept Automotive</span></a>'
+    +   '<a class="alp-brand" href="#top"><img src="' + BADGE + '" alt="Addept Automotive"></a>'
     +   '<a class="alp-call" href="' + PHONE_TEL + '">Call now</a>'
     + "</div>"
     + '<div id="alp-dots">' + SEC.map(function (s, i) {
@@ -444,6 +562,28 @@
       }).join(" ");
     }).join("<br>");
   });
+
+  /* live workshop clock + open/closed status, real Queenstown time. The hands
+     get their position from an SVG attribute rotation; CSS keyframes on the
+     inner group keep them sweeping from there (compositor only, no JS ticks). */
+  (function () {
+    var st = document.getElementById("alp-open");
+    if (!st) return;
+    try {
+      var parts = new Intl.DateTimeFormat("en-US", { timeZone: "Pacific/Auckland", weekday: "short", hour: "numeric", minute: "numeric", hour12: false }).formatToParts(new Date());
+      var wd = "", hr = 0, mi = 0;
+      parts.forEach(function (p) {
+        if (p.type === "weekday") wd = p.value;
+        else if (p.type === "hour") hr = +p.value % 24;
+        else if (p.type === "minute") mi = +p.value;
+      });
+      var open = ["Mon", "Tue", "Wed", "Thu"].indexOf(wd) !== -1 && hr >= 7 && hr < 17;
+      st.innerHTML = '<b class="alp-dot' + (open ? "" : " alp-off") + '"></b>' + (open ? "Open now" : "Currently closed");
+      var hh = document.getElementById("alp-hh"), mh = document.getElementById("alp-mh");
+      if (hh) hh.setAttribute("transform", "rotate(" + ((hr % 12) * 30 + mi * 0.5).toFixed(1) + " 22 22)");
+      if (mh) mh.setAttribute("transform", "rotate(" + (mi * 6) + " 22 22)");
+    } catch (err) { /* Intl/timezone unavailable — keep the static hours line */ }
+  })();
 
   var calLoaded = false;
   function loadCalendar() {
@@ -619,6 +759,23 @@
   var svcHeads = Array.prototype.slice.call(svcLayer.querySelectorAll(".alp-w"));
   var svcCopy = Array.prototype.slice.call(svcLayer.querySelectorAll(".alp-rise"));
   var svcLayerLines = Array.prototype.slice.call(svcLayer.querySelectorAll(".alp-hr"));
+  var svcOrns = Array.prototype.slice.call(svcLayer.querySelectorAll(".alp-orn"));
+  var secBoxes = secEls.map(function (el) {
+    return Array.prototype.slice.call(el.querySelectorAll(".alp-box")).map(function (b) {
+      return { t: b.querySelector(".alp-be.t"), r: b.querySelector(".alp-be.r"),
+        bm: b.querySelector(".alp-be.b"), l: b.querySelector(".alp-be.l"),
+        cs: Array.prototype.slice.call(b.querySelectorAll(".alp-bc")),
+        tab: b.querySelector(".alp-btab") };
+    });
+  });
+  var secFloats = secEls.map(function (el) {
+    return Array.prototype.slice.call(el.querySelectorAll(".alp-float, .alp-orn"));
+  });
+  var secPx = secEls.map(function (el) {
+    return Array.prototype.slice.call(el.querySelectorAll(".alp-float")).map(function (f) {
+      return { el: f.querySelector(".alp-fpx"), d: parseFloat(f.getAttribute("data-fd")) || 0.6 };
+    });
+  });
 
   function hideSvcLayer() {
     if (svcLayer.style.visibility !== "hidden") { svcLayer.style.opacity = 0; svcLayer.style.visibility = "hidden"; }
@@ -630,7 +787,7 @@
      in from a blur and blurs back out. Every channel keeps
      last-start + window <= 1 so enterQ=1/exitQ=0 is exactly settled — the
      parked render runs once and freezes there. */
-  function styleTextFx(heads, copy, lines, enterQ, exitQ, dirX) {
+  function styleTextFx(heads, copy, lines, boxes, floats, enterQ, exitQ, dirX) {
     var n = heads.length, k, st;
     if (exitQ > 0) {
       var stagO = Math.min(0.055, 0.5 / Math.max(n - 1, 1));
@@ -676,6 +833,58 @@
       lines[k].style.transformOrigin = (exitQ > 0 ? !oR : oR) ? "right" : "left";
       lines[k].style.transform = "scaleX(" + (lq * (1 - le)).toFixed(3) + ")";
     }
+    /* blueprint boxes: top edge traces first, sides drop, bottom closes,
+       corner brackets snap on, label tab slides in last */
+    for (k = 0; k < boxes.length; k++) {
+      var bx = boxes[k], c;
+      if (exitQ > 0) {
+        var bs = 1 - expoIn(clamp01(exitQ / 0.35));
+        if (bx.t) { bx.t.style.transformOrigin = "right"; bx.t.style.transform = "scaleX(" + bs.toFixed(3) + ")"; }
+        if (bx.bm) { bx.bm.style.transformOrigin = "left"; bx.bm.style.transform = "scaleX(" + bs.toFixed(3) + ")"; }
+        if (bx.l) { bx.l.style.transformOrigin = "bottom"; bx.l.style.transform = "scaleY(" + bs.toFixed(3) + ")"; }
+        if (bx.r) { bx.r.style.transformOrigin = "bottom"; bx.r.style.transform = "scaleY(" + bs.toFixed(3) + ")"; }
+        for (c = 0; c < bx.cs.length; c++) bx.cs[c].style.opacity = bs.toFixed(3);
+        if (bx.tab) bx.tab.style.opacity = bs.toFixed(3);
+      } else {
+        var rt = expoOut(clamp01((enterQ - 0.3) / 0.4));
+        var rs = expoOut(clamp01((enterQ - 0.42) / 0.4));
+        var rb = expoOut(clamp01((enterQ - 0.54) / 0.42));
+        if (bx.t) { bx.t.style.transformOrigin = dirX < 0 ? "right" : "left"; bx.t.style.transform = "scaleX(" + rt.toFixed(3) + ")"; }
+        if (bx.l) { bx.l.style.transformOrigin = "top"; bx.l.style.transform = "scaleY(" + rs.toFixed(3) + ")"; }
+        if (bx.r) { bx.r.style.transformOrigin = "top"; bx.r.style.transform = "scaleY(" + rs.toFixed(3) + ")"; }
+        if (bx.bm) { bx.bm.style.transformOrigin = dirX < 0 ? "left" : "right"; bx.bm.style.transform = "scaleX(" + rb.toFixed(3) + ")"; }
+        for (c = 0; c < bx.cs.length; c++) {
+          var rc = expoOut(clamp01((enterQ - 0.6 - c * 0.025) / 0.32));
+          bx.cs[c].style.opacity = rc.toFixed(3);
+          bx.cs[c].style.transform = "scale(" + (0.4 + rc * 0.6).toFixed(3) + ")";
+        }
+        if (bx.tab) {
+          var rtab = expoOut(clamp01((enterQ - 0.7) / 0.3));
+          bx.tab.style.opacity = rtab.toFixed(3);
+          bx.tab.style.transform = "translateY(calc(-50% + " + ((1 - rtab) * 8).toFixed(1) + "px))";
+        }
+      }
+    }
+    /* floats: blur-pop in late (foreground arrives last), fly out with depth */
+    var F = floats.length;
+    if (F) {
+      var stagF = 0.07, winF = Math.max(0.2, 1 - 0.5 - (F - 1) * stagF);
+      for (k = 0; k < F; k++) {
+        st = floats[k].style;
+        if (exitQ > 0) {
+          var oF = scrollDir > 0 ? k : F - 1 - k;
+          var eF = expoIn(clamp01((exitQ - oF * 0.06) / 0.45));
+          st.opacity = (1 - eF).toFixed(3);
+          st.transform = "translateY(" + (-scrollDir * eF * 3).toFixed(2) + "em) scale(" + (1 - eF * 0.06).toFixed(3) + ")";
+          st.filter = eF <= 0 ? "" : "blur(" + (eF * 8).toFixed(2) + "px)";
+        } else {
+          var rF = expoOut(clamp01((enterQ - 0.5 - k * stagF) / winF));
+          st.opacity = rF.toFixed(3);
+          st.transform = "translateY(" + ((1 - rF) * 2.4).toFixed(2) + "em) scale(" + (0.92 + rF * 0.08).toFixed(3) + ")";
+          st.filter = rF >= 1 ? "" : "blur(" + ((1 - rF) * 10).toFixed(2) + "px)";
+        }
+      }
+    }
   }
 
   var svcTextSettled = false;
@@ -687,7 +896,7 @@
        skip the text loops once they've settled */
     var settled = enterQ >= 1 && exitQ <= 0;
     if (!settled || !svcTextSettled) {
-      styleTextFx(svcHeads, svcCopy, svcLayerLines, enterQ, exitQ, 0);
+      styleTextFx(svcHeads, svcCopy, svcLayerLines, [], svcOrns, enterQ, exitQ, 0);
       svcTextSettled = settled;
     }
   }
@@ -840,6 +1049,14 @@
   var mx = 0.5, my = 0.5;
   window.addEventListener("mousemove", function (e) {
     mx = e.clientX / window.innerWidth; my = e.clientY / window.innerHeight;
+    /* float parallax: event-driven (no idle RAF work), damped by the .alp-fpx
+       CSS transition so the chips lag the cursor like they have mass */
+    if (MODE === "story" && !transitioning) {
+      var pxs = secPx[cur];
+      for (var pi = 0; pi < pxs.length; pi++) {
+        pxs[pi].el.style.transform = "translate(" + ((mx - 0.5) * -pxs[pi].d * 34).toFixed(1) + "px," + ((my - 0.5) * -pxs[pi].d * 20).toFixed(1) + "px)";
+      }
+    }
   }, { passive: true });
   svcCardEls.forEach(function (card) {
     var inner = card.querySelector(".alp-fin");
@@ -944,7 +1161,7 @@
        at the very end, otherwise the choreography would leave half-transparent */
     inner.style.opacity = exitQ > 0 ? (1 - expoIn(exitQ)).toFixed(3) : 1;
 
-    styleTextFx(secHeads[i], secCopy[i], secLines[i], enterQ, exitQ,
+    styleTextFx(secHeads[i], secCopy[i], secLines[i], secBoxes[i], secFloats[i], enterQ, exitQ,
       s.enter[0] > 0 ? 1 : s.enter[0] < 0 ? -1 : 0);
     if (s.svc) {
       showSvcLayer(enterQ, exitQ, vis, dx, dy);

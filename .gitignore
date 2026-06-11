@@ -1,0 +1,15 @@
+venv/
+.vercel/
+deploy/.vercel/
+alp-frames/
+oryzo-frames/
+noomo/
+*.jpg
+*.jpeg
+*.png
+!deploy/frames/*.jpg
+*.log
+tracks.js
+content.txt
+original.html
+.DS_Store

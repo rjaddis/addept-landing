@@ -245,9 +245,9 @@
   + ".alp-hbrk i.br{bottom:5px;right:0;border-bottom-width:2px;border-right-width:2px;}"
   + ".alp-section.alp-hero-low{align-items:flex-end;}"
   + ".alp-section.alp-hero-low .alp-inner{box-sizing:border-box;width:clamp(480px,48%,620px);max-width:none;padding:0 0 14vh 56px;position:relative;left:100px;top:-25px;}"
-  + ".alp-hwrap{transform:scale(1.4);transform-origin:left bottom;}"
+  + ".alp-hwrap{transform:scale(1.13);transform-origin:left bottom;}"
   + ".alp-lead{margin-top:18px;color:rgba(255,255,255,.58);line-height:1.65;font-size:clamp(.98rem,1.8vw,1.2rem);max-width:30em;}"
-  + ".alp-ticks{margin-top:26px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 20px;font-size:11px;letter-spacing:.05em;color:rgba(255,255,255,.38);}"
+  + ".alp-ticks{margin-top:26px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 20px;font-size:11px;letter-spacing:.05em;color:#fff;}"
   + ".alp-ticks span{display:inline-flex;align-items:center;gap:6px;}"
   + ".alp-ticks svg{width:12px;height:12px;}"
   /* buttons */
@@ -1272,8 +1272,17 @@
     root.appendChild(c);
     root.classList.add("alp-nocursor");
     var fctx = c.getContext("2d");
-    var W = 0, H = 0, FDPR = Math.min(window.devicePixelRatio || 1, 2);
-    function fxSize() { W = window.innerWidth; H = window.innerHeight; c.width = W * FDPR; c.height = H * FDPR; }
+    var W = 0, H = 0, FDPR = 1;
+    /* canvas is a replaced element: inset:0 does NOT stretch it, so the CSS
+       size must be set explicitly or the bitmap displays at intrinsic size
+       (2x on retina -> sparks drift away from the pointer). DPR re-read on
+       every resize so browser zoom / monitor moves stay calibrated. */
+    function fxSize() {
+      FDPR = Math.min(window.devicePixelRatio || 1, 2);
+      W = window.innerWidth; H = window.innerHeight;
+      c.width = W * FDPR; c.height = H * FDPR;
+      c.style.width = W + "px"; c.style.height = H + "px";
+    }
     fxSize(); window.addEventListener("resize", fxSize);
     var tx = -100, ty = -100, ox = -100, oy = -100, lvx = 0, lvy = 0;
     var sparks = [], fxRun = false, lastMove = 0;

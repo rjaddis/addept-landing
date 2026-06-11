@@ -146,18 +146,24 @@
   + "@keyframes alp-sheen{0%{opacity:0;background-position:130% 0}12%{opacity:1}85%{opacity:.8}100%{opacity:0;background-position:-50% 0}}"
   /* drifting amber embers behind the emblem */
   + "#alp-lembers{position:absolute;inset:0;pointer-events:none;overflow:hidden;}"
-  + "#alp-lembers i{position:absolute;top:60%;border-radius:99px;background:#ffb877;box-shadow:0 0 8px 2px rgba(255,150,60,.45);opacity:0;animation:alp-ember linear infinite;}"
-  + "#alp-lembers i:nth-child(1){left:24%;width:3px;height:3px;animation-duration:9s;animation-delay:-2s;}"
-  + "#alp-lembers i:nth-child(2){left:32%;width:2px;height:2px;animation-duration:12s;animation-delay:-7s;}"
-  + "#alp-lembers i:nth-child(3){left:41%;width:4px;height:4px;animation-duration:8s;animation-delay:-4.5s;}"
-  + "#alp-lembers i:nth-child(4){left:48%;width:2px;height:2px;animation-duration:11s;animation-delay:-1s;}"
-  + "#alp-lembers i:nth-child(5){left:55%;width:3px;height:3px;animation-duration:9.5s;animation-delay:-6s;}"
-  + "#alp-lembers i:nth-child(6){left:63%;width:2px;height:2px;animation-duration:13s;animation-delay:-9s;}"
-  + "#alp-lembers i:nth-child(7){left:70%;width:4px;height:4px;animation-duration:8.5s;animation-delay:-3s;}"
-  + "#alp-lembers i:nth-child(8){left:77%;width:2px;height:2px;animation-duration:10.5s;animation-delay:-5s;}"
-  + "#alp-lembers i:nth-child(9){left:18%;width:2px;height:2px;animation-duration:11.5s;animation-delay:-8s;}"
-  + "#alp-lembers i:nth-child(10){left:85%;width:3px;height:3px;animation-duration:10s;animation-delay:-2.5s;}"
-  + "@keyframes alp-ember{0%{transform:translateY(24vh) translateX(0) scale(1);opacity:0}8%{opacity:.75}30%{transform:translateY(6vh) translateX(8px) scale(.95);opacity:.45}60%{transform:translateY(-12vh) translateX(-6px) scale(.8);opacity:.5}100%{transform:translateY(-32vh) translateX(5px) scale(.5);opacity:0}}"
+  + "#alp-lembers i{position:absolute;top:55%;border-radius:99px;background:#ffc9a0;box-shadow:0 0 6px 2px rgba(255,160,70,.6);opacity:0;animation:alp-ember linear infinite;}"
+  + "#alp-lembers i:nth-child(1){left:35%;width:2px;height:2px;animation-duration:6.5s;animation-delay:-2s;}"
+  + "#alp-lembers i:nth-child(2){left:39%;width:3px;height:3px;animation-duration:8s;animation-delay:-5.5s;}"
+  + "#alp-lembers i:nth-child(3){left:43%;width:2px;height:2px;animation-duration:5.5s;animation-delay:-3.4s;}"
+  + "#alp-lembers i:nth-child(4){left:46%;width:2px;height:2px;animation-duration:7.5s;animation-delay:-1s;}"
+  + "#alp-lembers i:nth-child(5){left:50%;width:3px;height:3px;animation-duration:6s;animation-delay:-4.6s;}"
+  + "#alp-lembers i:nth-child(6){left:53%;width:2px;height:2px;animation-duration:8.5s;animation-delay:-7s;}"
+  + "#alp-lembers i:nth-child(7){left:57%;width:2px;height:2px;animation-duration:5s;animation-delay:-2.7s;}"
+  + "#alp-lembers i:nth-child(8){left:61%;width:3px;height:3px;animation-duration:7s;animation-delay:-5s;}"
+  + "#alp-lembers i:nth-child(9){left:65%;width:2px;height:2px;animation-duration:6.8s;animation-delay:-.8s;}"
+  + "#alp-lembers i:nth-child(10){left:48%;width:2px;height:2px;animation-duration:9s;animation-delay:-6.2s;}"
+  + "#alp-lembers i:nth-child(11){left:41%;width:2px;height:2px;animation-duration:7.8s;animation-delay:-3s;}"
+  + "#alp-lembers i:nth-child(12){left:55%;width:2px;height:2px;animation-duration:6.2s;animation-delay:-1.6s;}"
+  + "#alp-lembers i:nth-child(13){left:30%;width:2px;height:2px;animation-duration:9.5s;animation-delay:-4s;}"
+  + "#alp-lembers i:nth-child(14){left:69%;width:2px;height:2px;animation-duration:8.8s;animation-delay:-6.8s;}"
+  + "#alp-lembers i:nth-child(15){left:25%;width:2px;height:2px;animation-duration:10s;animation-delay:-2.3s;}"
+  + "#alp-lembers i:nth-child(16){left:74%;width:2px;height:2px;animation-duration:9.2s;animation-delay:-7.6s;}"
+  + "@keyframes alp-ember{0%{transform:translateY(16vh) translateX(0) scale(1);opacity:0}7%{opacity:.9}28%{transform:translateY(2vh) translateX(7px) scale(.95);opacity:.55}55%{transform:translateY(-12vh) translateX(-6px) scale(.8);opacity:.65}100%{transform:translateY(-28vh) translateX(4px) scale(.45);opacity:0}}"
   /* orbit stroke that draws itself around the emblem with an amber pen-tip */
   + "#alp-larc{position:absolute;left:-16%;top:-20%;width:132%;height:140%;pointer-events:none;overflow:visible;}"
   + "#alp-larc path{fill:none;stroke-linecap:round;}"
@@ -192,11 +198,11 @@
   /* amber aurora around the edges — three blurred blobs lapping in from
      offscreen, each drifting on its own slow orbit; a soft rim glow and the
      parent breathe modulate the whole thing. Flares on burst. */
-  + "#alp-lglow{position:absolute;inset:0;pointer-events:none;opacity:0;overflow:hidden;box-shadow:inset 0 0 150px 12px rgba(255,166,77,.28),inset 0 0 60px 4px rgba(255,120,40,.16);}"
+  + "#alp-lglow{position:absolute;inset:0;pointer-events:none;opacity:0;overflow:hidden;box-shadow:inset 0 0 130px 10px rgba(255,166,77,.18),inset 0 0 54px 4px rgba(255,120,40,.1);}"
   + "#alp-lglow i{position:absolute;display:block;border-radius:50%;filter:blur(46px);will-change:transform;}"
-  + "#alp-lglow i:nth-child(1){width:70vw;height:46vh;left:-12vw;top:-30vh;background:radial-gradient(ellipse,rgba(255,166,77,.5),transparent 65%);animation:alp-aur1 7.5s ease-in-out infinite alternate;}"
-  + "#alp-lglow i:nth-child(2){width:46vw;height:40vh;right:-26vw;top:22vh;background:radial-gradient(ellipse,rgba(255,120,40,.42),transparent 65%);animation:alp-aur2 9s ease-in-out infinite alternate;}"
-  + "#alp-lglow i:nth-child(3){width:64vw;height:42vh;left:-10vw;bottom:-26vh;background:radial-gradient(ellipse,rgba(255,196,112,.38),transparent 65%);animation:alp-aur3 6.5s ease-in-out infinite alternate;}"
+  + "#alp-lglow i:nth-child(1){width:70vw;height:46vh;left:-12vw;top:-30vh;background:radial-gradient(ellipse,rgba(255,166,77,.32),transparent 65%);animation:alp-aur1 7.5s ease-in-out infinite alternate;}"
+  + "#alp-lglow i:nth-child(2){width:46vw;height:40vh;right:-26vw;top:22vh;background:radial-gradient(ellipse,rgba(255,120,40,.26),transparent 65%);animation:alp-aur2 9s ease-in-out infinite alternate;}"
+  + "#alp-lglow i:nth-child(3){width:64vw;height:42vh;left:-10vw;bottom:-26vh;background:radial-gradient(ellipse,rgba(255,196,112,.24),transparent 65%);animation:alp-aur3 6.5s ease-in-out infinite alternate;}"
   /* multi-stop wander paths with a little rotation so the lobes change shape
      as they roam — the right blob stays mostly offscreen, dancing vertically */
   + "@keyframes alp-aur1{0%{transform:translate(-9vw,1vh) rotate(-4deg) scale(1)}35%{transform:translate(4vw,-3vh) rotate(5deg) scale(1.16)}70%{transform:translate(11vw,4vh) rotate(-3deg) scale(1.04)}100%{transform:translate(16vw,-2vh) rotate(8deg) scale(1.26)}}"
@@ -206,6 +212,7 @@
   + "@keyframes alp-glowin{to{opacity:1}}"
   + "@keyframes alp-lbreathe{0%,100%{opacity:1}50%{opacity:.6}}"
   + "@media (max-width:760px){#alp-lbadge{width:78vw;}}"
+  + "#alp-fx{position:fixed;inset:0;z-index:1000001;pointer-events:none;}"
   /* nav */
   + "#alp-nav{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:18px 32px;}"
   + "#alp-nav .alp-brand{font-size:15px;letter-spacing:.12em;text-transform:uppercase;color:#fff;text-decoration:none;white-space:nowrap;transition:opacity .25s;}"
@@ -232,11 +239,11 @@
   + ".alp-hbrk{position:relative;display:inline-block;padding:14px 16px 12px;margin:18px 0 0 -16px;}"
   + ".alp-hbrk i{position:absolute;width:15px;height:15px;border-style:solid;border-color:rgba(255,255,255,.85);border-width:0;}"
   + ".alp-hbrk i.tl{top:0;left:0;border-top-width:2px;border-left-width:2px;}"
-  + ".alp-hbrk i.tr{top:0;right:72px;border-top-width:2px;border-right-width:2px;}"
+  + ".alp-hbrk i.tr{top:0;right:0;border-top-width:2px;border-right-width:2px;}"
   + ".alp-hbrk i.bl{bottom:0;left:0;border-bottom-width:2px;border-left-width:2px;}"
-  + ".alp-hbrk i.br{bottom:5px;right:72px;border-bottom-width:2px;border-right-width:2px;}"
+  + ".alp-hbrk i.br{bottom:5px;right:0;border-bottom-width:2px;border-right-width:2px;}"
   + ".alp-section.alp-hero-low{align-items:flex-end;}"
-  + ".alp-section.alp-hero-low .alp-inner{box-sizing:border-box;width:clamp(480px,48%,620px);max-width:none;padding:0 0 14vh 56px;}"
+  + ".alp-section.alp-hero-low .alp-inner{box-sizing:border-box;width:clamp(480px,48%,620px);max-width:none;padding:0 0 14vh 56px;position:relative;left:40px;top:-15px;}"
   + ".alp-lead{margin-top:18px;color:rgba(255,255,255,.58);line-height:1.65;font-size:clamp(.98rem,1.8vw,1.2rem);max-width:30em;}"
   + ".alp-ticks{margin-top:26px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 20px;font-size:11px;letter-spacing:.05em;color:rgba(255,255,255,.38);}"
   + ".alp-ticks span{display:inline-flex;align-items:center;gap:6px;}"
@@ -327,7 +334,7 @@
   + "@media (max-width:760px){"
   +   ".alp-heroh{font-size:26px;}"
   +   ".alp-herodim{font-size:27px;}"
-  +   ".alp-section.alp-hero-low .alp-inner{width:100%;padding:0 22px 12vh;}"
+  +   ".alp-section.alp-hero-low .alp-inner{width:100%;padding:0 22px 12vh;left:0;top:0;}"
   +   "#alp-nav{padding:14px 16px;}"
   +   "#alp-nav .alp-brand{font-size:13px;}"
   +   "#alp-dots{display:none;}"
@@ -643,7 +650,7 @@
     +   '<div class="alp-footer">Copyright © Addept Automotive 2026. Full Rights Reserved.</div>'
     + "</div></div>"
     + '<div id="alp-loader"><div id="alp-lglow"><i></i><i></i><i></i></div>'
-    +   '<div id="alp-lembers"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>'
+    +   '<div id="alp-lembers"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>'
     +   '<div id="alp-lcore"><div id="alp-lbadge"></div><div id="alp-lsheen"></div>'
     +     '<svg id="alp-larc" viewBox="0 0 1000 640" preserveAspectRatio="none">'
     +       '<path class="alp-arcb" d="M 96 522 A 442 224 -11 1 1 916 426" pathLength="1000"/>'
@@ -1247,6 +1254,77 @@
       else goTo(0);
     }
   });
+
+  // ── Molten cursor companion (desktop): a glowing amber droplet chases the
+  // pointer with springy lag, stretching along its velocity like hot metal and
+  // shedding sparks when it moves fast. The rAF loop sleeps whenever the
+  // pointer is still and no sparks are alive, so parked idle stays free.
+  var FINE = window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  if (FINE && !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches)) (function () {
+    var c = document.createElement("canvas");
+    c.id = "alp-fx";
+    root.appendChild(c);
+    var fctx = c.getContext("2d");
+    var W = 0, H = 0, FDPR = Math.min(window.devicePixelRatio || 1, 2);
+    function fxSize() { W = window.innerWidth; H = window.innerHeight; c.width = W * FDPR; c.height = H * FDPR; }
+    fxSize(); window.addEventListener("resize", fxSize);
+    var tx = -100, ty = -100, ox = -100, oy = -100, lvx = 0, lvy = 0;
+    var sparks = [], fxRun = false, lastMove = 0;
+    function spawn(x, y, pow) {
+      if (sparks.length > 90) return;
+      var a = Math.random() * 6.283, sp = (0.4 + Math.random() * 1.4) * pow;
+      sparks.push({ x: x, y: y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 0.3,
+        life: 1, dk: 0.02 + Math.random() * 0.025, r: 0.8 + Math.random() * 1.8, w: Math.random() < 0.3 });
+    }
+    function wake() { if (!fxRun) { fxRun = true; requestAnimationFrame(fxStep); } }
+    window.addEventListener("mousemove", function (e) {
+      tx = e.clientX; ty = e.clientY; lastMove = performance.now();
+      if (ox < -50) { ox = tx; oy = ty; }
+      wake();
+    }, { passive: true });
+    window.addEventListener("mousedown", function (e) {
+      for (var i = 0; i < 12; i++) spawn(e.clientX, e.clientY, 2.2);
+      lastMove = performance.now();
+      wake();
+    }, { passive: true });
+    function fxStep() {
+      var dx = tx - ox, dy = ty - oy;
+      ox += dx * 0.16; oy += dy * 0.16;
+      lvx = lvx * 0.8 + dx * 0.2; lvy = lvy * 0.8 + dy * 0.2;
+      var speed = Math.sqrt(lvx * lvx + lvy * lvy);
+      if (speed > 3 && Math.random() < 0.55) spawn(ox, oy, Math.min(speed / 14, 1.6));
+      fctx.setTransform(FDPR, 0, 0, FDPR, 0, 0);
+      fctx.clearRect(0, 0, W, H);
+      fctx.globalCompositeOperation = "lighter";
+      if (ox > -50) {
+        var ang = Math.atan2(lvy, lvx), st = Math.min(speed * 0.045, 1.6);
+        fctx.save();
+        fctx.translate(ox, oy); fctx.rotate(ang); fctx.scale(1 + st, Math.max(1 - st * 0.35, 0.55));
+        var g = fctx.createRadialGradient(0, 0, 0, 0, 0, 13);
+        g.addColorStop(0, "rgba(255,236,200,.8)");
+        g.addColorStop(0.35, "rgba(255,166,77,.35)");
+        g.addColorStop(1, "rgba(255,120,40,0)");
+        fctx.fillStyle = g;
+        fctx.beginPath(); fctx.arc(0, 0, 13, 0, 6.283); fctx.fill();
+        fctx.restore();
+      }
+      for (var i = sparks.length - 1; i >= 0; i--) {
+        var s = sparks[i];
+        s.x += s.vx; s.y += s.vy; s.vy += 0.015; s.vx *= 0.985; s.vy *= 0.985;
+        s.life -= s.dk;
+        if (s.life <= 0) { sparks.splice(i, 1); continue; }
+        var al = s.life * s.life;
+        fctx.fillStyle = s.w ? "rgba(255,240,214," + (al * 0.9).toFixed(3) + ")" : "rgba(255,166,77," + (al * 0.8).toFixed(3) + ")";
+        fctx.beginPath(); fctx.arc(s.x, s.y, s.r * (0.5 + s.life * 0.5), 0, 6.283); fctx.fill();
+      }
+      // sleep once settled: companion parked on the cursor, no sparks left
+      if (performance.now() - lastMove > 300 && sparks.length === 0 && Math.abs(dx) + Math.abs(dy) < 0.4) {
+        fxRun = false;
+        return;
+      }
+      requestAnimationFrame(fxStep);
+    }
+  })();
 
   // mouse parallax + card hover tilt
   var mx = 0.5, my = 0.5;

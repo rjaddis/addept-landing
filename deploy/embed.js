@@ -183,7 +183,7 @@
   + "#alp-larc{position:absolute;left:-16%;top:-20%;width:132%;height:140%;pointer-events:none;overflow:visible;}"
   + "#alp-larc path{fill:none;stroke-linecap:round;}"
   + "#alp-larc .alp-arcb{stroke:rgba(255,255,255,.32);stroke-width:2.2;}"
-  + "#alp-larc .alp-arct{stroke:#ffa64d;stroke-width:3;filter:drop-shadow(0 0 6px rgba(255,166,77,.8));}"
+  + "#alp-larc .alp-arct{stroke:#ffa64d;stroke-width:3;}"
   /* odometer counter, bottom centre — each digit rolls in a masked column;
      the workshop line takes its place at 100 */
   + "#alp-lpct{position:absolute;bottom:26px;left:0;right:0;text-align:center;font-size:13px;font-weight:600;letter-spacing:.18em;font-variant-numeric:tabular-nums;color:rgba(255,255,255,.85);transition:opacity .35s;}"
@@ -466,7 +466,7 @@
       + '<div class="alp-ticks alp-rise"><span>' + check + "Euro &amp; Japanese specialists</span><span>" + check + "Tuning &amp; emissions solutions</span></div>"
       + "</div>"
       + "</div>" },
-    { id: "about", stop: 15.6118, enter: [22, 0], exit: [-18, 0],
+    { id: "about", stop: 17.7215, enter: [22, 0], exit: [-18, 0],
       deco: flo(9, 30, 0.8, 8, 0.8, '<span class="alp-fchip">' + check + "Comprehensive Diagnostics</span>")
         + flo(76, 60, 0.9, 9.5, 2.9, '<span class="alp-fchip">' + check + "Tyre &amp; Battery Marketplace</span>")
         + orn(14, 70, 2, 4) + orn(83, 22, 3, 9),
@@ -739,7 +739,7 @@
   var lVeil = document.getElementById("alp-lveil");
   var arcB = loader.querySelector(".alp-arcb");
   var arcT = loader.querySelector(".alp-arct");
-  var batchLoaded = 0, badgeSvg = null, badgeReady = false, arcLen = 0;
+  var batchLoaded = 0, badgeSvg = null, badgeReady = false, arcLen = 0, arcCTM = null, arcCTMage = 0;
   var loaderT0 = performance.now(), LOADER_MIN_MS = 2600, shownPct = 0, bursting = false;
   var REDUCE = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -822,12 +822,13 @@
     arcT.style.strokeDashoffset = (34 - 1000 * p).toFixed(1);
     arcT.style.opacity = p > 0.02 && p < 0.995 ? 1 : 0;
     /* the tracer grinds off sparks as it draws — flung back along its tangent */
-    if (fxSpawn && p > 0.03 && p < 0.99 && Math.random() < 0.7) {
+    if (fxSpawn && p > 0.03 && p < 0.99 && Math.random() < 0.6) {
       try {
         if (!arcLen) arcLen = arcT.getTotalLength();
         var ptA = arcT.getPointAtLength(arcLen * p);
         var ptB = arcT.getPointAtLength(arcLen * Math.max(p - 0.012, 0));
-        var ctm = arcT.getScreenCTM();
+        if (!arcCTM || !(arcCTMage = (arcCTMage + 1) % 6)) arcCTM = arcT.getScreenCTM();
+        var ctm = arcCTM;
         if (ctm) {
           var sx2 = ptA.x * ctm.a + ptA.y * ctm.c + ctm.e;
           var sy2 = ptA.x * ctm.b + ptA.y * ctm.d + ctm.f;
@@ -1290,14 +1291,14 @@
     c.id = "alp-fx";
     root.appendChild(c);
     root.classList.add("alp-nocursor");
-    var fctx = c.getContext("2d");
+    var fctx = c.getContext("2d", { desynchronized: true });
     var W = 0, H = 0, FDPR = 1;
     /* canvas is a replaced element: inset:0 does NOT stretch it, so the CSS
        size must be set explicitly or the bitmap displays at intrinsic size
        (2x on retina -> sparks drift away from the pointer). DPR re-read on
        every resize so browser zoom / monitor moves stay calibrated. */
     function fxSize() {
-      FDPR = Math.min(window.devicePixelRatio || 1, 2);
+      FDPR = Math.min(window.devicePixelRatio || 1, 1.25); /* fx layer stays cheap */
       W = window.innerWidth; H = window.innerHeight;
       c.width = W * FDPR; c.height = H * FDPR;
       c.style.width = W + "px"; c.style.height = H + "px";
@@ -1306,7 +1307,7 @@
     var tx = -100, ty = -100, ox = -100, oy = -100, lvx = 0, lvy = 0;
     var sparks = [], fxRun = false, lastMove = 0;
     function addSpark(x, y, vx, vy, hot) {
-      if (sparks.length > 680) return;
+      if (sparks.length > 520) return;
       sparks.push({ x: x, y: y, vx: vx, vy: vy, life: 1,
         dk: 0.0025 + Math.random() * 0.0055,
         r: hot ? 1.8 + Math.random() * 1.8 : 0.8 + Math.random() * 1.4 });
@@ -1344,7 +1345,7 @@
       lvx = lvx * 0.7 + mvx * 0.3; lvy = lvy * 0.7 + mvy * 0.3;
       var speed = Math.sqrt(lvx * lvx + lvy * lvy);
       if (speed > 0.5 && pox > -50) {
-        var nT = Math.min(18, 1 + Math.ceil(speed * 0.8));
+        var nT = Math.min(14, 1 + Math.ceil(speed * 0.7));
         for (var sT = 0; sT < nT; sT++) {
           var tt = Math.random();
           spawnTail(pox + mvx * tt, poy + mvy * tt, lvx, lvy, speed);
@@ -1366,6 +1367,7 @@
         fctx.beginPath(); fctx.arc(0, 0, 12, 0, 6.283); fctx.fill();
         fctx.restore();
       }
+      /* physics pass: integrate, cull, split */
       for (var i = sparks.length - 1; i >= 0; i--) {
         var s = sparks[i];
         s.vy += 0.085;                 /* gravity */
@@ -1374,7 +1376,7 @@
         s.life -= s.dk;
         if (s.life <= 0 || s.y > H + 50 || s.x < -60 || s.x > W + 60) { sparks.splice(i, 1); continue; }
         /* a spark occasionally pops and splits mid-flight */
-        if (s.life < 0.85 && s.life > 0.25 && sparks.length < 640 && Math.random() < 0.006) {
+        if (s.life < 0.85 && s.life > 0.25 && sparks.length < 480 && Math.random() < 0.006) {
           for (var k2 = 0; k2 < 2; k2++) {
             var ra = (Math.random() - 0.5) * 1.6;
             var ca = Math.cos(ra), sa = Math.sin(ra);
@@ -1382,19 +1384,51 @@
           }
           s.dk *= 1.8; /* the parent burns out quicker after popping */
         }
-        var al = Math.pow(s.life, 1.4) * (0.72 + Math.random() * 0.28); /* flicker */
-        var spd2 = s.vx * s.vx + s.vy * s.vy;
+      }
+      /* draw pass, batched: sparks grouped by tone/alpha/width so the whole
+         field renders in a few dozen path ops instead of one per spark —
+         keeps the main thread free for the rest of the page */
+      var buckets = {}, bkey, blist;
+      for (i = 0; i < sparks.length; i++) {
+        var s4 = sparks[i];
+        var al = Math.pow(s4.life, 1.4) * (0.72 + Math.random() * 0.28); /* flicker */
+        var aq = (al * 6) | 0;
+        if (aq <= 0) continue;
+        if (aq > 5) aq = 5;
+        var tq = s4.life > 0.75 ? 0 : s4.life > 0.45 ? 1 : s4.life > 0.22 ? 2 : 3;
+        var spd2 = s4.vx * s4.vx + s4.vy * s4.vy;
+        var wq;
         if (spd2 > 0.04) {
-          /* motion streak along the velocity — how real sparks read */
-          fctx.strokeStyle = "rgba(" + tone(s.life) + "," + al.toFixed(3) + ")";
-          fctx.lineWidth = s.r * (0.5 + s.life * 0.9);
+          var wpx = s4.r * (0.5 + s4.life * 0.9);
+          wq = wpx < 1.1 ? 0 : wpx < 1.9 ? 1 : 2;
+        } else wq = 9;
+        bkey = tq * 100 + aq * 10 + wq;
+        (buckets[bkey] || (buckets[bkey] = [])).push(s4);
+      }
+      var TONES4 = ["255,246,222", "255,198,112", "255,138,56", "206,82,40"];
+      var WIDTHS3 = [0.9, 1.5, 2.3];
+      for (bkey in buckets) {
+        blist = buckets[bkey];
+        var kn = +bkey, tone4 = TONES4[(kn / 100) | 0], aq4 = ((kn / 10) | 0) % 10, wq4 = kn % 10;
+        var alpha4 = ((aq4 + 0.5) / 6).toFixed(3);
+        if (wq4 === 9) {
+          fctx.fillStyle = "rgba(" + tone4 + "," + alpha4 + ")";
           fctx.beginPath();
-          fctx.moveTo(s.x, s.y);
-          fctx.lineTo(s.x - s.vx * 3.2, s.y - s.vy * 3.2);
-          fctx.stroke();
+          for (var d4 = 0; d4 < blist.length; d4++) {
+            var sd = blist[d4], rr = sd.r * (0.4 + sd.life * 0.6);
+            fctx.rect(sd.x - rr, sd.y - rr, rr * 2, rr * 2);
+          }
+          fctx.fill();
         } else {
-          fctx.fillStyle = "rgba(" + tone(s.life) + "," + al.toFixed(3) + ")";
-          fctx.beginPath(); fctx.arc(s.x, s.y, s.r * (0.4 + s.life * 0.6), 0, 6.283); fctx.fill();
+          fctx.strokeStyle = "rgba(" + tone4 + "," + alpha4 + ")";
+          fctx.lineWidth = WIDTHS3[wq4];
+          fctx.beginPath();
+          for (var d5 = 0; d5 < blist.length; d5++) {
+            var sl = blist[d5];
+            fctx.moveTo(sl.x, sl.y);
+            fctx.lineTo(sl.x - sl.vx * 3.2, sl.y - sl.vy * 3.2);
+          }
+          fctx.stroke();
         }
       }
       if (performance.now() - lastMove > 300 && sparks.length === 0) {

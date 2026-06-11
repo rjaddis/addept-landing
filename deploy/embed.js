@@ -134,7 +134,7 @@
   + "#alp-lbadge.alp-lin{opacity:1;}"
   + "#alp-lbadge svg{width:100%;height:auto;display:block;overflow:visible;}"
   + "#alp-lbadge img{width:100%;display:block;}"
-  + "#alp-lpct{margin-top:4.5vh;font-size:clamp(2.4rem,6.5vw,4.4rem);font-weight:800;letter-spacing:-.02em;line-height:1;font-variant-numeric:tabular-nums;transition:opacity .35s;}"
+  + "#alp-lpct{margin-top:calc(4.5vh + 25px);font-size:clamp(1.9rem,5vw,3.4rem);font-weight:800;letter-spacing:-.02em;line-height:1;font-variant-numeric:tabular-nums;transition:opacity .35s;}"
   + "#alp-lpct i{font-style:normal;font-size:.42em;font-weight:600;color:rgba(255,255,255,.45);margin-left:5px;}"
   + "#alp-lrule{width:min(300px,60vw);height:1px;background:rgba(255,255,255,.12);margin:20px 0 16px;transition:opacity .35s;}"
   + "#alp-lrule i{display:block;height:100%;background:rgba(255,255,255,.75);transform:scaleX(0);transform-origin:left;}"
@@ -142,8 +142,17 @@
   + "#alp-lflash{position:absolute;inset:0;background:radial-gradient(circle at 50% 47%,rgba(255,255,255,.95) 0%,rgba(255,255,255,.5) 28%,transparent 64%);opacity:0;pointer-events:none;}"
   + "#alp-lflash.alp-on{animation:alp-lflash .55s ease-out forwards;}"
   + "@keyframes alp-lflash{0%{opacity:0}18%{opacity:.9}100%{opacity:0}}"
-  /* amber workshop glow around the edges — breathes while loading, flares on burst */
-  + "#alp-lglow{position:absolute;inset:0;pointer-events:none;opacity:0;box-shadow:inset 0 0 150px 12px rgba(255,166,77,.45),inset 0 0 60px 4px rgba(255,120,40,.26);}"
+  /* amber aurora around the edges — three blurred blobs lapping in from
+     offscreen, each drifting on its own slow orbit; a soft rim glow and the
+     parent breathe modulate the whole thing. Flares on burst. */
+  + "#alp-lglow{position:absolute;inset:0;pointer-events:none;opacity:0;overflow:hidden;box-shadow:inset 0 0 150px 12px rgba(255,166,77,.28),inset 0 0 60px 4px rgba(255,120,40,.16);}"
+  + "#alp-lglow i{position:absolute;display:block;border-radius:50%;filter:blur(46px);will-change:transform;}"
+  + "#alp-lglow i:nth-child(1){width:70vw;height:46vh;left:-12vw;top:-30vh;background:radial-gradient(ellipse,rgba(255,166,77,.5),transparent 65%);animation:alp-aur1 9s ease-in-out infinite alternate;}"
+  + "#alp-lglow i:nth-child(2){width:55vw;height:44vh;right:-18vw;top:24vh;background:radial-gradient(ellipse,rgba(255,120,40,.42),transparent 65%);animation:alp-aur2 11.5s ease-in-out infinite alternate;}"
+  + "#alp-lglow i:nth-child(3){width:64vw;height:42vh;left:-10vw;bottom:-26vh;background:radial-gradient(ellipse,rgba(255,196,112,.38),transparent 65%);animation:alp-aur3 8s ease-in-out infinite alternate;}"
+  + "@keyframes alp-aur1{from{transform:translate(-6vw,0) scale(1)}to{transform:translate(14vw,3vh) scale(1.25)}}"
+  + "@keyframes alp-aur2{from{transform:translate(0,-4vh) scale(1.15)}to{transform:translate(-6vw,6vh) scale(.9)}}"
+  + "@keyframes alp-aur3{from{transform:translate(10vw,2vh) scale(1.1)}to{transform:translate(-8vw,-2vh) scale(1.3)}}"
   + "#alp-lglow.alp-on{animation:alp-glowin 1.6s ease .4s forwards,alp-lbreathe 5.6s ease-in-out 2.2s infinite;}"
   + "@keyframes alp-glowin{to{opacity:1}}"
   + "@keyframes alp-lbreathe{0%,100%{opacity:1}50%{opacity:.6}}"
@@ -354,7 +363,7 @@
 
   /* Sections: each parks the video at a scene; transitions play the footage. */
   var SEC = [
-    { id: "hero", stop: 1, enter: [0, 10], exit: [0, -11],
+    { id: "hero", stop: 2.9536, enter: [0, 10], exit: [0, -11],
       deco: flo(67, 22, 0.9, 7.5, 1.2, '<span class="alp-fchip"><b class="alp-dot"></b>WOF Repair Specialists</span>')
         + flo(73, 60, 0.6, 9, 3.4, '<span class="alp-fchip">' + check + "Diesel · Euro · JDM</span>")
         + orn(57, 78, 3, 2) + orn(87, 12, 2, 7),
@@ -370,7 +379,7 @@
       + '<a class="alp-btn alp-btn-ghost" href="' + PHONE_TEL + '">Call ' + PHONE_DISPLAY + "</a></div>"
       + '<div class="alp-ticks alp-rise"><span>' + check + "WOF repair specialists</span><span>" + check + "Diesel engine solutions</span><span>" + check + "Frankton, Queenstown</span></div>"
       + "</div>" },
-    { id: "about", stop: 16, enter: [22, 0], exit: [-18, 0],
+    { id: "about", stop: 15.6118, enter: [22, 0], exit: [-18, 0],
       deco: flo(9, 30, 0.8, 8, 0.8, '<span class="alp-fchip">' + check + "Comprehensive Diagnostics</span>")
         + flo(76, 60, 0.9, 9.5, 2.9, '<span class="alp-fchip">' + check + "Tyre &amp; Battery Marketplace</span>")
         + orn(14, 70, 2, 4) + orn(83, 22, 3, 9),
@@ -383,11 +392,11 @@
       + '<p class="alp-lead alp-rise" style="margin-top:0;">Your go-to for peak vehicle performance and reliability — comprehensive diagnostics, routine maintenance, diesel engine solutions and WOF repairs, plus a tyre &amp; battery marketplace.</p>'
       + "</div>"
       + "</div>" },
-    { id: "services", stop: 30, enter: [0, -12], exit: [0, -12], svc: true, html:
+    { id: "services", stop: 27.0042, enter: [0, -12], exit: [0, -12], svc: true, html:
       '<div class="alp-inner" style="position:absolute;inset:0;">'
       + '<div id="alp-svc-cards">' + svcCards + "</div>"
       + "</div>" },
-    { id: "inspections", stop: 42.2, enter: [-22, 0], exit: [16, 0],
+    { id: "inspections", stop: 42.1941, enter: [-22, 0], exit: [16, 0],
       deco: flo(69, 26, 0.9, 8, 2, '<div class="alp-fcard2"><div class="alp-ft">Inspection Report</div>'
           + '<div class="alp-fr">' + check + "Mechanical</div>"
           + '<div class="alp-fr">' + check + "Structural</div>"
@@ -404,7 +413,7 @@
       + '<p class="alp-lead alp-rise" style="margin-top:0;">We give any vehicle you’re about to buy or sell a thorough inspection — and list anything it needs now or in the near future. No surprises after the handshake.</p>'
       + '<div class="alp-btnrow alp-rise"><a class="alp-btn alp-btn-ghost" href="' + PHONE_TEL + '">Call ' + PHONE_DISPLAY + "</a></div>"
       + "</div>" },
-    { id: "overhauls", stop: 60, enter: [0, 14], exit: [0, -12], top: true,
+    { id: "overhauls", stop: 60.3376, enter: [0, 14], exit: [0, -12], top: true,
       deco: flo(63, 74, 0.85, 8.5, 1.8, '<span class="alp-fchip">' + check + "Engine &amp; Gearbox Rebuilds</span>")
         + flo(81, 62, 0.6, 10, 5, '<span class="alp-fchip">' + check + "Intricate Auto Electrical</span>")
         + orn(8, 80, 3, 6),
@@ -415,7 +424,7 @@
       + '<i class="alp-hr" data-o="l" style="max-width:380px;"></i>'
       + '<p class="alp-lead alp-rise" style="margin-top:0;font-size:clamp(.92rem,1.5vw,1.05rem);">Engine and transmission overhauls and intricate auto electrical work — the deep jobs other shops send away.</p>'
       + "</div>" },
-    { id: "hours", stop: 81, enter: [20, 0], exit: [-16, 0],
+    { id: "hours", stop: 79.3249, enter: [20, 0], exit: [-16, 0],
       deco: flo(73, 26, 0.95, 8, 2.6, '<div class="alp-fcard2" style="text-align:center;">'
           + '<div class="alp-ft" style="justify-content:center;">Frankton · Queenstown</div>'
           + CLOCK_SVG
@@ -438,7 +447,7 @@
       + "</div>"
       + '<p class="alp-lead alp-rise" style="font-size:13px;margin-top:22px;color:rgba(255,255,255,.35);">35B Brookes Road, Frankton, Queenstown 9300</p>'
       + "</div>" },
-    { id: "cta", stop: 93, enter: [0, 13], exit: [0, -10],
+    { id: "cta", stop: 95.3586, enter: [0, 13], exit: [0, -10],
       deco: flo(70, 30, 0.85, 8, 1, '<a class="alp-fchip" href="' + PHONE_TEL + '">' + IC_PHONE + "Call " + PHONE_DISPLAY + "</a>")
         + flo(13, 60, 0.7, 9.5, 3.8, '<a class="alp-fchip" href="mailto:' + EMAIL + '">' + IC_MAIL + "Email the workshop</a>")
         + orn(82, 72, 3, 8) + orn(7, 16, 2, 2),
@@ -558,7 +567,7 @@
     +   "</div>"
     +   '<div class="alp-footer">Copyright © Addept Automotive 2026. Full Rights Reserved.</div>'
     + "</div></div>"
-    + '<div id="alp-loader"><div id="alp-lglow"></div><div id="alp-lbadge"></div>'
+    + '<div id="alp-loader"><div id="alp-lglow"><i></i><i></i><i></i></div><div id="alp-lbadge"></div>'
     +   '<div id="alp-lpct">0<i>%</i></div>'
     +   '<div id="alp-lrule"><i></i></div>'
     +   '<div id="alp-lstat">Warming up the bay</div>'

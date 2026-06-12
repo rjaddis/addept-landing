@@ -25,7 +25,6 @@
   var BADGE = SCRIPT_BASE + "/addept-logo-badge.svg";
   var MAPS = "https://maps.google.com/?q=35B+Brookes+Road,+Frankton,+Queenstown+9300";
   var introActive = true; // gates input + section render until the loader's badge-burst hands off
-  var fxSpawn = null; // set by the cursor-spark module; lets the loader tracer shed sparks
 
   function frameSrc(i) {
     var n = String(i + 1); while (n.length < 4) n = "0" + n;
@@ -76,6 +75,10 @@
      without affecting layout; no horizontal padding (would eat word spacing) */
   + ".alp-wm{display:inline-block;overflow:hidden;vertical-align:top;padding:.12em 0 .18em;margin:-.12em 0 -.18em;}"
   + ".alp-w{display:inline-block;transform:translateY(130%);}"
+  /* about letter-scatter: masks open up, words sit still, letters carry the motion */
+  + ".alp-section[data-sec='about'] .alp-wm{overflow:visible;}"
+  + ".alp-section[data-sec='about'] .alp-w{transform:none;}"
+  + ".alp-ch{display:inline-block;opacity:0;will-change:transform,opacity,filter;}"
   + ".alp-ln{display:inline-block;will-change:transform;}"
   /* deco: blueprint boxes that draw themselves around key content */
   + ".alp-box{position:relative;display:inline-block;padding:30px 34px;}"
@@ -195,11 +198,6 @@
   + "#alp-lembers i:nth-child(43){left:90%;top:34%;width:2px;height:2px;animation-duration:8.1s;animation-delay:-4.9s;}"
   + "#alp-lembers i:nth-child(44){left:11%;top:30%;width:2px;height:2px;animation-duration:9.6s;animation-delay:-2.4s;}"
   + "@keyframes alp-ember{0%{transform:translateY(16vh) translateX(0) scale(1);opacity:0}7%{opacity:.9}28%{transform:translateY(2vh) translateX(7px) scale(.95);opacity:.55}55%{transform:translateY(-12vh) translateX(-6px) scale(.8);opacity:.65}100%{transform:translateY(-28vh) translateX(4px) scale(.45);opacity:0}}"
-  /* orbit stroke that draws itself around the emblem with an amber pen-tip */
-  + "#alp-larc{position:absolute;left:-16%;top:-20%;width:132%;height:140%;pointer-events:none;overflow:visible;}"
-  + "#alp-larc path{fill:none;stroke-linecap:round;}"
-  + "#alp-larc .alp-arcb{stroke:rgba(255,255,255,.32);stroke-width:2.2;}"
-  + "#alp-larc .alp-arct{stroke:#ffa64d;stroke-width:3;}"
   /* odometer counter, bottom centre — each digit rolls in a masked column;
      the workshop line takes its place at 100 */
   + "#alp-lpct{position:absolute;bottom:26px;left:0;right:0;text-align:center;font-size:13px;font-weight:600;letter-spacing:.18em;font-variant-numeric:tabular-nums;color:rgba(255,255,255,.85);transition:opacity .35s;}"
@@ -673,12 +671,7 @@
     + "</div></div>"
     + '<div id="alp-loader">'
     +   '<div id="alp-lembers"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>'
-    +   '<div id="alp-lcore"><div id="alp-lbadge"></div><div id="alp-lsheen"></div>'
-    +     '<svg id="alp-larc" viewBox="0 0 1000 640" preserveAspectRatio="none">'
-    +       '<path class="alp-arcb" d="M 96 522 A 442 224 -11 1 1 916 426" pathLength="1000"/>'
-    +       '<path class="alp-arct" d="M 96 522 A 442 224 -11 1 1 916 426" pathLength="1000"/>'
-    +     "</svg>"
-    +   "</div>"
+    +   '<div id="alp-lcore"><div id="alp-lbadge"></div><div id="alp-lsheen"></div></div>'
     +   '<div id="alp-ldot"></div>'
     +   '<div id="alp-lpct"><span class="alp-odc"><span class="alp-odw" id="alp-odt">' + ODIGITS + '</span></span><span class="alp-odc"><span class="alp-odw" id="alp-odo">' + ODIGITS + "</span></span></div>"
     +   '<div id="alp-lstat">' + TAG_HTML + "<i>.</i><i>.</i><i>.</i></div>"
@@ -693,6 +686,12 @@
         return '<span class="alp-wm"><span class="alp-w">' + w + "</span></span>";
       }).join(" ") + "</span>";
     }).join("<br>");
+  });
+  /* about section: words split further into letters for the scatter reveal */
+  Array.prototype.forEach.call(root.querySelectorAll('.alp-section[data-sec="about"] .alp-w'), function (w) {
+    w.innerHTML = w.textContent.split("").map(function (c) {
+      return '<span class="alp-ch">' + c + "</span>";
+    }).join("");
   });
 
   /* live workshop clock + open/closed status, real Queenstown time. The hands
@@ -754,9 +753,7 @@
   var lStat = document.getElementById("alp-lstat");
   var lDot = document.getElementById("alp-ldot");
   var lVeil = document.getElementById("alp-lveil");
-  var arcB = loader.querySelector(".alp-arcb");
-  var arcT = loader.querySelector(".alp-arct");
-  var batchLoaded = 0, badgeSvg = null, badgeReady = false, arcLen = 0, arcCTM = null, arcCTMage = 0;
+  var batchLoaded = 0, badgeSvg = null, badgeReady = false;
   var loaderT0 = performance.now(), LOADER_MIN_MS = 2600, shownPct = 0, bursting = false;
   var REDUCE = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -790,9 +787,7 @@
       setTimeout(function () { loader.style.display = "none"; introActive = false; startIntro(); }, 520);
       return;
     }
-    /* wind-up: the emblem swells with anticipation before the drop — the
-       tracer stays finished, no encore lap */
-    arcT.style.opacity = 0;
+    /* wind-up: the emblem swells with anticipation before the drop */
     lCore.style.transition = "transform .42s cubic-bezier(.55,-.25,.65,1)";
     lCore.style.transform = "scale(1.26)";
     /* collapse into the point */
@@ -833,32 +828,6 @@
     lOdT.style.transform = "translateY(-" + Math.floor(pInt / 10) * 1.1 + "em)";
     lOdO.style.transform = "translateY(-" + (pInt % 10) * 1.1 + "em)";
     var p = shownPct / 100;
-    arcB.style.strokeDasharray = "1000";
-    arcB.style.strokeDashoffset = (1000 * (1 - p)).toFixed(1);
-    arcT.style.strokeDasharray = "34 966";
-    arcT.style.strokeDashoffset = (34 - 1000 * p).toFixed(1);
-    arcT.style.opacity = p > 0.02 && p < 0.995 ? 1 : 0;
-    /* the tracer grinds off sparks as it draws — flung back along its tangent */
-    if (fxSpawn && p > 0.03 && p < 0.99 && Math.random() < 0.6) {
-      try {
-        if (!arcLen) arcLen = arcT.getTotalLength();
-        var ptA = arcT.getPointAtLength(arcLen * p);
-        var ptB = arcT.getPointAtLength(arcLen * Math.max(p - 0.012, 0));
-        if (!arcCTM || !(arcCTMage = (arcCTMage + 1) % 6)) arcCTM = arcT.getScreenCTM();
-        var ctm = arcCTM;
-        if (ctm) {
-          var sx2 = ptA.x * ctm.a + ptA.y * ctm.c + ctm.e;
-          var sy2 = ptA.x * ctm.b + ptA.y * ctm.d + ctm.f;
-          var tvx = sx2 - (ptB.x * ctm.a + ptB.y * ctm.c + ctm.e);
-          var tvy = sy2 - (ptB.x * ctm.b + ptB.y * ctm.d + ctm.f);
-          var tm = Math.sqrt(tvx * tvx + tvy * tvy) || 1;
-          fxSpawn(sx2, sy2,
-            -tvx / tm * (0.5 + Math.random() * 1.2) + (Math.random() - 0.5) * 0.8,
-            -tvy / tm * (0.5 + Math.random() * 1.2) + (Math.random() - 0.5) * 0.8 - 0.2,
-            Math.random() < 0.25);
-        }
-      } catch (eT) {}
-    }
     if (!REDUCE) lCore.style.transform = "scale(" + (1 + p * 0.18).toFixed(4) + ")";
     if (shownPct >= 100 && firstReady && badgeReady) burst();
   })();
@@ -988,7 +957,8 @@
   var spacer = document.getElementById("alp-spacer");
 
   var secHeads = secEls.map(function (el) {
-    return Array.prototype.slice.call(el.querySelectorAll(".alp-w"));
+    var sel = el.getAttribute("data-sec") === "about" ? ".alp-ch" : ".alp-w";
+    return Array.prototype.slice.call(el.querySelectorAll(sel));
   });
   var secCopy = secEls.map(function (el) {
     return Array.prototype.slice.call(el.querySelectorAll(".alp-rise"));
@@ -1038,7 +1008,30 @@
      parked render runs once and freezes there. */
   function styleTextFx(heads, copy, lines, boxes, floats, enterQ, exitQ, dirX) {
     var n = heads.length, k, st;
-    if (exitQ > 0) {
+    var isCh = n > 0 && heads[0].classList.contains("alp-ch");
+    if (isCh) {
+      /* letter scatter: each glyph rides its own golden-angle vector with
+         spin, scale and blur, settling crisp; exit flings them back out */
+      var chStag = Math.min(0.02, 0.45 / Math.max(n - 1, 1));
+      for (k = 0; k < n; k++) {
+        st = heads[k].style;
+        var av = k * 2.39996; // golden angle: evenly scattered directions
+        var vx = Math.cos(av), vy = Math.sin(av);
+        if (exitQ > 0) {
+          var oc2 = scrollDir > 0 ? k : n - 1 - k;
+          var ev = expoIn(clamp01((exitQ - oc2 * chStag) / 0.5));
+          st.opacity = (1 - ev).toFixed(3);
+          st.transform = "translate(" + (vx * ev * 1.1).toFixed(3) + "em," + (vy * ev * 0.9 - scrollDir * ev * 0.6).toFixed(3) + "em) rotate(" + (vx * ev * 30).toFixed(1) + "deg) scale(" + (1 - ev * 0.3).toFixed(3) + ")";
+          st.filter = ev <= 0 ? "" : "blur(" + (ev * 6).toFixed(2) + "px)";
+        } else {
+          var rv = expoOut(clamp01((enterQ - k * chStag) / 0.55));
+          var dv = 1 - rv;
+          st.opacity = Math.min(1, rv * 2.2).toFixed(3);
+          st.transform = "translate(" + (vx * dv * 1.5).toFixed(3) + "em," + (vy * dv * 1.1).toFixed(3) + "em) rotate(" + (vx * dv * 40).toFixed(1) + "deg) scale(" + (0.5 + rv * 0.5).toFixed(3) + ")";
+          st.filter = rv >= 1 ? "" : "blur(" + (dv * 7).toFixed(2) + "px)";
+        }
+      }
+    } else if (exitQ > 0) {
       var stagO = Math.min(0.055, 0.5 / Math.max(n - 1, 1));
       for (k = 0; k < n; k++) {
         var o = scrollDir > 0 ? k : n - 1 - k;
@@ -1151,7 +1144,7 @@
   }
 
   function startIntro() {
-    transitioning = true; fromIdx = -1; toIdx = 0; tFrom = SEC[0].stop; tTo = SEC[0].stop; tT = 0; tDur = 1.15;
+    transitioning = true; fromIdx = -1; toIdx = 0; tFrom = SEC[0].stop; tTo = SEC[0].stop; tT = 0; tDur = 2.0;
   }
 
   function goTo(idx) {
@@ -1162,6 +1155,7 @@
     transitioning = true; fromIdx = cur; toIdx = idx;
     tFrom = pNow; tTo = SEC[idx].stop; tT = 0;
     tDur = Math.min(2.3, 0.75 + Math.abs(tTo - tFrom) * 0.05);
+    if (idx <= 1) tDur = Math.min(3.2, tDur * 1.6); // hero/about: linger so the text choreography reads
     scrollDir = tTo > tFrom ? 1 : -1;
     wheelAcc = 0;
   }
@@ -1324,7 +1318,7 @@
     var tx = -100, ty = -100, ox = -100, oy = -100, lvx = 0, lvy = 0;
     var sparks = [], fxRun = false, lastMove = 0;
     function addSpark(x, y, vx, vy, hot) {
-      if (sparks.length > 520) return;
+      if (sparks.length > 240) return;
       var rT = Math.random();
       sparks.push({ x: x, y: y, vx: vx, vy: vy, life: 1,
         dk: 0.003 + rT * rT * 0.022,           /* heavy tail: many die fast, a few burn long */
@@ -1339,7 +1333,6 @@
       addSpark(x, y, bx * v - by * j, by * v + bx * j - 0.25, Math.random() < 0.2);
     }
     function wake() { if (!fxRun) { fxRun = true; requestAnimationFrame(fxStep); } }
-    fxSpawn = function (x, y, vx, vy, hot) { addSpark(x, y, vx, vy, hot); wake(); };
     window.addEventListener("mousemove", function (e) {
       tx = e.clientX; ty = e.clientY; lastMove = performance.now();
       if (ox < -50) { ox = tx; oy = ty; }
@@ -1363,8 +1356,8 @@
       var mvx = ox - pox, mvy = oy - poy;
       lvx = lvx * 0.7 + mvx * 0.3; lvy = lvy * 0.7 + mvy * 0.3;
       var speed = Math.sqrt(lvx * lvx + lvy * lvy);
-      if (speed > 0.5 && pox > -50) {
-        var nT = Math.min(16, 1 + Math.ceil(speed * 0.75));
+      if (speed > 1.4 && pox > -50) {
+        var nT = Math.min(4, 1 + Math.ceil(speed * 0.16));
         for (var sT = 0; sT < nT; sT++) {
           var tt = Math.random();
           spawnTail(pox + mvx * tt, poy + mvy * tt, lvx, lvy, speed);
@@ -1407,7 +1400,7 @@
           s.vx += (Math.random() - 0.5) * 1.8;                  /* knocked off course */
           s.vy += (Math.random() - 0.5) * 1.8 - 0.4;
           var nb = (3 + Math.random() * 3) | 0;
-          for (var b5 = 0; b5 < nb && sparks.length < 520; b5++) {
+          for (var b5 = 0; b5 < nb && sparks.length < 240; b5++) {
             var ba = Math.random() * 6.283, bs = 1.2 + Math.random() * 2.2;
             sparks.push({ x: s.x, y: s.y, vx: Math.cos(ba) * bs + s.vx * 0.3, vy: Math.sin(ba) * bs + s.vy * 0.3,
               life: 0.85, dk: 0.05 + Math.random() * 0.05, r: 0.7 + Math.random() * 1.2, b: false });
@@ -1688,7 +1681,7 @@
     for (var i = 0; i < SEC.length; i++) {
       if (transitioning) {
         if (i === fromIdx) styleSectionState(i, 1, ease(clamp01(tq / 0.52)));
-        else if (i === toIdx) styleSectionState(i, ease(clamp01((tq - 0.4) / 0.6)), 0);
+        else if (i === toIdx) styleSectionState(i, ease(clamp01((tq - (toIdx <= 1 ? 0.22 : 0.4)) / (toIdx <= 1 ? 0.78 : 0.6))), 0);
         else {
           if (secEls[i].style.visibility !== "hidden") { secEls[i].style.opacity = 0; secEls[i].style.visibility = "hidden"; }
           if (i === svcIdx) hideSvcLayer();

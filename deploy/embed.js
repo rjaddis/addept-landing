@@ -262,6 +262,8 @@
   + ".alp-section.alp-hero-low .alp-inner{box-sizing:border-box;width:clamp(480px,48%,620px);max-width:none;padding:0 0 14vh 56px;position:relative;left:100px;top:-25px;}"
   + ".alp-hwrap{transform:scale(1.13);transform-origin:left bottom;}"
   + ".alp-hwrap .alp-eyebrow{position:relative;top:30px;font-size:7px;}"
+  + ".alp-section[data-sec='about'] .alp-heroh{font-size:clamp(2.2rem,4.6vw,4rem);}"
+  + ".alp-section[data-sec='about'] .alp-lead{color:#fff;}"
   + ".alp-lead{margin-top:18px;color:rgba(255,255,255,.58);line-height:1.65;font-size:clamp(.98rem,1.8vw,1.2rem);max-width:30em;}"
   + ".alp-ticks{margin-top:26px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 20px;font-size:11px;letter-spacing:.05em;color:#fff;}"
   + ".alp-ticks span{display:inline-flex;align-items:center;gap:6px;}"
@@ -489,9 +491,9 @@
       + boxO("", "What We Do")
       + '<i class="alp-hr" data-o="r"></i>'
       + '<h2 class="alp-heroh alp-split">First-rate repairs.</h2>'
-      + '<h2 class="alp-heroh alp-herodim alp-split">Top-tier care.</h2>'
+      + '<h2 class="alp-heroh alp-herodim alp-split">Top-tier\ncare.</h2>'
       + '<i class="alp-hr" data-o="l"></i>'
-      + '<p class="alp-lead alp-rise" style="margin-top:0;">There isn’t much we don’t do<br>From a simple service to advanced electrical diagnostics.<br>Got the fault three garages gave up on?<br>We collect those...</p>'
+      + '<p class="alp-lead alp-rise" style="margin-top:0;">There isn’t much we don’t do.<br>From a simple service to advanced electrical diagnostics.<br>Got the fault three garages gave up on?<br>We collect those...</p>'
       + "</div>"
       + "</div>" },
     { id: "services", stop: 27.0042, enter: [0, -12], exit: [0, -12], svc: true, html:
@@ -1326,7 +1328,7 @@
       var rT = Math.random();
       sparks.push({ x: x, y: y, vx: vx, vy: vy, life: 1,
         dk: 0.003 + rT * rT * 0.022,           /* heavy tail: many die fast, a few burn long */
-        r: hot ? 1.8 + Math.random() * 1.8 : 0.8 + Math.random() * 1.4,
+        r: hot ? 2.3 + Math.random() * 2.2 : 1.1 + Math.random() * 1.8,
         b: Math.random() < 0.3 });             /* carbon-rich: will explode near burnout */
     }
     function spawnTail(x, y, dirx, diry, sp) {
@@ -1376,12 +1378,12 @@
         var ang = Math.atan2(lvy, lvx), st = Math.min(speed * 0.045, 1.6);
         fctx.save();
         fctx.translate(ox, oy); fctx.rotate(ang); fctx.scale(1 + st, Math.max(1 - st * 0.35, 0.55));
-        var g = fctx.createRadialGradient(0, 0, 0, 0, 0, 12);
+        var g = fctx.createRadialGradient(0, 0, 0, 0, 0, 17);
         g.addColorStop(0, "rgba(255,240,210,.9)");
         g.addColorStop(0.35, "rgba(255,166,77,.38)");
         g.addColorStop(1, "rgba(255,120,40,0)");
         fctx.fillStyle = g;
-        fctx.beginPath(); fctx.arc(0, 0, 12, 0, 6.283); fctx.fill();
+        fctx.beginPath(); fctx.arc(0, 0, 17, 0, 6.283); fctx.fill();
         fctx.restore();
       }
       /* physics pass — tuned to studies of real grinder sparks: launch fast,
@@ -1408,7 +1410,7 @@
           for (var b5 = 0; b5 < nb && sparks.length < 520; b5++) {
             var ba = Math.random() * 6.283, bs = 1.2 + Math.random() * 2.2;
             sparks.push({ x: s.x, y: s.y, vx: Math.cos(ba) * bs + s.vx * 0.3, vy: Math.sin(ba) * bs + s.vy * 0.3,
-              life: 0.85, dk: 0.05 + Math.random() * 0.05, r: 0.5 + Math.random() * 0.9, b: false });
+              life: 0.85, dk: 0.05 + Math.random() * 0.05, r: 0.7 + Math.random() * 1.2, b: false });
           }
         }
       }
@@ -1429,13 +1431,13 @@
         var wq;
         if (spd2 > 0.04) {
           var wpx = s4.r * (0.5 + s4.life * 0.9);
-          wq = wpx < 1.1 ? 0 : wpx < 1.9 ? 1 : 2;
+          wq = wpx < 1.4 ? 0 : wpx < 2.4 ? 1 : 2;
         } else wq = 9;
         bkey = tq * 100 + aq * 10 + wq;
         (buckets[bkey] || (buckets[bkey] = [])).push(s4);
       }
       var TONES4 = ["255,246,222", "255,198,112", "255,138,56", "206,82,40"];
-      var WIDTHS3 = [0.9, 1.5, 2.3];
+      var WIDTHS3 = [1.2, 2, 3];
       for (bkey in buckets) {
         blist = buckets[bkey];
         var kn = +bkey, tone4 = TONES4[(kn / 100) | 0], aq4 = ((kn / 10) | 0) % 10, wq4 = kn % 10;

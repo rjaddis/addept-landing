@@ -483,16 +483,15 @@
       + "</div>"
       + "</div>" },
     { id: "about", stop: 17.7215, enter: [22, 0], exit: [-18, 0],
-      deco: flo(9, 30, 0.8, 8, 0.8, '<span class="alp-fchip">' + check + "Comprehensive Diagnostics</span>")
-        + flo(76, 60, 0.9, 9.5, 2.9, '<span class="alp-fchip">' + check + "Tyre &amp; Battery Marketplace</span>")
-        + orn(14, 70, 2, 4) + orn(83, 22, 3, 9),
+      deco: orn(14, 70, 2, 4) + orn(83, 22, 3, 9),
       html:
       '<div class="alp-inner alp-center">'
-      + boxO("", "02 · The Workshop")
+      + boxO("", "What We Do")
       + '<i class="alp-hr" data-o="r"></i>'
-      + '<h2 class="alp-giant alp-split">First-rate repairs.\nTop-tier care.</h2>'
+      + '<h2 class="alp-heroh alp-split">First-rate repairs.</h2>'
+      + '<h2 class="alp-heroh alp-herodim alp-split">Top-tier care.</h2>'
       + '<i class="alp-hr" data-o="l"></i>'
-      + '<p class="alp-lead alp-rise" style="margin-top:0;">Your go-to for peak vehicle performance and reliability — comprehensive diagnostics, routine maintenance, diesel engine solutions and WOF repairs, plus a tyre &amp; battery marketplace.</p>'
+      + '<p class="alp-lead alp-rise" style="margin-top:0;">There isn’t much we don’t do<br>From a simple service to advanced electrical diagnostics.<br>Got the fault three garages gave up on?<br>We collect those...</p>'
       + "</div>"
       + "</div>" },
     { id: "services", stop: 27.0042, enter: [0, -12], exit: [0, -12], svc: true, html:
@@ -1326,7 +1325,7 @@
       if (sparks.length > 520) return;
       var rT = Math.random();
       sparks.push({ x: x, y: y, vx: vx, vy: vy, life: 1,
-        dk: 0.004 + rT * rT * 0.028,           /* heavy tail: many die fast, a few burn long */
+        dk: 0.003 + rT * rT * 0.022,           /* heavy tail: many die fast, a few burn long */
         r: hot ? 1.8 + Math.random() * 1.8 : 0.8 + Math.random() * 1.4,
         b: Math.random() < 0.3 });             /* carbon-rich: will explode near burnout */
     }
@@ -1334,7 +1333,7 @@
       var m = Math.sqrt(dirx * dirx + diry * diry) || 1;
       var bx = -dirx / m, by = -diry / m;
       var j = (Math.random() - 0.5) * 1.8;
-      var v = 0.9 + Math.random() * 2.6 + sp * 0.06;
+      var v = 1.1 + Math.random() * 3 + sp * 0.07;
       addSpark(x, y, bx * v - by * j, by * v + bx * j - 0.25, Math.random() < 0.2);
     }
     function wake() { if (!fxRun) { fxRun = true; requestAnimationFrame(fxStep); } }
@@ -1363,7 +1362,7 @@
       lvx = lvx * 0.7 + mvx * 0.3; lvy = lvy * 0.7 + mvy * 0.3;
       var speed = Math.sqrt(lvx * lvx + lvy * lvy);
       if (speed > 0.5 && pox > -50) {
-        var nT = Math.min(14, 1 + Math.ceil(speed * 0.7));
+        var nT = Math.min(16, 1 + Math.ceil(speed * 0.75));
         for (var sT = 0; sT < nT; sT++) {
           var tt = Math.random();
           spawnTail(pox + mvx * tt, poy + mvy * tt, lvx, lvy, speed);
@@ -1395,7 +1394,7 @@
         var vmag = Math.sqrt(s.vx * s.vx + s.vy * s.vy);
         var dr2 = 1 - Math.min(0.07, 0.011 * vmag);
         s.vx *= dr2; s.vy *= dr2 + 0.006;
-        s.vy += 0.085;                 /* gravity */
+        s.vy += 0.125;                 /* gravity */
         if (vmag < 1.3) { s.vx += (Math.random() - 0.5) * 0.05; s.vy += (Math.random() - 0.5) * 0.03; }
         s.x += s.vx; s.y += s.vy;
         s.life -= s.dk;
@@ -1419,8 +1418,9 @@
       var buckets = {}, bkey, blist;
       for (i = 0; i < sparks.length; i++) {
         var s4 = sparks[i];
-        var al = Math.pow(s4.life, 1.4) * (0.72 + Math.random() * 0.28); /* flicker */
-        if (s4.life < 0.22) al *= 0.45 + Math.random() * 0.55;           /* dying pulse */
+        if (Math.random() < 0.05) continue;                              /* hard blink */
+        var al = Math.pow(s4.life, 1.4) * (0.5 + Math.random() * 0.5);   /* flicker */
+        if (s4.life < 0.22) al *= 0.25 + Math.random() * 0.75;           /* dying pulse */
         var aq = (al * 6) | 0;
         if (aq <= 0) continue;
         if (aq > 5) aq = 5;

@@ -938,6 +938,14 @@
   var MODE = "story";
   var cur = 0, fromIdx = -1, toIdx = 0;
   var transitioning = false, tT = 0, tDur = 1, tFrom = SEC[0].stop, tTo = SEC[0].stop;
+  /* hero/about text choreography runs on its own clock, decoupled from the
+     video transition — the footage glides at full speed while the words and
+     letters take their time populating */
+  var entT0 = 0, entFor = -1, ENT_MS = 3600, ENT_DELAY = 350;
+  function entQFor(i) {
+    if (i > 1 || i !== entFor) return 1;
+    return ease(clamp01((performance.now() - entT0 - ENT_DELAY) / ENT_MS));
+  }
   var pNow = SEC[0].stop;
   var wheelAcc = 0, lastWheelT = 0, cooldownUntil = 0;
   var fleetT = 0, fleetGoal = 0, fleetAcc = 0; // services card-fleet travel (0..1)
@@ -1144,7 +1152,8 @@
   }
 
   function startIntro() {
-    transitioning = true; fromIdx = -1; toIdx = 0; tFrom = SEC[0].stop; tTo = SEC[0].stop; tT = 0; tDur = 2.0;
+    transitioning = true; fromIdx = -1; toIdx = 0; tFrom = SEC[0].stop; tTo = SEC[0].stop; tT = 0; tDur = 1.15;
+    entFor = 0; entT0 = performance.now();
   }
 
   function goTo(idx) {
@@ -1155,7 +1164,7 @@
     transitioning = true; fromIdx = cur; toIdx = idx;
     tFrom = pNow; tTo = SEC[idx].stop; tT = 0;
     tDur = Math.min(2.3, 0.75 + Math.abs(tTo - tFrom) * 0.05);
-    if (idx <= 1) tDur = Math.min(3.2, tDur * 1.6); // hero/about: linger so the text choreography reads
+    entFor = idx; entT0 = performance.now();
     scrollDir = tTo > tFrom ? 1 : -1;
     wheelAcc = 0;
   }
@@ -1318,7 +1327,7 @@
     var tx = -100, ty = -100, ox = -100, oy = -100, lvx = 0, lvy = 0;
     var sparks = [], fxRun = false, lastMove = 0;
     function addSpark(x, y, vx, vy, hot) {
-      if (sparks.length > 240) return;
+      if (sparks.length > 130) return;
       var rT = Math.random();
       sparks.push({ x: x, y: y, vx: vx, vy: vy, life: 1,
         dk: 0.003 + rT * rT * 0.022,           /* heavy tail: many die fast, a few burn long */
@@ -1339,7 +1348,7 @@
       wake();
     }, { passive: true });
     window.addEventListener("mousedown", function (e) {
-      for (var i = 0; i < 18; i++) {
+      for (var i = 0; i < 10; i++) {
         var a = Math.random() * 6.283, sp2 = 1.2 + Math.random() * 3.4;
         addSpark(e.clientX, e.clientY, Math.cos(a) * sp2, Math.sin(a) * sp2 - 0.8, Math.random() < 0.4);
       }
@@ -1356,8 +1365,8 @@
       var mvx = ox - pox, mvy = oy - poy;
       lvx = lvx * 0.7 + mvx * 0.3; lvy = lvy * 0.7 + mvy * 0.3;
       var speed = Math.sqrt(lvx * lvx + lvy * lvy);
-      if (speed > 1.4 && pox > -50) {
-        var nT = Math.min(4, 1 + Math.ceil(speed * 0.16));
+      if (speed > 1.9 && pox > -50) {
+        var nT = Math.min(2, 1 + Math.ceil(speed * 0.07));
         for (var sT = 0; sT < nT; sT++) {
           var tt = Math.random();
           spawnTail(pox + mvx * tt, poy + mvy * tt, lvx, lvy, speed);
@@ -1400,7 +1409,7 @@
           s.vx += (Math.random() - 0.5) * 1.8;                  /* knocked off course */
           s.vy += (Math.random() - 0.5) * 1.8 - 0.4;
           var nb = (3 + Math.random() * 3) | 0;
-          for (var b5 = 0; b5 < nb && sparks.length < 240; b5++) {
+          for (var b5 = 0; b5 < nb && sparks.length < 130; b5++) {
             var ba = Math.random() * 6.283, bs = 1.2 + Math.random() * 2.2;
             sparks.push({ x: s.x, y: s.y, vx: Math.cos(ba) * bs + s.vx * 0.3, vy: Math.sin(ba) * bs + s.vy * 0.3,
               life: 0.85, dk: 0.05 + Math.random() * 0.05, r: 0.7 + Math.random() * 1.2, b: false });
@@ -1681,13 +1690,13 @@
     for (var i = 0; i < SEC.length; i++) {
       if (transitioning) {
         if (i === fromIdx) styleSectionState(i, 1, ease(clamp01(tq / 0.52)));
-        else if (i === toIdx) styleSectionState(i, ease(clamp01((tq - (toIdx <= 1 ? 0.22 : 0.4)) / (toIdx <= 1 ? 0.78 : 0.6))), 0);
+        else if (i === toIdx) styleSectionState(i, toIdx <= 1 ? entQFor(i) : ease(clamp01((tq - 0.4) / 0.6)), 0);
         else {
           if (secEls[i].style.visibility !== "hidden") { secEls[i].style.opacity = 0; secEls[i].style.visibility = "hidden"; }
           if (i === svcIdx) hideSvcLayer();
         }
       } else if (i === cur && MODE === "story" && !introActive) {
-        styleSectionState(i, 1, 0);
+        styleSectionState(i, entQFor(i), 0);
       } else {
         if (secEls[i].style.visibility !== "hidden") { secEls[i].style.opacity = 0; secEls[i].style.visibility = "hidden"; }
         if (i === svcIdx) hideSvcLayer();
@@ -1755,6 +1764,8 @@
         if (Math.abs(fleetGoal - fleetT) < 0.0004) fleetT = fleetGoal;
         cline.style.transform = "scaleX(" + ((cur + Math.max(fleetT, 0.04)) / SEC.length).toFixed(3) + ")";
         needs = true;
+      } else if (MODE === "story" && cur === entFor && cur <= 1 && performance.now() - entT0 < ENT_MS + ENT_DELAY + 120) {
+        needs = true; // text entrance clock still playing after the video parked
       }
       if (needs || parkedDirty) { parkedDirty = false; render(pNow, false); }
     } catch (e) { /* loop must survive */ }

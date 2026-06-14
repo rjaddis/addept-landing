@@ -26,8 +26,8 @@ Everything lives in `deploy/index.html` (thin shell) + `deploy/embed.js` (~252 K
 | 1 | Analytics (GA4 + conversion events) | ✅ done |
 | 2 | Section-nav snappiness + scroll smoothness | ✅ done (commit `b9a6b3e`) |
 | 3 | ~~Video re-encode~~ — masters already lean, **skipped** | ✅ done |
-| 4 | **Film MozJPEG re-encode** (scroll frames) | ⬅ **NEXT** |
-| 5 | Contact icons in the nav (Call / Text / WhatsApp) | ⬜ pending |
+| 4 | Film frames — deleted 62 unused branded frames; used set already lean | ✅ done |
+| 5 | **Contact icons in the nav** (Call / Text / WhatsApp) | ⬅ **NEXT** |
 | 6 | Local-SEO pages + sitemap/robots + cleanUrls | ⬜ pending |
 
 ### Done so far
@@ -99,8 +99,17 @@ mobile still gets the mobile file. Then commit + push.
 
 ---
 
-## Phase 4 — Film MozJPEG re-encode
-Re-encode the 238 scroll frames in `deploy/frames/` (`frame_0001.jpg` …) with
+## Phase 4 — Film frames (✅ DONE — 2026-06-14)
+**Outcome:** like the videos, the 238 used frames are already at their compression
+frontier — lossless `jpegtran -optimize` = **~1%** (verified pixel-identical), and a
+mozjpeg re-encode at equal/higher quality comes out *larger*; shrinking further
+needs visible quality loss (rejected — sharpness priority). **Real win taken:**
+deleted 62 unused frames (`frame_0239–0300`, **6.17 MB**) that are never loaded
+(`TOTAL_FRAMES=238`) and carried **Gearbook** (other-project) branding on the
+public site — commit `4c4716a`. Used set (1–238, 20.78 MB) left as-is.
+
+_Original plan, not pursued (no lossless headroom — frames are ffmpeg-mjpeg
+`-q:v 5`, already small for their quality):_ Re-encode the 238 scroll frames in `deploy/frames/` (`frame_0001.jpg` …) with
 MozJPEG/sharp at **q ≈ 88–90**, trellis quant, optimized Huffman, **keep
 1600×900** (portrait phones cover-crop by height — lowering res *reduces*
 sharpness). Stays JPEG → scrub-decode speed unchanged. Expect ~21 MB → ~15–17 MB.

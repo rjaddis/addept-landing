@@ -400,10 +400,14 @@
   + ".alp-fhead .alp-lead{margin-left:auto;margin-right:auto;}"
   /* booking shell: dark frame + skeleton until the widget iframe loads, so
      the third-party calendar never flashes raw white into the film world */
-  + "#alp-calcard{position:relative;background:linear-gradient(165deg,rgba(23,23,26,.82),rgba(13,13,15,.82));border:none;border-radius:18px;padding:10px;box-shadow:0 30px 80px rgba(0,0,0,.5);min-height:600px;opacity:.92;}"
-  + "#alp-calcard iframe{width:100%;min-height:600px;border:none;border-radius:12px;display:block;background:#fff;opacity:0;transition:opacity .6s ease;}"
+  /* no dark padding frame: the iframe fills the card edge-to-edge (overflow
+     clips the rounded corners) and the card itself is transparent, so there's
+     no dark border. opacity makes the widget see-through over the video.
+     Smaller: capped width + shorter min-height. */
+  + "#alp-calcard{position:relative;max-width:760px;margin:0 auto;background:transparent;border:none;border-radius:14px;overflow:hidden;box-shadow:0 22px 64px rgba(0,0,0,.45);min-height:560px;opacity:.85;}"
+  + "#alp-calcard iframe{width:100%;min-height:560px;border:none;display:block;background:#fff;opacity:0;transition:opacity .6s ease;}"
   + "#alp-calcard.alp-ld iframe{opacity:1;}"
-  + "#alp-calskel{position:absolute;inset:10px;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;color:rgba(255,255,255,.45);font-size:11px;letter-spacing:.2em;text-transform:uppercase;}"
+  + "#alp-calskel{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;color:rgba(255,255,255,.45);font-size:11px;letter-spacing:.2em;text-transform:uppercase;}"
   + "#alp-calskel i{width:26px;height:26px;border:2px solid rgba(255,255,255,.15);border-top-color:rgba(255,255,255,.7);border-radius:50%;animation:alp-rot 1s linear infinite;}"
   + "#alp-calcard.alp-ld #alp-calskel{display:none;}"
   /* testimonials: Oryzo-style square-card marquee over the workshop video */
@@ -1408,6 +1412,11 @@
     var fFrom = Math.round(fromPct / 100 * (TOTAL_FRAMES - 1));
     var fTo = Math.round(toPct / 100 * (TOTAL_FRAMES - 1));
     var dir = fTo >= fFrom ? 1 : -1, order = [], k, f;
+    /* warm the move's OPENING frames (just ahead of the source) as well as the
+       landing, so a sweep never stutters on its first paints nor lands on a
+       near-miss; then backfill the span. Still bounded by BMP_INFLIGHT_MAX —
+       no decode burst, so the crash-tuned inflight cap is untouched. */
+    for (k = 1; k <= 3; k++) order.push(fFrom + k * dir);
     for (k = 0; k <= 2; k++) { order.push(fTo + k); if (k) order.push(fTo - k); }
     for (f = fFrom; f !== fTo; f += dir) order.push(f);
     for (var oi = 0; oi < order.length && bmpInflight < BMP_INFLIGHT_MAX; oi++) {
@@ -1580,6 +1589,12 @@
   var annoEls = Array.prototype.slice.call(root.querySelectorAll(".alp-anno"));
   var dotEls = Array.prototype.slice.call(root.querySelectorAll("#alp-dots button"));
   var spacer = document.getElementById("alp-spacer");
+  /* spacer is a constant 100vh scroll shim (one CSS rule, no JS/flow-mode
+     override), but the bridge ride reads its height every frame and
+     offsetHeight forces a synchronous layout — so memoize it and refresh only
+     when the viewport actually changes (resize). */
+  var spacerH = spacer.offsetHeight || window.innerHeight;
+  function measureSpacerH() { spacerH = spacer.offsetHeight || window.innerHeight; }
 
   var secHeadsW = secEls.map(function (el) {
     return Array.prototype.slice.call(el.querySelectorAll(".alp-w"));
@@ -2058,37 +2073,54 @@
      hero. Every voice is gated by sndReady(), so they're silent until the
      sound invite unlocks the context (SND is hoisted-undefined on the loader's
      first synchronous frame — the !SND guard covers that). */
+  /* old mechanical odometer: a dry detent CLICK (the wheel catching its next
+     notch) over a tiny woody THOCK (the drum's mass). No rising pitch — real
+     odometers click at the same pitch and just speed up; the carry (every 10)
+     gets a heavier double-catch clunk. Slight per-tick jitter for realism. */
   function sndOdoTick(rate, accent) {
     if (!SND || !sndReady()) return;
-    var c = SND.ctx, t = c.currentTime, r = rate || 0;
-    /* bright digital click: a short high-passed noise transient ... */
+    var c = SND.ctx, t = c.currentTime;
+    var j = 0.9 + Math.random() * 0.2;
+    /* detent click: brief band-limited noise transient, fast decay */
     var src = c.createBufferSource(); src.buffer = SND.noise;
-    var hp = c.createBiquadFilter(); hp.type = "highpass"; hp.frequency.value = accent ? 1400 : 2600;
+    var bp = c.createBiquadFilter(); bp.type = "bandpass"; bp.Q.value = 1.7;
+    bp.frequency.value = (accent ? 1150 : 1950) * j;
     var ng = c.createGain();
-    ng.gain.setValueAtTime(accent ? 0.085 : 0.045, t);
-    ng.gain.exponentialRampToValueAtTime(0.0001, t + (accent ? 0.05 : 0.024));
-    src.connect(hp); hp.connect(ng); ng.connect(SND.master);
-    src.start(t); src.stop(t + 0.06);
-    /* ... plus a pitched ping that rises as the counter climbs */
-    var o = c.createOscillator(); o.type = "square";
-    var f = (accent ? 880 : 1500) + r * 900;
-    o.frequency.setValueAtTime(f, t);
-    o.frequency.exponentialRampToValueAtTime(f * 0.7, t + 0.03);
+    ng.gain.setValueAtTime(accent ? 0.08 : 0.05, t);
+    ng.gain.exponentialRampToValueAtTime(0.0001, t + (accent ? 0.03 : 0.016));
+    src.connect(bp); bp.connect(ng); ng.connect(SND.master);
+    src.start(t); src.stop(t + 0.05);
+    /* woody wheel thock under it */
+    var o = c.createOscillator(); o.type = "triangle";
+    o.frequency.setValueAtTime((accent ? 150 : 235) * j, t);
+    o.frequency.exponentialRampToValueAtTime((accent ? 88 : 150) * j, t + 0.04);
     var og = c.createGain();
-    og.gain.setValueAtTime(accent ? 0.05 : 0.028, t);
-    og.gain.exponentialRampToValueAtTime(0.0001, t + (accent ? 0.06 : 0.034));
+    og.gain.setValueAtTime(accent ? 0.06 : 0.03, t);
+    og.gain.exponentialRampToValueAtTime(0.0001, t + (accent ? 0.06 : 0.032));
     o.connect(og); og.connect(SND.master);
-    o.start(t); o.stop(t + 0.07);
+    o.start(t); o.stop(t + 0.08);
+    /* carry: a second catch-click ~22ms later as the next wheel turns over */
+    if (accent) {
+      var s2 = c.createBufferSource(); s2.buffer = SND.noise;
+      var b2 = c.createBiquadFilter(); b2.type = "bandpass"; b2.Q.value = 1.5; b2.frequency.value = 1500 * j;
+      var n2 = c.createGain();
+      n2.gain.setValueAtTime(0.0001, t + 0.022);
+      n2.gain.linearRampToValueAtTime(0.045, t + 0.026);
+      n2.gain.exponentialRampToValueAtTime(0.0001, t + 0.05);
+      s2.connect(b2); b2.connect(n2); n2.connect(SND.master);
+      s2.start(t + 0.022); s2.stop(t + 0.07);
+    }
   }
   function sndOdoLand() {
     if (!SND || !sndReady()) return;
     var c = SND.ctx, t = c.currentTime;
+    /* the wheels settle home: a low woody clunk + the final latch click */
     var o = c.createOscillator(); o.type = "triangle";
-    o.frequency.setValueAtTime(190, t); o.frequency.exponentialRampToValueAtTime(72, t + 0.12);
+    o.frequency.setValueAtTime(168, t); o.frequency.exponentialRampToValueAtTime(62, t + 0.14);
     var g = c.createGain();
-    g.gain.setValueAtTime(0.16, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.18);
-    o.connect(g); g.connect(SND.master); o.start(t); o.stop(t + 0.2);
-    sndOdoTick(1, true);   // tight latch click on top of the thunk
+    g.gain.setValueAtTime(0.15, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.2);
+    o.connect(g); g.connect(SND.master); o.start(t); o.stop(t + 0.22);
+    sndOdoTick(0, true);   // latch click on top of the clunk
   }
   /* the rising bed while the count climbs: sub drone + ember crackle + a
      band-passed noise riser whose brightness/level sndRiseTo() tracks to p */
@@ -2238,8 +2270,14 @@
     if (now - lastWheelT > 320) wheelAcc = 0;
     lastWheelT = now;
     wheelAcc += e.deltaY;
-    if (wheelAcc > 110) goNext();
-    else if (wheelAcc < -110) goPrev();
+    /* snappier trigger: a decisive flick (one firm wheel notch / fast trackpad
+       swipe) fires the move at once instead of waiting for the accumulator to
+       cross ±110 — that wait is what read as lag. Gentle scrolls still
+       accumulate. The post-move cooldown (cooldownUntil +420ms) and the
+       transitioning guard above swallow the momentum tail, so a single gesture
+       can't double-advance. Transition speed/easing are unchanged. */
+    if (e.deltaY >= 50 || wheelAcc > 110) goNext();
+    else if (e.deltaY <= -50 || wheelAcc < -110) goPrev();
   }, { passive: false });
 
   var touchY = null, touchX = null, touchUsed = false, touchRw = false;
@@ -2304,8 +2342,11 @@
     }
     if (touchUsed) return;
     var dy = touchY - e.touches[0].clientY;
-    if (dy > 70) { touchUsed = true; goNext(); }
-    else if (dy < -70) { touchUsed = true; goPrev(); }
+    /* snappier trigger: a deliberate ~48px swipe fires the move, replacing the
+       old 70px dead-zone that read as lag on phones. touchUsed caps it at one
+       move per gesture; tap jitter (<24px) stays well under the bar. */
+    if (dy > 48) { touchUsed = true; goNext(); }
+    else if (dy < -48) { touchUsed = true; goPrev(); }
   }, { passive: false });
   root.addEventListener("touchend", function () {
     /* a quick stationary tap on the deck toggles the card view; a long press or
@@ -3444,9 +3485,16 @@
       if (weldSnd) weldSnd.master.gain.setTargetAtTime(SND.on ? 0.14 : 0, weldSnd.ac.currentTime, 0.03);
       if (SND.on) {
         sndInit();
-        if (SND.ctx && SND.ctx.state === "suspended") SND.ctx.resume();
-        sndTick();                          // confirmation tick (also the unlock gesture)
-        if (loaderPhase) startIntroAudio();  // clicked during the loader → intro/odometer audio plays
+        /* start the sounds only AFTER the context is actually running —
+           resume() is async, so firing sndTick/startIntroAudio immediately
+           scheduled them against a still-suspended (frozen) clock and they were
+           lost, which is why it used to take a second press to hear anything */
+        var startSnd = function () {
+          sndTick();                          // confirmation tick
+          if (loaderPhase) startIntroAudio();  // clicked during the loader → intro/odometer bed
+        };
+        if (SND.ctx && SND.ctx.state === "suspended") SND.ctx.resume().then(startSnd).catch(startSnd);
+        else startSnd();
       } else {
         stopIntroAudio();
       }
@@ -3991,12 +4039,12 @@
         bridgeT += (bridgeGoal - bridgeT) * 0.18;
         if (Math.abs(bridgeGoal - bridgeT) < 0.0006) bridgeT = bridgeGoal;
         pNow = lerp(SEC[revIdx].stop, 100, bridgeT);
-        root.scrollTop = Math.round(bridgeT * spacer.offsetHeight);
+        root.scrollTop = Math.round(bridgeT * spacerH);
         needs = true;
         if (bridgeGoal >= 1 && bridgeT > 0.995) finishBridge();
       } else if (MODE === "story" && cur === entFor && cur !== svcIdx && performance.now() - entT0 < tuneFor(entFor).wordMs + tuneFor(entFor).wordDelay + 120) {
         needs = true; // text entrance clock still playing after the video parked
-      } else if (MODE === "flow" && flowReady && root.scrollTop < spacer.offsetHeight - 8) {
+      } else if (MODE === "flow" && flowReady && root.scrollTop < spacerH - 8) {
         /* safety net: a fast/momentum scroll-up can carry past the spacer edge
            with no wheel/touch event left to trigger the handback, stranding us
            in flow over the bare film. Hand back to the reviews bridge here. */
@@ -4025,7 +4073,7 @@
     rfootWrap.style.transform = "translateY(" + next.toFixed(1) + "px)";
   }
 
-  window.addEventListener("resize", function () { drawnFrame = -1; parkedDirty = true; centerReviewFoot(); });
+  window.addEventListener("resize", function () { drawnFrame = -1; parkedDirty = true; measureSpacerH(); centerReviewFoot(); });
 
   document.documentElement.style.overflow = "hidden";
   document.body.style.overflow = "hidden";

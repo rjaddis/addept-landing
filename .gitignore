@@ -13,3 +13,5 @@ tracks.js
 content.txt
 original.html
 .DS_Store
+.playwright-mcp/
+deploy/frames-avif/

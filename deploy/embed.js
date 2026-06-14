@@ -236,16 +236,16 @@
      glass gloss over the digit. The workshop line takes its place at 100.
      Drum geometry: digit-height = window-height = JS roll step = .92em. */
   + "#alp-lpct{--alp-grain:url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2290%22%20height%3D%2290%22%3E%3Cfilter%20id%3D%22n%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%220.8%22%20numOctaves%3D%222%22%20stitchTiles%3D%22stitch%22%2F%3E%3CfeColorMatrix%20type%3D%22saturate%22%20values%3D%220%22%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20filter%3D%22url(%23n)%22%2F%3E%3C%2Fsvg%3E');--alp-blotch:url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22140%22%20height%3D%22120%22%3E%3Cfilter%20id%3D%22n%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%220.22%200.3%22%20numOctaves%3D%223%22%20stitchTiles%3D%22stitch%22%2F%3E%3CfeColorMatrix%20type%3D%22saturate%22%20values%3D%220%22%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20filter%3D%22url(%23n)%22%2F%3E%3C%2Fsvg%3E');position:absolute;bottom:24px;left:0;right:0;text-align:center;font-size:20px;transition:opacity .35s;}"
-  + "#alp-lpct .alp-odm{display:inline-flex;align-items:center;padding:.16em .2em;border-radius:.2em;background:var(--alp-grain),linear-gradient(158deg,#efe9d9 0%,#ddd5c0 46%,#bfb69d 100%);background-size:.9em auto,auto;background-blend-mode:soft-light,normal;box-shadow:0 .03em 0 rgba(255,255,255,.55) inset,0 -.04em .03em rgba(0,0,0,.32) inset,.03em 0 0 rgba(255,255,255,.35) inset,-.03em 0 0 rgba(0,0,0,.18) inset,0 .14em .3em rgba(0,0,0,.6),0 .03em .08em rgba(0,0,0,.5);}"
+  + "#alp-lpct .alp-odm{display:inline-flex;align-items:center;padding:.08em .1em;border-radius:.16em;background:var(--alp-grain),linear-gradient(158deg,#efe9d9 0%,#ddd5c0 46%,#bfb69d 100%);background-size:.9em auto,auto;background-blend-mode:soft-light,normal;box-shadow:0 .016em 0 rgba(255,255,255,.5) inset,0 -.025em .022em rgba(0,0,0,.3) inset,.014em 0 0 rgba(255,255,255,.3) inset,-.016em 0 0 rgba(0,0,0,.16) inset,0 .12em .26em rgba(0,0,0,.55),0 .025em .07em rgba(0,0,0,.45);}"
   + ".alp-odbox{position:relative;display:inline-flex;border-radius:.07em;overflow:hidden;background:#040404;box-shadow:0 .035em .07em rgba(0,0,0,.95) inset,0 -.02em .05em rgba(0,0,0,.9) inset,0 0 0 .02em rgba(0,0,0,.85);}"
-  + ".alp-odbox::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:2;background:var(--alp-grain);background-size:.62em .62em;mix-blend-mode:overlay;opacity:.5;}"
+  + ".alp-odbox::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:2;background:var(--alp-grain);background-size:.62em .62em;mix-blend-mode:overlay;opacity:.22;}"
   + ".alp-odbox::after{content:'';position:absolute;left:0;right:0;top:0;height:42%;pointer-events:none;z-index:5;background:linear-gradient(rgba(255,255,255,.08),rgba(255,255,255,0));}"
   + ".alp-odc{position:relative;display:inline-block;overflow:hidden;height:.92em;width:.8em;vertical-align:top;background:var(--alp-blotch),linear-gradient(90deg,rgba(0,0,0,.55) 0%,rgba(255,255,255,.05) 15%,rgba(255,255,255,.05) 85%,rgba(0,0,0,.55) 100%),linear-gradient(#0e0e0e,#000);background-size:1.6em auto,auto,auto;background-blend-mode:soft-light,normal,normal;box-shadow:inset .02em 0 .02em rgba(255,255,255,.05),inset -.02em 0 .03em rgba(0,0,0,.9);}"
-  + ".alp-odc::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:3;background:linear-gradient(102deg,rgba(255,255,255,.14) 0%,rgba(255,255,255,.04) 18%,rgba(255,255,255,0) 42%),linear-gradient(to bottom,rgba(0,0,0,.96) 0%,rgba(0,0,0,.5) 13%,rgba(0,0,0,0) 33%,rgba(255,255,255,.15) 50%,rgba(0,0,0,0) 67%,rgba(0,0,0,.55) 87%,rgba(0,0,0,.97) 100%);}"
+  + ".alp-odc::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:3;background:linear-gradient(102deg,rgba(255,255,255,.08) 0%,rgba(255,255,255,.02) 18%,rgba(255,255,255,0) 42%),linear-gradient(to bottom,rgba(0,0,0,.44) 0%,rgba(0,0,0,.13) 10%,rgba(0,0,0,0) 26%,rgba(255,255,255,.07) 50%,rgba(0,0,0,0) 74%,rgba(0,0,0,.15) 90%,rgba(0,0,0,.46) 100%);}"
   + ".alp-odw{display:block;transition:transform .55s cubic-bezier(.22,.85,.3,1);}"
-  + ".alp-odw b{display:block;height:.92em;line-height:.92em;text-align:center;font-family:'Space Grotesk',Inter,sans-serif;font-weight:700;letter-spacing:.005em;background:linear-gradient(#fdfaf1 0%,#ebe5d4 52%,#cbc4b0 100%);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 .012em .01em rgba(0,0,0,.5);filter:drop-shadow(0 .008em .006em rgba(0,0,0,.65));}"
+  + ".alp-odw b{display:block;height:.92em;line-height:.92em;text-align:center;font-family:'Space Grotesk',Inter,sans-serif;font-weight:700;letter-spacing:.005em;background:linear-gradient(#ffffff 0%,#f8f6f0 60%,#ebe6db 100%);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 .006em 0 rgba(0,0,0,.3);}"
   + ".alp-odc:last-child{background:var(--alp-blotch),linear-gradient(90deg,rgba(0,0,0,.5) 0%,rgba(255,255,255,.06) 15%,rgba(255,255,255,.06) 85%,rgba(0,0,0,.5) 100%),linear-gradient(#caa24e,#a6781f);background-size:1.6em auto,auto,auto;background-blend-mode:soft-light,normal,normal;}"
-  + ".alp-odc:last-child::after{background:linear-gradient(102deg,rgba(255,255,255,.26) 0%,rgba(255,255,255,.08) 18%,rgba(255,255,255,0) 42%),linear-gradient(to bottom,rgba(54,36,7,.95) 0%,rgba(54,36,7,.5) 13%,rgba(80,55,12,.04) 33%,rgba(255,240,200,.24) 50%,rgba(80,55,12,.05) 67%,rgba(48,31,6,.58) 87%,rgba(38,24,4,.96) 100%);}"
+  + ".alp-odc:last-child::after{background:linear-gradient(102deg,rgba(255,255,255,.2) 0%,rgba(255,255,255,.06) 18%,rgba(255,255,255,0) 42%),linear-gradient(to bottom,rgba(54,36,7,.6) 0%,rgba(54,36,7,.22) 11%,rgba(80,55,12,0) 30%,rgba(255,240,200,.18) 50%,rgba(80,55,12,0) 70%,rgba(48,31,6,.24) 89%,rgba(38,24,4,.62) 100%);}"
   + ".alp-odc:last-child .alp-odw b{background:linear-gradient(#fff7e6 0%,#f3e4c2 55%,#d8c195 100%);-webkit-background-clip:text;background-clip:text;color:transparent;}"
   /* tagline matches the counter's cut; letters drop into place one by one,
      then the trailing dots count up in the beat before the burst */
@@ -404,7 +404,7 @@
      clips the rounded corners) and the card itself is transparent, so there's
      no dark border. opacity makes the widget see-through over the video.
      Smaller: capped width + shorter min-height. */
-  + "#alp-calcard{position:relative;max-width:760px;margin:0 auto;background:transparent;border:none;border-radius:14px;overflow:hidden;box-shadow:0 22px 64px rgba(0,0,0,.45);min-height:560px;opacity:.85;}"
+  + "#alp-calcard{position:relative;max-width:760px;margin:0 auto;background:transparent;border:none;border-radius:14px;overflow:hidden;box-shadow:0 22px 64px rgba(0,0,0,.45);min-height:560px;opacity:.84;}"
   + "#alp-calcard iframe{width:100%;min-height:560px;border:none;display:block;background:#fff;opacity:0;transition:opacity .6s ease;}"
   + "#alp-calcard.alp-ld iframe{opacity:1;}"
   + "#alp-calskel{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;color:rgba(255,255,255,.45);font-size:11px;letter-spacing:.2em;text-transform:uppercase;}"
@@ -3479,25 +3479,30 @@
     syncPill();
     pill.addEventListener("click", function (e) {
       e.stopPropagation();
-      SND.on = !SND.on;
-      track("sound_toggle", { on: SND.on ? 1 : 0 });
-      try { localStorage.setItem("alp-sound", SND.on ? "1" : "0"); } catch (err) {}
-      if (weldSnd) weldSnd.master.gain.setTargetAtTime(SND.on ? 0.14 : 0, weldSnd.ac.currentTime, 0.03);
-      if (SND.on) {
+      /* only turn OFF when audio is genuinely playing (context running). If it
+         reads "on" from a saved preference but the context is still suspended
+         (the browser never let it start without a gesture), this click UNLOCKS
+         it instead of toggling off — so one press always gets sound, not two. */
+      var playing = SND.on && SND.ctx && SND.ctx.state === "running";
+      if (playing) {
+        SND.on = false;
+        if (weldSnd) weldSnd.master.gain.setTargetAtTime(0, weldSnd.ac.currentTime, 0.03);
+        stopIntroAudio();
+      } else {
+        SND.on = true;
+        if (weldSnd) weldSnd.master.gain.setTargetAtTime(0.14, weldSnd.ac.currentTime, 0.03);
         sndInit();
-        /* start the sounds only AFTER the context is actually running —
-           resume() is async, so firing sndTick/startIntroAudio immediately
-           scheduled them against a still-suspended (frozen) clock and they were
-           lost, which is why it used to take a second press to hear anything */
+        /* start the sounds only AFTER the context is actually running — resume()
+           is async, so firing them immediately scheduled against a frozen clock */
         var startSnd = function () {
           sndTick();                          // confirmation tick
           if (loaderPhase) startIntroAudio();  // clicked during the loader → intro/odometer bed
         };
         if (SND.ctx && SND.ctx.state === "suspended") SND.ctx.resume().then(startSnd).catch(startSnd);
         else startSnd();
-      } else {
-        stopIntroAudio();
       }
+      track("sound_toggle", { on: SND.on ? 1 : 0 });
+      try { localStorage.setItem("alp-sound", SND.on ? "1" : "0"); } catch (err) {}
       syncPill();
     });
     root.appendChild(pill);

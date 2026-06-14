@@ -20,6 +20,8 @@
   var INITIAL_BATCH = 24;
   var PHONE_DISPLAY = "027 439 3403";
   var PHONE_TEL = "tel:+64274393403";
+  var SMS_TEL = "sms:+64274393403";
+  var WA_URL = "https://wa.me/64274393403?text=" + encodeURIComponent("Hi Addept, I'd like to ask about ");
   var EMAIL = "addeptauto@gmail.com";
   var CAL_URL = "https://api.leadconnectorhq.com/widget/booking/jk0S1digTnc8PT4F1AmO";
   /* Estimate form now emails straight to EMAIL via Web3Forms (no GHL).
@@ -283,8 +285,26 @@
   + "#alp-nav .alp-brand:hover{opacity:.8;}"
   + "#alp-nav .alp-brand b{font-weight:800;}"
   + "#alp-nav .alp-brand span{font-weight:400;color:rgba(255,255,255,.75);}"
-  + "#alp-nav a.alp-call{padding:9px 18px;border-radius:99px;border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.8);font-family:'Space Grotesk',Inter,sans-serif;font-weight:600;text-transform:uppercase;font-size:12px;letter-spacing:.14em;text-decoration:none;background:rgba(10,10,10,.45);transition:background .25s,color .25s,border-color .3s,transform .35s cubic-bezier(.2,.8,.2,1);white-space:nowrap;}"
-  + "#alp-nav a.alp-call:hover{color:#fff;border-color:rgba(255,255,255,.4);}"
+  + "#alp-nav .alp-contact{display:flex;align-items:center;gap:10px;}"
+  + "#alp-nav .alp-call{padding:9px 18px;border-radius:99px;border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.8);font-family:'Space Grotesk',Inter,sans-serif;font-weight:600;text-transform:uppercase;font-size:12px;letter-spacing:.14em;text-decoration:none;background:rgba(10,10,10,.45);transition:background .25s,color .25s,border-color .3s,transform .35s cubic-bezier(.2,.8,.2,1);white-space:nowrap;cursor:pointer;line-height:1;}"
+  + "#alp-nav .alp-call:hover{color:#fff;border-color:rgba(255,255,255,.4);}"
+  + ".alp-callwrap{position:relative;display:inline-flex;}"
+  + ".alp-call-ic{display:none;}"
+  + ".alp-cibtn{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:99px;border:1px solid rgba(255,255,255,.18);background:rgba(10,10,10,.45);color:rgba(255,255,255,.8);transition:background .25s,border-color .3s,transform .35s cubic-bezier(.2,.8,.2,1);}"
+  + ".alp-cibtn:hover{border-color:rgba(255,255,255,.4);}"
+  + ".alp-cibtn svg{width:19px;height:19px;}"
+  + ".alp-citext svg{fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;}"
+  + ".alp-citext{display:none;}"
+  + ".alp-ciwa .alp-waglyph{width:21px;height:21px;fill:#25d366;}"
+  + ".alp-ciwa:hover{background:rgba(37,211,102,.16);border-color:rgba(37,211,102,.5);}"
+  + ".alp-callpop{position:absolute;top:calc(100% + 12px);right:0;min-width:212px;padding:16px 18px;border-radius:14px;border:1px solid rgba(255,255,255,.14);background:rgba(18,18,22,.97);box-shadow:0 18px 50px rgba(0,0,0,.5);z-index:40;}"
+  + ".alp-callpop[hidden]{display:none;}"
+  + ".alp-callpop-n{font-family:'Space Grotesk',Inter,sans-serif;font-size:22px;font-weight:600;color:#fff;letter-spacing:.02em;-webkit-user-select:all;user-select:all;}"
+  + ".alp-callpop-r{display:flex;align-items:center;gap:14px;margin-top:12px;}"
+  + ".alp-callpop-copy{padding:7px 14px;border-radius:99px;border:1px solid rgba(255,255,255,.2);background:#fff;color:#000;font-family:'Space Grotesk',Inter,sans-serif;font-weight:600;font-size:11px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:transform .2s;}"
+  + ".alp-callpop-copy:hover{transform:translateY(-1px);}"
+  + ".alp-callpop-dial{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.5);text-decoration:none;white-space:nowrap;}"
+  + ".alp-callpop-dial:hover{color:#fff;}"
   /* dots */
   + "#alp-dots{position:fixed;right:14px;top:50%;transform:translateY(-50%);z-index:30;display:flex;flex-direction:column;gap:9px;transition:opacity .4s;}"
   + "#alp-dots button{position:relative;display:flex;align-items:center;justify-content:flex-end;background:none;border:none;cursor:pointer;padding:7px 6px;}"
@@ -416,7 +436,7 @@
      film as you enter booking (the whole scene dissolves film → video, so there
      is no rectangle edge / seam anywhere), then content scrolls over it. Opacity
      is driven by flow/bridge state in JS; the transition smooths the crossfade. */
-  + "#alp-bookbg{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0;transition:opacity .55s ease;background:radial-gradient(ellipse 90% 70% at 50% 30%,#16161a 0%,#0a0a0c 55%,#050505 100%);}"
+  + "#alp-bookbg{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0;transition:opacity .18s linear;background:radial-gradient(ellipse 90% 70% at 50% 30%,#16161a 0%,#0a0a0c 55%,#050505 100%);}"
   + "#alp-bgvid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .9s ease;}"
   + "#alp-bgvid.alp-on{opacity:1;}"
   + "#alp-bookshade{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(5,5,5,.9) 0%,rgba(5,5,5,.82) 26%,rgba(5,5,5,.84) 72%,rgba(5,5,5,.93) 100%);}"
@@ -594,9 +614,17 @@
   +   ".alp-hwrap{transform:none;}"
   +   "#alp-nav{padding:14px 16px;}"
   +   "#alp-nav .alp-brand{font-size:13px;}"
-  +   ".alp-nest,.alp-nbook{display:none;}" /* mobile nav: Call only — Book/Estimate now live as buttons on their own sections */
-  +   ".alp-nbtn,#alp-nav a.alp-call{padding:8px 13px;font-size:10.5px;letter-spacing:.1em;}"
+  +   ".alp-nest,.alp-nbook{display:none;}" /* mobile nav: Book/Estimate live as buttons on their sections; right = contact icons */
+  +   ".alp-nbtn{padding:8px 13px;font-size:10.5px;letter-spacing:.1em;}"
   +   "#alp-nav .alp-navr{gap:8px;}"
+  +   ".alp-contact{gap:8px;}"
+  +   ".alp-call-txt{display:none;}"
+  +   "#alp-nav .alp-call{width:42px;height:42px;padding:0;display:inline-flex;align-items:center;justify-content:center;}"
+  +   ".alp-call-ic{display:inline-flex;align-items:center;justify-content:center;}"
+  +   ".alp-call-ic svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;}"
+  +   ".alp-citext{display:inline-flex;}"
+  +   ".alp-cibtn{width:42px;height:42px;}"
+  +   "@media (max-width:360px){.alp-brand span{display:none;}#alp-nav .alp-call,.alp-cibtn{width:38px;height:38px;}.alp-contact{gap:6px;}}"
   +   "#alp-dots{display:none;}"
   +   "#alp-count{left:16px;}"
   +   "#alp-mute{display:none;}" /* no sound on phones — hide the toggle entirely */
@@ -749,6 +777,8 @@
   var IC_MAIL = '<svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>';
   var IC_PIN = '<svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>';
   var IC_ARR = '<svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8"/></svg>';
+  var IC_TEXT = '<svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 20l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>';
+  var IC_WA = '<svg viewBox="0 0 24 24" class="alp-waglyph"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.46 1.32 4.96L2 22l5.25-1.38c1.45.79 3.08 1.2 4.78 1.2h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm0 18.13c-1.52 0-3.01-.41-4.31-1.18l-.31-.18-3.2.84.85-3.12-.2-.32a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.82 2.42a8.18 8.18 0 0 1 2.41 5.82c0 4.54-3.7 8.24-8.25 8.24Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.16.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.5.11-.11.25-.29.37-.43.13-.14.17-.25.25-.42.08-.17.04-.31-.02-.43-.06-.12-.56-1.35-.77-1.84-.2-.48-.41-.42-.56-.43-.14-.01-.31-.01-.48-.01-.17 0-.43.06-.66.31-.23.25-.86.84-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.24 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28Z"/></svg>';
   var CLOCK_SVG = '<svg class="alp-clock" viewBox="0 0 44 44"><circle cx="22" cy="22" r="20" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.25)"/>'
     + '<line x1="22" y1="4" x2="22" y2="7" stroke="rgba(255,255,255,.4)"/><line x1="40" y1="22" x2="37" y2="22" stroke="rgba(255,255,255,.4)"/>'
     + '<line x1="22" y1="40" x2="22" y2="37" stroke="rgba(255,255,255,.4)"/><line x1="4" y1="22" x2="7" y2="22" stroke="rgba(255,255,255,.4)"/>'
@@ -962,7 +992,20 @@
     +   '<div class="alp-navr">'
     +     '<a class="alp-nbtn alp-nbook" href="#alp-booking" tabindex="-1">Make a booking</a>'
     +     '<button class="alp-nbtn alp-nest alp-openest" type="button" tabindex="-1">Request estimate</button>'
-    +     '<a class="alp-call" href="' + PHONE_TEL + '">Call now</a>'
+    +     '<div class="alp-contact">'
+    +       '<div class="alp-callwrap">'
+    +         '<button class="alp-call alp-ccall" type="button" aria-haspopup="dialog" aria-expanded="false" aria-label="Call Addept">'
+    +           '<span class="alp-call-txt">Call now</span><span class="alp-call-ic" aria-hidden="true">' + IC_PHONE + '</span>'
+    +         '</button>'
+    +         '<div class="alp-callpop" role="dialog" aria-label="Phone number" hidden>'
+    +           '<div class="alp-callpop-n">' + PHONE_DISPLAY + '</div>'
+    +           '<div class="alp-callpop-r"><button class="alp-callpop-copy" type="button">Copy</button>'
+    +             '<a class="alp-callpop-dial" href="' + PHONE_TEL + '">Call from computer</a></div>'
+    +         '</div>'
+    +       '</div>'
+    +       '<a class="alp-cibtn alp-citext" href="' + SMS_TEL + '" aria-label="Text Addept">' + IC_TEXT + '</a>'
+    +       '<a class="alp-cibtn alp-ciwa" href="' + WA_URL + '" target="_blank" rel="noopener" aria-label="Message Addept on WhatsApp">' + IC_WA + '</a>'
+    +     '</div>'
     +   "</div>"
     + "</div>"
     + '<div id="alp-dots" role="navigation" aria-label="Sections">' + SEC.map(function (s, i) {
@@ -1044,7 +1087,7 @@
     +   '<div id="alp-lembers"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>'
     +   '<div id="alp-lcore"><div id="alp-lbadge"></div><div id="alp-lsheen"></div></div>'
     +   '<div id="alp-ldot"></div>'
-    +   '<div id="alp-lpct"><span class="alp-odm"><span class="alp-odbox"><span class="alp-odc"><span class="alp-odw"><b>0</b></span></span><span class="alp-odc"><span class="alp-odw"><b>0</b></span></span><span class="alp-odc"><span class="alp-odw"><b id="alp-odh">0</b></span></span><span class="alp-odc"><span class="alp-odw" id="alp-odt">' + ODIGITS + '</span></span><span class="alp-odc"><span class="alp-odw" id="alp-odo">' + ODIGITS + "</span></span></span></span></div>"
+    +   '<div id="alp-lpct"><span class="alp-odm"><span class="alp-odbox"><span class="alp-odc"><span class="alp-odw"><b>0</b></span></span><span class="alp-odc"><span class="alp-odw"><b id="alp-odk">0</b></span></span><span class="alp-odc"><span class="alp-odw" id="alp-od3">' + ODIGITS + '</span></span><span class="alp-odc"><span class="alp-odw" id="alp-odt">' + ODIGITS + '</span></span><span class="alp-odc"><span class="alp-odw" id="alp-odo">' + ODIGITS + "</span></span></span></span></div>"
     +   '<div id="alp-lstat"><span class="alp-lstat-in">' + TAG_HTML + '<span class="alp-lstat-dots"><i>.</i><i>.</i><i>.</i></span></span></div>'
     +   '<div id="alp-lveil"></div>'
     + "</div>";
@@ -1195,9 +1238,10 @@
   var lBadge = document.getElementById("alp-lbadge");
   var lSheen = document.getElementById("alp-lsheen");
   var lPct = document.getElementById("alp-lpct");
-  var lOdT = document.getElementById("alp-odt");
-  var lOdO = document.getElementById("alp-odo");
-  var lOdH = document.getElementById("alp-odh");   // hundreds column — lights to 1 only at 100
+  var lOdT = document.getElementById("alp-odt");   // percent ones wheel
+  var lOdO = document.getElementById("alp-odo");   // tenths-of-a-percent wheel (the white tenths)
+  var lOd3 = document.getElementById("alp-od3");   // percent tens wheel
+  var lOdK = document.getElementById("alp-odk");   // thousands column — lights to 1 only at 100 (reads 01000)
   var lStat = document.getElementById("alp-lstat");
   var lDot = document.getElementById("alp-ldot");
   var lVeil = document.getElementById("alp-lveil");
@@ -1206,7 +1250,7 @@
   /* audio handoff state: the loader runs before any gesture, so the intro/odometer
      voices stay silent until the visitor clicks the sound pill mid-count */
   var loaderPhase = true, introAudioOn = false, emberTimer = null;
-  var lastOdoInt = -1, lastOdoTickT = 0, odoLanded = false;
+  var lastOdoVal = -1, lastOdoTickT = 0, odoLanded = false;
   var REDUCE = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   /* badge svg is inlined for crisp scaling; cross-origin embeds fall back to
@@ -1288,7 +1332,7 @@
   function readyLoaded() { var c = 0; for (var i = 0; i < READY.length; i++) if (frames[READY[i]]) c++; return c; }
 
   /* loader heartbeat: a five-column odometer tracking min(ready-set load
-     progress, a minimum dwell). At 100 it sits a beat on a crisp 00100 before
+     progress, a minimum dwell). At 100 it sits a beat on a crisp 01000 before
      the badge-burst. Stops itself at the burst. */
   (function loaderTick() {
     if (bursting) return;
@@ -1298,25 +1342,35 @@
     var target = Math.min(tq, dq) * 100;
     shownPct += (target - shownPct) * 0.14;
     if (target >= 100 && shownPct > 99.1) shownPct = 100;
-    var pInt = Math.min(Math.floor(shownPct), 100), od100 = pInt >= 100;
-    if (lOdH) lOdH.textContent = od100 ? "1" : "0";
-    /* at 100 the wheels point at the trailing wrap-0 (position 10) so they roll
-       forward off the 9 like a real odometer, while the hundreds column flips */
-    lOdT.style.transform = "translateY(-" + (od100 ? 10 : Math.floor(pInt / 10)) * 0.92 + "em)";
-    lOdO.style.transform = "translateY(-" + (od100 ? 10 : pInt % 10) * 0.92 + "em)";
+    var val = Math.min(Math.floor(shownPct * 10), 1000), od100 = val >= 1000; // tenths of a percent, 0..1000 (reads 01000 at 100%)
+    if (lOdK) lOdK.textContent = od100 ? "1" : "0";                            // thousands column → 1 at 100%
+    /* three rolling wheels — percent-tens, percent-ones, tenths-of-a-percent. At
+       100 they point at the trailing wrap-0 (pos 10) so they carry forward off
+       the 9 like a real odometer, while the thousands column flips to 1. */
+    if (lOd3) lOd3.style.transform = "translateY(-" + (od100 ? 10 : Math.floor(val / 100) % 10) * 0.92 + "em)";
+    lOdT.style.transform = "translateY(-" + (od100 ? 10 : Math.floor(val / 10) % 10) * 0.92 + "em)";
+    /* white tenths wheel: spin-blurred while counting (too fast to read), then
+       settle on 0 once it lands */
+    if (od100) {
+      if (lOdO.classList.contains("alp-odspin")) lOdO.classList.remove("alp-odspin");
+      lOdO.style.transform = "translateY(-9.2em)";
+    } else if (!lOdO.classList.contains("alp-odspin")) {
+      lOdO.classList.add("alp-odspin");
+      lOdO.style.transform = "";
+    }
     var p = shownPct / 100;
     /* odometer audio: a ratchet tick per integer step (throttled so the fast
        early spin reads as a quickening, thinning as it eases to 100), an accent
        on each tens rollover, and a mechanical latch when it lands; the riser
        tracks the climb. All no-ops until the sound invite unlocks the context. */
-    if (pInt !== lastOdoInt) {
+    if (val !== lastOdoVal) {
       if (od100) { if (!odoLanded) { odoLanded = true; sndOdoLand(); } }
-      else if (performance.now() - lastOdoTickT > 46) { sndOdoTick(p, pInt % 10 === 0); lastOdoTickT = performance.now(); }
-      lastOdoInt = pInt;
+      else if (performance.now() - lastOdoTickT > 46) { sndOdoTick(p, val % 10 === 0); lastOdoTickT = performance.now(); }
+      lastOdoVal = val;
     }
     sndRiseTo(p);
     if (!REDUCE) lCore.style.transform = "scale(" + (1 + p * 0.18).toFixed(4) + ")";
-    /* let the full 00100 land and hold for ~half a second before handing off */
+    /* let the full 01000 land and hold for ~half a second before handing off */
     if (shownPct >= 100 && firstReady && badgeReady && !loaderHeld) {
       loaderHeld = true;
       setTimeout(burst, 480);
@@ -2391,8 +2445,8 @@
   });
 
   root.addEventListener("click", function (e) {
-    var contact = e.target.closest ? e.target.closest("a[href^='tel:'], a[href^='mailto:']") : null;
-    if (contact) track(contact.getAttribute("href").indexOf("tel:") === 0 ? "call_click" : "email_click");
+    var contact = e.target.closest ? e.target.closest("a[href^='tel:'], a[href^='mailto:'], a[href^='sms:'], a[href*='wa.me']") : null;
+    if (contact) { var ch = contact.getAttribute("href"); track(ch.indexOf("tel:") === 0 ? "call_click" : ch.indexOf("sms:") === 0 ? "text_click" : ch.indexOf("wa.me") > -1 ? "whatsapp_click" : "email_click"); }
     var a = e.target.closest ? e.target.closest("a[href^='#']") : null;
     if (!a) return;
     var id = a.getAttribute("href").slice(1);
@@ -2409,6 +2463,32 @@
       else goTo(0);
     }
   });
+
+  /* nav Call control: fine pointers reveal a number popover (+ copy); a coarse
+     pointer (phone) dials straight through. Click-outside / Esc close it. */
+  (function () {
+    var cb = root.querySelector(".alp-ccall"); if (!cb) return;
+    var pop = root.querySelector(".alp-callpop");
+    var cp = root.querySelector(".alp-callpop-copy");
+    function close() { cb.setAttribute("aria-expanded", "false"); if (pop) pop.hidden = true; }
+    cb.addEventListener("click", function (e) {
+      e.stopPropagation();
+      if (!FINE) { track("call_click"); location.href = PHONE_TEL; return; }
+      if (cb.getAttribute("aria-expanded") === "true") close();
+      else { cb.setAttribute("aria-expanded", "true"); if (pop) pop.hidden = false; }
+    });
+    if (cp) cp.addEventListener("click", function (e) {
+      e.stopPropagation();
+      try { navigator.clipboard.writeText(PHONE_DISPLAY); cp.textContent = "Copied"; setTimeout(function () { cp.textContent = "Copy"; }, 1400); } catch (er) {}
+      track("call_click");
+    });
+    document.addEventListener("click", function (e) {
+      if (cb.getAttribute("aria-expanded") !== "true") return;
+      if (cb.contains(e.target) || (pop && pop.contains(e.target))) return;
+      close();
+    });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
+  })();
 
   // ── Molten cursor companion (desktop): the droplet IS the pointer — pinned
   // dead-on it, stretching along velocity like hot metal — shedding sparks
@@ -3959,9 +4039,14 @@
 
     /* the HUD fades as the booking page rides over the film */
     var inFlow = MODE === "flow" || bridgeT > 0.08;
-    /* crossfade the video backdrop with the film: it dissolves in as you enter
-       booking and out as you leave — no rectangle edge, so no seam anywhere */
-    if (bookbgEl) { var bo = inFlow ? "1" : "0"; if (bookbgEl.style.opacity !== bo) bookbgEl.style.opacity = bo; }
+    /* crossfade the booking video with the film. Fully in booking (flow) = 1.
+       During the bridge ride it tracks bridgeT so that scrolling UP fades the
+       video out — the reviews reappear by the time the booking heading is about
+       mid-screen (bridgeT ~0.5) rather than only at the very top. */
+    if (bookbgEl) {
+      var bo = (MODE === "flow" ? 1 : clamp01((bridgeT - 0.28) / 0.42)).toFixed(3);
+      if (bookbgEl.style.opacity !== bo) bookbgEl.style.opacity = bo;
+    }
     /* mobile: each time a new section lands, hide the scroll hint for 5s, then
        wake the loop once so it can fade in */
     if (IS_MOBILE && cur !== hintPrevCur) {

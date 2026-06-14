@@ -27,8 +27,8 @@ Everything lives in `deploy/index.html` (thin shell) + `deploy/embed.js` (~252 K
 | 2 | Section-nav snappiness + scroll smoothness | ✅ done (commit `b9a6b3e`) |
 | 3 | ~~Video re-encode~~ — masters already lean, **skipped** | ✅ done |
 | 4 | Film frames — deleted 62 unused branded frames; used set already lean | ✅ done |
-| 5 | **Contact icons in the nav** (Call / Text / WhatsApp) | ⬅ **NEXT** |
-| 6 | Local-SEO pages + sitemap/robots + cleanUrls | ⬜ pending |
+| 5 | Nav contact controls — Call popover + WhatsApp + mobile Text | ✅ done |
+| 6 | **Local-SEO pages** + sitemap/robots + cleanUrls | ⬅ **NEXT** |
 
 ### Done so far
 - **Phase 1 — Analytics.** Guarded `track(ev, params)` (try/catch + `window.GA_ID`
@@ -118,8 +118,18 @@ for the scrub (the abandoned `deploy/frames-avif/`, gitignored, was soft + slow 
 decode — that's the known failure). Optional, owner-gated: trim frame count via
 the existing sub-frame blend (`grep` for the `fa` blend / `TOTAL_FRAMES`).
 
-## Phase 5 — Contact icons in the nav
-Desktop top-right: **Call + WhatsApp**. Mobile top-right: **Call + Text +
+## Phase 5 — Nav contact controls (✅ DONE — 2026-06-14, commit `27b9dff`)
+**Outcome:** built the full confirmed design. Desktop: "Call now" → number+Copy
+popover (keyboard / click-outside / Esc close); WhatsApp icon in official green
+(`#25d366`, wa.me + prefill). Mobile (≤760px): the "Call now" pill becomes three
+44px circular icon buttons (Call `tel:` / Text `sms:` / WhatsApp); ≤360px tightens
+to 38px and hides "Automotive" so nothing overflows (verified 320/360/390 +
+desktop, 0 console errors). Coarse pointer dials direct; fine pointer gets the
+popover. `track()` fires `whatsapp_click`/`text_click`. Committed via a filtered
+patch so the owner's parallel odometer-redesign WIP stayed unstaged. **Optional
+follow-up:** a matching WhatsApp/Text plate in the V5 contact section.
+
+_Original spec:_ Desktop top-right: **Call + WhatsApp**. Mobile top-right: **Call + Text +
 WhatsApp** as ~40 px circular icon buttons (≥44 px tap target, ≥8 px gaps, visible
 focus, `aria-label` + inline `<svg aria-hidden>`). Call/Text = white line icons;
 **WhatsApp = official green glyph**. Mobile Call dials `tel:+64274393403`; desktop

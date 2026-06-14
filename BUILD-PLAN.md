@@ -25,8 +25,8 @@ Everything lives in `deploy/index.html` (thin shell) + `deploy/embed.js` (~252 K
 |---|-------|--------|
 | 1 | Analytics (GA4 + conversion events) | ✅ done |
 | 2 | Section-nav snappiness + scroll smoothness | ✅ done (commit `b9a6b3e`) |
-| 3 | **Video re-encode** (booking background) | ⬅ **NEXT** |
-| 4 | Film MozJPEG re-encode (scroll frames) | ⬜ pending |
+| 3 | ~~Video re-encode~~ — masters already lean, **skipped** | ✅ done |
+| 4 | **Film MozJPEG re-encode** (scroll frames) | ⬅ **NEXT** |
 | 5 | Contact icons in the nav (Call / Text / WhatsApp) | ⬜ pending |
 | 6 | Local-SEO pages + sitemap/robots + cleanUrls | ⬜ pending |
 
@@ -58,8 +58,18 @@ Everything lives in `deploy/index.html` (thin shell) + `deploy/embed.js` (~252 K
 
 ---
 
-## Phase 3 — Video re-encode (NEXT)
-**Goal:** shrink the looping booking-page background with no visible quality loss.
+## Phase 3 — Video re-encode (✅ DONE — SKIPPED by owner, 2026-06-14)
+**Outcome:** investigated and skipped. The masters are **already well-compressed**
+(H.264 High 1080p25, ~2.9–3.3 Mbps): a same-res CRF-21 re-encode came out *larger*
+(8.7 MB vs 7.5 MB) and CRF-23 was identical — there's no free lossless shrink here.
+Real options measured: VP9 1080p (desktop −14% / mobile −27%, needs a `<source>`
+refactor), or mobile 720p downscale (−49% drop-in, slight quality trade). Both
+videos are **lazy-loaded only on booking entry**, so they don't affect first-load.
+Owner reviewed a 100% before/after crop and chose to **leave them as-is** and
+prioritise the upfront scroll-film (phase 4) instead. No masters or code changed.
+_Commands below kept only in case it's ever revisited._
+
+**Goal (if revisited):** shrink the looping booking-page background with no visible quality loss.
 
 **Targets:** `deploy/workshop.mp4` (~7.5 MB) + `deploy/workshop-mobile.mp4` (~5.6 MB).
 The `<video>` element is built in `embed.js` — **grep `workshop` / `loadFlowMedia`

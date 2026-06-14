@@ -461,28 +461,40 @@
   + ".alp-qa .alp-a{max-height:0;overflow:hidden;transition:max-height .35s ease;}"
   + ".alp-qa .alp-a p{padding:0 6px 22px 48px;font-size:14px;line-height:1.7;color:rgba(255,255,255,.5);max-width:620px;}"
   /* contact — two-column: stacked icon detail rows + live hours panel */
-  + ".alp-cwrap{display:grid;grid-template-columns:1fr;gap:16px;max-width:560px;margin:0 auto;align-items:start;}"
-  + ".alp-clabel{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.42);}"
-  + ".alp-cmain{display:flex;flex-direction:column;gap:12px;}"
-  + ".alp-crow{display:flex;align-items:center;gap:16px;padding:17px 20px;border-radius:14px;border:1px solid rgba(255,255,255,.09);background:linear-gradient(165deg,rgba(26,26,30,.72),rgba(14,14,16,.72));text-decoration:none;transition:transform .35s cubic-bezier(.2,.8,.2,1),border-color .3s,background .3s;}"
-  + ".alp-crow:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.24);background:linear-gradient(165deg,rgba(34,34,40,.85),rgba(18,18,22,.82));}"
-  + ".alp-cic{flex:0 0 auto;width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:#fff;transition:background .3s,border-color .3s,transform .35s cubic-bezier(.2,.8,.2,1);}"
-  + ".alp-crow:hover .alp-cic{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.22);transform:scale(1.06);}"
-  + ".alp-cic svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}"
-  + ".alp-ct{display:flex;flex-direction:column;gap:3px;min-width:0;}"
-  + ".alp-ct .alp-cval{font-size:15px;font-weight:600;color:#fff;line-height:1.35;word-break:break-word;text-transform:uppercase;letter-spacing:.05em;}"
-  + ".alp-carr{margin-left:auto;color:rgba(255,255,255,.28);flex-shrink:0;transition:transform .35s cubic-bezier(.2,.8,.2,1),color .3s;}"
-  + ".alp-carr svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}"
-  + ".alp-crow:hover .alp-carr{color:#fff;transform:translate(3px,-3px);}"
-  + ".alp-chours{display:flex;flex-direction:column;padding:22px 24px 24px;border-radius:14px;border:1px solid rgba(255,255,255,.09);background:linear-gradient(165deg,rgba(26,26,30,.72),rgba(14,14,16,.72));}"
-  + ".alp-chhead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:4px;}"
-  + ".alp-cstatus{display:inline-flex;align-items:center;gap:7px;font-size:11px;color:rgba(255,255,255,.72);white-space:nowrap;}"
-  + ".alp-chrow{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:13px 0;border-top:1px solid rgba(255,255,255,.08);}"
-  + ".alp-chrow b{font-size:13.5px;font-weight:600;color:rgba(255,255,255,.9);}"
-  + ".alp-chrow span{font-size:13.5px;color:rgba(255,255,255,.55);font-variant-numeric:tabular-nums;}"
-  + ".alp-cbtn{margin-top:20px;display:flex;align-items:center;justify-content:center;gap:9px;padding:14px;border-radius:99px;background:#fff;color:#000;font-weight:600;font-size:12px;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;transition:transform .25s,box-shadow .25s;}"
-  + ".alp-cbtn:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(0,0,0,.4);}"
-  + ".alp-cbtn svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}"
+  /* contact: bracketed "diagnostic plate" tiles — phone + email side-by-side,
+     workshop bar beneath, all 540px and centered (V5 redesign) */
+  + ".alp-cwrap{max-width:540px;margin:0 auto;}"
+  + ".alp-crow{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}"
+  + ".alp-cplate{position:relative;display:block;box-sizing:border-box;padding:13px 22px;text-decoration:none;background:rgba(255,255,255,.015);transition:background .3s cubic-bezier(.2,.8,.2,1);}"
+  + ".alp-cplate:hover{background:rgba(255,255,255,.045);}"
+  + ".alp-cwide{display:block;width:100%;}"
+  + ".alp-ctop{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;}"
+  + ".alp-clab{display:inline-flex;align-items:center;gap:9px;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.45);}"
+  + ".alp-clab svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}"
+  + ".alp-cidx{font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(255,255,255,.3);}"
+  + ".alp-cval{font-family:'Space Grotesk',Inter,sans-serif;font-size:18px;font-weight:500;text-transform:uppercase;color:#fff;letter-spacing:.01em;line-height:1.2;}"
+  + ".alp-cval-wide{font-size:19px;white-space:nowrap;letter-spacing:.015em;}"
+  + ".alp-ccap{margin-top:7px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.04em;color:rgba(255,255,255,.32);}"
+  + ".alp-brk>i{position:absolute;width:13px;height:13px;border-style:solid;border-color:rgba(255,255,255,.8);border-width:0;transition:border-color .3s,transform .4s cubic-bezier(.2,.8,.2,1);}"
+  + ".alp-brk>i.tl{top:0;left:0;border-top-width:2px;border-left-width:2px;}"
+  + ".alp-brk>i.tr{top:0;right:0;border-top-width:2px;border-right-width:2px;}"
+  + ".alp-brk>i.bl{bottom:0;left:0;border-bottom-width:2px;border-left-width:2px;}"
+  + ".alp-brk>i.br{bottom:0;right:0;border-bottom-width:2px;border-right-width:2px;}"
+  + ".alp-brk:hover>i{border-color:#fff;}"
+  /* hover: the corner reticle expands outward (locks on), the value glows, the
+     index lights up, and a thin line sweeps across the plate */
+  + ".alp-cplate:hover>i.tl{transform:translate(-3px,-3px);}"
+  + ".alp-cplate:hover>i.tr{transform:translate(3px,-3px);}"
+  + ".alp-cplate:hover>i.bl{transform:translate(-3px,3px);}"
+  + ".alp-cplate:hover>i.br{transform:translate(3px,3px);}"
+  + ".alp-cval{transition:text-shadow .35s;}"
+  + ".alp-cplate:hover .alp-cval{text-shadow:0 0 22px rgba(180,205,255,.5);}"
+  + ".alp-cidx{transition:color .3s;}"
+  + ".alp-cplate:hover .alp-cidx{color:rgba(150,190,255,.95);}"
+  + ".alp-cplate{overflow:hidden;}"
+  + ".alp-cplate::after{content:'';position:absolute;top:0;left:-60%;width:45%;height:100%;background:linear-gradient(105deg,transparent,rgba(190,212,255,.14),transparent);transform:skewX(-18deg);opacity:0;pointer-events:none;}"
+  + ".alp-cplate:hover::after{animation:alp-cscan .7s ease;}"
+  + "@keyframes alp-cscan{0%{left:-60%;opacity:1;}100%{left:130%;opacity:1;}}"
   + ".alp-footer{position:relative;z-index:1;padding:30px 24px 40px;text-align:center;color:rgba(255,255,255,.25);font-size:12px;border-top:1px solid rgba(255,255,255,.06);margin-top:14px;}"
   + ".alp-fnav,.alp-fsoc{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 26px;margin-bottom:18px;}"
   + ".alp-fnav a{color:rgba(255,255,255,.6);text-decoration:none;font-size:12px;letter-spacing:.1em;text-transform:uppercase;transition:color .25s;}"
@@ -600,7 +612,8 @@
   +   "#alp-svc-side{display:none;}"
   +   "#alp-svc-meta{left:22px;bottom:4vh;right:22px;}"
   +   ".alp-fcard{width:74vw;filter:none!important;}"
-  +   ".alp-cwrap{grid-template-columns:1fr;}"
+  +   ".alp-crow{grid-template-columns:1fr;}"
+  +   ".alp-cval-wide{font-size:15px;white-space:normal;}"
   +   ".alp-fsec{padding:32px 16px;}"
   +   "#alp-booking{padding:0;}"
   +   "#alp-reviews{padding:12px 0 0;}"
@@ -912,7 +925,7 @@
 
   var fontLink = document.createElement("link");
   fontLink.rel = "stylesheet";
-  fontLink.href = "https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap";
+  fontLink.href = "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap";
   document.head.appendChild(fontLink);
 
   var root = document.createElement("div");
@@ -960,24 +973,30 @@
     + '<div id="alp-flow"><div id="alp-flowfade"></div><div id="alp-flowbody"><div id="alp-bookbg" aria-hidden="true"><div id="alp-bookshade"></div></div>'
     +   '<div class="alp-fsec" id="alp-booking">'
     +     '<div class="alp-bcal"><div class="alp-fhead" style="margin-bottom:26px;">'
-    +     '<h2 class="alp-heroh" style="font-size:clamp(2.4rem,5vw,4rem);">Make a booking</h2>'
+    +     '<h2 class="alp-heroh" style="font-size:clamp(2rem,4.2vw,3.2rem);">Make a booking</h2>'
     +     '<p class="alp-lead">Choose a date and time that suits you, and we’ll see you then. Prefer to talk it through? Call <a href="' + PHONE_TEL + '" style="color:#fff;">' + PHONE_DISPLAY + "</a>.</p></div>"
     +     '<div id="alp-calcard"><div id="alp-calskel" aria-hidden="true"><i></i><span>Loading bookings</span></div>'
     +     '<iframe data-src="' + CAL_URL + '" scrolling="no" id="jk0S1digTnc8PT4F1AmO_alp" title="Addept Automotive Bookings"></iframe></div></div>'
     +   "</div>"
     +   '<div class="alp-fsec" id="alp-faqs">'
-    +     '<div class="alp-fhead"><div class="alp-eyebrow">FAQs</div><h2 class="alp-h2">Common questions</h2></div>'
+    +     '<div class="alp-fhead"><div class="alp-eyebrow">FAQs</div><h2 class="alp-heroh" style="font-size:clamp(2rem,4.2vw,3.2rem);">Common questions</h2></div>'
     +     '<div class="alp-faq">' + faqHtml + "</div>"
     +   "</div>"
     +   '<div class="alp-fsec" id="alp-contact">'
-    +     '<div class="alp-fhead"><div class="alp-eyebrow">Contact</div><h2 class="alp-heroh" style="font-size:clamp(2.1rem,4.4vw,3.2rem);">Get in touch</h2>'
+    +     '<div class="alp-fhead"><div class="alp-eyebrow">Contact</div><h2 class="alp-heroh" style="font-size:clamp(2rem,4.2vw,3.2rem);">Get in touch</h2>'
     +       '<p class="alp-lead">Booked up, broken down, or just not sure where to start — get hold of us and we’ll tell you what’s actually going on.</p></div>'
     +     '<div class="alp-cwrap">'
-    +       '<div class="alp-cmain">'
-    +         '<a class="alp-crow" href="' + PHONE_TEL + '"><span class="alp-cic">' + IC_PHONE + '</span><span class="alp-ct"><span class="alp-clabel">Phone</span><span class="alp-cval">' + PHONE_DISPLAY + '</span></span><span class="alp-carr">' + IC_ARR + '</span></a>'
-    +         '<a class="alp-crow" href="mailto:' + EMAIL + '"><span class="alp-cic">' + IC_MAIL + '</span><span class="alp-ct"><span class="alp-clabel">Email</span><span class="alp-cval">' + EMAIL + '</span></span><span class="alp-carr">' + IC_ARR + '</span></a>'
-    +         '<a class="alp-crow" href="' + MAPS + '" target="_blank" rel="noopener"><span class="alp-cic">' + IC_PIN + '</span><span class="alp-ct"><span class="alp-clabel">Workshop</span><span class="alp-cval">35B Brookes Road, Frankton, Queenstown 9300</span></span><span class="alp-carr">' + IC_ARR + '</span></a>'
+    +       '<div class="alp-crow">'
+    +         '<a class="alp-cplate alp-brk" href="' + PHONE_TEL + '"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>'
+    +           '<div class="alp-ctop"><span class="alp-clab">' + IC_PHONE + 'Phone</span><span class="alp-cidx">01</span></div>'
+    +           '<div class="alp-cval">' + PHONE_DISPLAY + '</div><div class="alp-ccap">Mon–Thu · 7am–5pm</div></a>'
+    +         '<a class="alp-cplate alp-brk" href="mailto:' + EMAIL + '"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>'
+    +           '<div class="alp-ctop"><span class="alp-clab">' + IC_MAIL + 'Email</span><span class="alp-cidx">02</span></div>'
+    +           '<div class="alp-cval" style="font-size:15px;">' + EMAIL + '</div><div class="alp-ccap">Replies within a day</div></a>'
     +       "</div>"
+    +       '<a class="alp-cplate alp-cwide alp-brk" href="' + MAPS + '" target="_blank" rel="noopener"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>'
+    +         '<div class="alp-ctop"><span class="alp-clab">' + IC_PIN + 'Workshop</span><span class="alp-cidx">03</span></div>'
+    +         '<div class="alp-cval alp-cval-wide">35B Brookes Road, Frankton, Queenstown 9300</div><div class="alp-ccap">Open in Google Maps →</div></a>'
     +     "</div>"
     +   "</div>"
     +   '<div class="alp-footer">'
@@ -3637,21 +3656,23 @@
     /* the prominent, always-visible copy — headings, eyebrows, leads, FAQ
        questions, contact details, hours, footer. (Accordion answers are left
        out so a closed FAQ can never leave hidden letters behind.) */
-    var sel = ".alp-heroh,.alp-h2,.alp-eyebrow,.alp-lead,.alp-qa button,.alp-ct,.alp-chrow,.alp-chhead,.alp-cbtn,.alp-fcopy,.alp-fnav a,.alp-fsoc a";
+    var sel = ".alp-heroh,.alp-h2,.alp-eyebrow,.alp-lead,.alp-qa button,.alp-cplate,.alp-fcopy,.alp-fnav a,.alp-fsoc a";
     var els = Array.prototype.slice.call(flowBody.querySelectorAll(sel));
     els.forEach(split);
     if (REDUCE || typeof IntersectionObserver === "undefined") {
       els.forEach(function (el) { el.classList.add("alp-in"); });   // no scroll-reveal — just show
       return;
     }
-    /* reveal ONCE then stop watching — scrolling up and back down no longer
-       re-animates the text, so the booking flow scrolls smoothly (the replay
-       was the jumpiness). */
+    /* populate on the way in, de-populate once a block is fully off-screen (the
+       reset is never seen), so it re-animates every time you scroll back to it.
+       Hysteresis between the two thresholds stops edge flicker. */
     var rio = new IntersectionObserver(function (ents) {
       for (var i = 0; i < ents.length; i++) {
-        if (ents[i].isIntersecting) { ents[i].target.classList.add("alp-in"); rio.unobserve(ents[i].target); }
+        var e = ents[i];
+        if (e.intersectionRatio >= 0.18) e.target.classList.add("alp-in");
+        else if (e.intersectionRatio <= 0.001) e.target.classList.remove("alp-in");
       }
-    }, { root: root, threshold: 0.18 });
+    }, { root: root, threshold: [0, 0.18] });
     els.forEach(function (el) { rio.observe(el); });
   })();
 

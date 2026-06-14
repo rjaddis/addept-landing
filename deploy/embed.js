@@ -1174,7 +1174,12 @@
       v.id = "alp-bgvid";
       v.muted = true; v.loop = true; v.playsInline = true;
       v.setAttribute("muted", ""); v.setAttribute("playsinline", "");
-      v.preload = "auto"; v.src = vsrc;
+      v.preload = "auto";
+      /* VP9 webm is ~30-40% smaller for the same footage; capable browsers take
+         it, everyone else keeps the mp4 (canPlayType returns "" → mp4 fallback).
+         Same basename, deployed alongside the mp4 the HEAD probe just verified. */
+      var webmOk = v.canPlayType && v.canPlayType('video/webm; codecs="vp9"');
+      v.src = webmOk ? vsrc.replace(/\.mp4$/, ".webm") : vsrc;
       v.addEventListener("canplay", function () { v.classList.add("alp-on"); });
       var bg = document.getElementById("alp-bookbg");
       bg.insertBefore(v, bg.firstChild);

@@ -25,8 +25,8 @@ Everything lives in `deploy/index.html` (thin shell) + `deploy/embed.js` (~252 K
 |---|-------|--------|
 | 1 | Analytics (GA4 + conversion events) | ✅ done |
 | 2 | Section-nav snappiness + scroll smoothness | ✅ done (commit `b9a6b3e`) |
-| 3 | **Video re-encode** (booking background) | ⬅ **NEXT** |
-| 4 | Film MozJPEG re-encode (scroll frames) | ⬜ pending |
+| 3 | Video re-encode (booking background) | ✅ done |
+| 4 | Film MozJPEG re-encode (scroll frames) | ⬅ **NEXT** |
 | 5 | Contact icons in the nav (Call / Text / WhatsApp) | ⬜ pending |
 | 6 | Local-SEO pages + sitemap/robots + cleanUrls | ⬜ pending |
 
@@ -56,9 +56,28 @@ Everything lives in `deploy/index.html` (thin shell) + `deploy/embed.js` (~252 K
     value-cache — setting a style to its current value doesn't reflow in modern
     engines, so it's JS-only, brief, and risky vs. the visual-parity bar.
 
+- **Phase 3 — Video re-encode** (additive, no master replaced):
+  The plan assumed x264 CRF 21 would shrink the masters ~40-55%, but the two
+  `workshop*.mp4` files were **already near-optimally encoded** (~2.9–3.3 Mbps
+  H.264 @ 1080p) — re-encoding at any visually-lossless x264 CRF came out the
+  same size or larger (CRF 23 ≈ 100%, CRF 25 ≈ 85%). So instead of touching the
+  masters, we **added VP9 WebM `<source>` siblings** that capable browsers pick
+  via `canPlayType('video/webm; codecs="vp9"')`; everyone else keeps the
+  untouched mp4. CRF 34, `-b:v 0` (constant-quality), `-auto-alt-ref 1
+  -lag-in-frames 25`, audio dropped.
+  - `workshop.webm` 7.86 MB → **5.38 MB (−31.5%)**, PSNR 45.5 dB / SSIM 0.989
+  - `workshop-mobile.webm` 5.84 MB → **3.39 MB (−42%)**, PSNR 45.8 dB / SSIM 0.988
+  - Both > 44 dB (visually-lossless bar) with margin. Change is one guarded
+    branch in `loadFlowMedia` (grep `webmOk`); the existing HEAD-probe existence
+    check + mobile→desktop fallback are untouched. `vercel.json` cache rule and
+    the playback attributes (muted/loop/playsinline/poster) are unchanged.
+  - ⚠️ This env had **no ffmpeg** (apt-installed 6.1.1) and **no libvmaf** — used
+    SSIM/PSNR for the quality gate. Before/after stills: `compare-*.png`
+    (gitignored, evidence only).
+
 ---
 
-## Phase 3 — Video re-encode (NEXT)
+## Phase 3 — Video re-encode (DONE — see note above)
 **Goal:** shrink the looping booking-page background with no visible quality loss.
 
 **Targets:** `deploy/workshop.mp4` (~7.5 MB) + `deploy/workshop-mobile.mp4` (~5.6 MB).

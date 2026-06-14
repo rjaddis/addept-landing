@@ -15,7 +15,7 @@
       ]
     },
     {
-      "source": "/(og.jpg|favicon-32.png|icon-512.png|apple-touch-icon.png|workshop.mp4|workshop-mobile.mp4)",
+      "source": "/(og.jpg|favicon-32.png|icon-512.png|apple-touch-icon.png|workshop.mp4|workshop-mobile.mp4|workshop.webm|workshop-mobile.webm)",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=86400" }
       ]

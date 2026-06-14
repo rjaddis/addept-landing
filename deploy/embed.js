@@ -325,6 +325,10 @@
   + ".alp-btn-light:hover{transform:translateY(-3px) scale(1.04);box-shadow:0 26px 60px rgba(0,0,0,.5);}"
   + ".alp-btn-ghost{background:rgba(20,20,20,.55);color:#fff;border:1px solid rgba(255,255,255,.22);}"
   + ".alp-btn-ghost:hover{background:#fff;color:#000;transform:translateY(-3px);}"
+  /* estimate button reads in the hero-headline style (Space Grotesk, lighter
+     weight, tight tracking) — like a small headline rather than wide-tracked
+     button text */
+  + ".alp-btn.alp-openest{font-weight:500;letter-spacing:.02em;font-size:16px;}"
   + ".alp-btnrow{margin-top:30px;display:flex;flex-wrap:wrap;gap:14px;align-items:center;}"
   /* per-section contextual CTAs: hidden everywhere except phones (shown in the
      mobile block), where the nav drops its Book button */
@@ -396,7 +400,7 @@
   + ".alp-fhead .alp-lead{margin-left:auto;margin-right:auto;}"
   /* booking shell: dark frame + skeleton until the widget iframe loads, so
      the third-party calendar never flashes raw white into the film world */
-  + "#alp-calcard{position:relative;background:linear-gradient(165deg,#17171a,#0d0d0f);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:10px;box-shadow:0 30px 80px rgba(0,0,0,.5);min-height:600px;}"
+  + "#alp-calcard{position:relative;background:linear-gradient(165deg,rgba(23,23,26,.82),rgba(13,13,15,.82));border:none;border-radius:18px;padding:10px;box-shadow:0 30px 80px rgba(0,0,0,.5);min-height:600px;opacity:.92;}"
   + "#alp-calcard iframe{width:100%;min-height:600px;border:none;border-radius:12px;display:block;background:#fff;opacity:0;transition:opacity .6s ease;}"
   + "#alp-calcard.alp-ld iframe{opacity:1;}"
   + "#alp-calskel{position:absolute;inset:10px;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;color:rgba(255,255,255,.45);font-size:11px;letter-spacing:.2em;text-transform:uppercase;}"
@@ -777,7 +781,7 @@
       +   '<i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>'
       +   '<h1 class="alp-heroh alp-split">We’ll tell you\nwhat’s actually\nwrong with your\ncar.</h1>'
       + "</div>"
-      + '<h2 class="alp-heroh alp-herodim alp-split">Wild concept, we\nknow.</h2>'
+      + '<h2 class="alp-heroh alp-herodim alp-split">Wild concept,\nwe know.</h2>'
       + '<i class="alp-hr" data-o="l" style="max-width:360px;"></i>'
       + '<div class="alp-btnrow alp-rise"><a class="alp-btn alp-btn-light" href="#alp-booking">Make a booking</a>'
       + '<button class="alp-btn alp-btn-ghost alp-openest" type="button">Request estimate</button></div>'
@@ -1105,6 +1109,7 @@
       document.getElementById("alp-calcard").classList.add("alp-ld");
     });
     ifr.src = ifr.getAttribute("data-src");
+    track("booking_calendar_open"); /* the booking calendar actually loaded */
     loadFormEmbedJs();
   }
   var feLoaded = false;
@@ -1863,7 +1868,7 @@
     tFrom = pNow; tTo = SEC[idx].stop; tT = 0;
     tDur = REDUCE ? 0.35 : Math.min(2.3, 0.75 + Math.abs(tTo - tFrom) * 0.05) * tuneFor(idx).vid;
     entFor = idx; entT0 = performance.now();
-    if (jumpMode) { tDur = 0.8; entFor = -1; entT0 = performance.now() - 1e6; } // dissolve in fully-settled (no slide / per-letter populate / re-anim on land)
+    if (jumpMode) { tDur = 0.8; } // entFor/entT0 keep the entrance clock so the destination text still populates during/after the dissolve
     scrollDir = tTo > tFrom ? 1 : -1;
     wheelAcc = 0;
     prefetchSweep(tFrom, tTo);   // land the destination frame decoded, no mid-sweep miss
@@ -2894,24 +2899,7 @@
         }
         fctx.globalCompositeOperation = "source-over";
         fctx.lineJoin = "round";
-        /* contact/toe shadow under the whole seam, cast slightly down-right */
-        for (qk in bq) {
-          var qs = +qk === 11 ? 1 : (+qk + 0.5) / 12;
-          var sl2 = bq[qk];
-          fctx.strokeStyle = "rgba(26,30,40," + (0.3 * qs).toFixed(3) + ")";
-          fctx.lineWidth = 15;
-          fctx.beginPath();
-          for (var s6 = 0; s6 < sl2.length; s6++) {
-            var sp2 = sl2[s6];
-            if (sp2 === 0 || bead[sp2 - 1].b || bead[sp2 - 1].h) {
-              fctx.moveTo(bead[sp2].sx + 0.61, bead[sp2].sy + 1.1);
-            } else {
-              fctx.moveTo(bead[sp2 - 1].sx + 0.6, bead[sp2 - 1].sy + 1.1);
-            }
-            fctx.lineTo(bead[sp2].sx + 0.6, bead[sp2].sy + 1.1);
-          }
-          fctx.stroke();
-        }
+        /* (contact/toe shadow removed — no dark band behind the bead) */
         /* the dimes themselves, painted oldest -> newest exactly as they
            froze: each dab is an OPAQUE shingle disc that overlaps the one
            before it. Per shingle, in its own travel-rotated frame:
@@ -3336,6 +3324,7 @@
         if (!(d && d.success)) throw new Error(d && d.message);
         estSending = false;
         estForm.reset(); /* sent for real — clear it for next time */
+        track("estimate_success"); /* true conversion — the email actually went through */
       })
       .catch(function () {
         /* real failure — reopen the form (details still there) with an error */
@@ -3344,6 +3333,7 @@
         document.getElementById("alp-est-x").focus();
         estShowErr("Hmm, that didn’t go through — please try again, or call us.");
         estSending = false;
+        track("estimate_error"); /* send failed — watch this vs estimate_success */
       });
   });
   root.addEventListener("click", function (e) {
@@ -3430,6 +3420,7 @@
     pill.addEventListener("click", function (e) {
       e.stopPropagation();
       SND.on = !SND.on;
+      track("sound_toggle", { on: SND.on ? 1 : 0 });
       try { localStorage.setItem("alp-sound", SND.on ? "1" : "0"); } catch (err) {}
       if (weldSnd) weldSnd.master.gain.setTargetAtTime(SND.on ? 0.14 : 0, weldSnd.ac.currentTime, 0.03);
       if (SND.on) {
@@ -3807,11 +3798,10 @@
     glow.style.opacity = "0";
     canvas.style.transform = "";
     for (var i = 0; i < SEC.length; i++) {
-      if (i === fromIdx || i === toIdx) {
-        styleSectionState(i, 1, 0);                       // fully settled (no slide / populate)
-        var op = (i === toIdx ? jdis : 1 - jdis).toFixed(3);
-        secEls[i].style.opacity = op;                     // crossfade the section block
-        if (i === svcIdx) svcLayer.style.opacity = op;    // the fleet rides its own layer
+      if (i === toIdx) {
+        /* destination section plays its normal per-letter entrance (entQFor /
+           svc clock) over the video crossfade — same effect as a scroll arrival */
+        styleSectionState(i, entQFor(i), 0);
       } else {
         if (secEls[i].style.visibility !== "hidden") { secEls[i].style.opacity = 0; secEls[i].style.visibility = "hidden"; }
         if (i === svcIdx) hideSvcLayer();

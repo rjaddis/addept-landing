@@ -8,6 +8,19 @@
       ]
     },
     {
+      "source": "/frames-avif/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" },
+        { "key": "Access-Control-Allow-Origin", "value": "*" }
+      ]
+    },
+    {
+      "source": "/(og.jpg|favicon-32.png|icon-512.png|apple-touch-icon.png|workshop.mp4|workshop-mobile.mp4)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=86400" }
+      ]
+    },
+    {
       "source": "/embed.js",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=60, must-revalidate" },

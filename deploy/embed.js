@@ -47,6 +47,23 @@
     var n = String(i + 1); while (n.length < 4) n = "0" + n;
     return FRAMES_DIR + "frame_" + n + FRAME_EXT;
   }
+  /* analytics bootstrap: when this script runs somewhere index.html did NOT
+     switch GA on (e.g. the GoHighLevel page, which only loads embed.js), turn it
+     on here so track() fires anywhere embed.js lives. Guarded on GA_ID so it can
+     never double-load alongside the index.html bootstrap. */
+  var GA_ID_FALLBACK = "G-13X4NT1WMQ";
+  if (!window.GA_ID && GA_ID_FALLBACK) {
+    try {
+      window.GA_ID = GA_ID_FALLBACK;
+      var _gaS = document.createElement("script");
+      _gaS.async = true; _gaS.src = "https://www.googletagmanager.com/gtag/js?id=" + window.GA_ID;
+      document.head.appendChild(_gaS);
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = window.gtag || function () { dataLayer.push(arguments); };
+      gtag("js", new Date());
+      gtag("config", window.GA_ID, { anonymize_ip: true });
+    } catch (e) {}
+  }
   function track(ev, params) {
     try { if (window.gtag && window.GA_ID) window.gtag("event", ev, params || {}); } catch (e) {}
   }

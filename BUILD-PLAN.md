@@ -28,7 +28,7 @@ Everything lives in `deploy/index.html` (thin shell) + `deploy/embed.js` (~252 K
 | 3 | ~~Video re-encode~~ — masters already lean, **skipped** | ✅ done |
 | 4 | Film frames — deleted 62 unused branded frames; used set already lean | ✅ done |
 | 5 | Nav contact controls — Call popover + WhatsApp + mobile Text | ✅ done |
-| 6 | **Local-SEO pages** + sitemap/robots + cleanUrls | ⬅ **NEXT** |
+| 6 | Homepage SEO — structured data + noscript (single-site) | ✅ done |
 
 ### Done so far
 - **Phase 1 — Analytics.** Guarded `track(ev, params)` (try/catch + `window.GA_ID`
@@ -120,9 +120,11 @@ the existing sub-frame blend (`grep` for the `fa` blend / `TOTAL_FRAMES`).
 
 ## Phase 5 — Nav contact controls (✅ DONE — 2026-06-14, commit `27b9dff`)
 **Outcome:** built the full confirmed design. Desktop: "Call now" → number+Copy
-popover (keyboard / click-outside / Esc close); WhatsApp icon in official green
-(`#25d366`, wa.me + prefill). Mobile (≤760px): the "Call now" pill becomes three
-44px circular icon buttons (Call `tel:` / Text `sms:` / WhatsApp); ≤360px tightens
+popover (keyboard / click-outside / Esc close); and a **WhatsApp** row *inside* that
+popover (monochrome white, wa.me + prefill) — owner chose a minimal bar with no
+standalone icon and no green (redesign commit `27abef1`). Mobile (≤760px): the
+"Call now" pill becomes three 44px circular icon buttons (Call `tel:` / Text
+`sms:` / WhatsApp, all white); ≤360px tightens
 to 38px and hides "Automotive" so nothing overflows (verified 320/360/390 +
 desktop, 0 console errors). Coarse pointer dials direct; fine pointer gets the
 popover. `track()` fires `whatsapp_click`/`text_click`. Committed via a filtered
@@ -140,8 +142,21 @@ nav (`.alp-call`, `.alp-nbook`, `.alp-nest`). ⚠️ The contact **section** was
 separate "V5" redesign (bracketed diagnostic plates) — check its current markup
 before adding the matching contact-row buttons there.
 
-## Phase 6 — Local SEO (largest; its own session)
-Generate **12 service pages + a `/services/` hub** from **one template + a
+## Phase 6 — Local SEO (✅ DONE — 2026-06-15, commit `c84d5ff`)
+**Outcome — pivoted from separate pages to homepage SEO.** The owner wanted *only*
+the cinematic site seen by visitors — and you can't cloak (show Google a separate
+page but send humans elsewhere), so whatever ranks is what people land on. Instead
+of 12 pages, the SEO was baked into the homepage with **zero visual change**:
+enriched JSON-LD in `index.html` (AutoRepair LocalBusiness + 12-service
+`OfferCatalog` + reviews + areaServed + hours/geo; `WebSite`; `FAQPage`) and a
+crawlable `<noscript>` fallback (h1, services, reviews, NAP, FAQs) that JS visitors
+never see (no flash) + minimal `robots.txt`/`sitemap.xml`. Cinematic site verified
+byte-identical. **Trade-off accepted:** one page targets the long tail less sharply
+than 12 pages, but in a small market the local map pack + **Google Business
+Profile** dominate anyway (owner given a GBP checklist). The generated pages +
+generator were deleted; `cleanUrls` not needed.
+
+_Original plan (not taken — separate pages):_ Generate **12 service pages + a `/services/` hub** from **one template + a
 per-service data array** (a short Node script — don't hand-write). Each page:
 branded-lightweight, **does NOT load `embed.js`**, real crawlable copy adapted
 from the SERVICES array (grep `SERVICES`), Queenstown angle, NAP block

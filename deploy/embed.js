@@ -294,9 +294,8 @@
   + ".alp-cibtn:hover{border-color:rgba(255,255,255,.4);}"
   + ".alp-cibtn svg{width:19px;height:19px;}"
   + ".alp-citext svg{fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;}"
-  + ".alp-citext{display:none;}"
-  + ".alp-ciwa .alp-waglyph{width:21px;height:21px;fill:#25d366;}"
-  + ".alp-ciwa:hover{background:rgba(37,211,102,.16);border-color:rgba(37,211,102,.5);}"
+  + ".alp-citext,.alp-ciwa{display:none;}"
+  + ".alp-ciwa .alp-waglyph{width:21px;height:21px;fill:#fff;}"
   + ".alp-callpop{position:absolute;top:calc(100% + 12px);right:0;min-width:212px;padding:16px 18px;border-radius:14px;border:1px solid rgba(255,255,255,.14);background:rgba(18,18,22,.97);box-shadow:0 18px 50px rgba(0,0,0,.5);z-index:40;}"
   + ".alp-callpop[hidden]{display:none;}"
   + ".alp-callpop-n{font-family:'Space Grotesk',Inter,sans-serif;font-size:22px;font-weight:600;color:#fff;letter-spacing:.02em;-webkit-user-select:all;user-select:all;}"
@@ -305,6 +304,11 @@
   + ".alp-callpop-copy:hover{transform:translateY(-1px);}"
   + ".alp-callpop-dial{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.5);text-decoration:none;white-space:nowrap;}"
   + ".alp-callpop-dial:hover{color:#fff;}"
+  + ".alp-callpop-wa{display:flex;align-items:center;gap:9px;margin-top:13px;padding-top:13px;border-top:1px solid rgba(255,255,255,.12);font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.8);text-decoration:none;transition:color .2s;}"
+  + ".alp-callpop-wa:hover{color:#fff;}"
+  + ".alp-callpop-wa svg{width:18px;height:18px;}"
+  + ".alp-callpop-wa .alp-waglyph{fill:rgba(255,255,255,.85);transition:fill .2s;}"
+  + ".alp-callpop-wa:hover .alp-waglyph{fill:#fff;}"
   /* dots */
   + "#alp-dots{position:fixed;right:14px;top:50%;transform:translateY(-50%);z-index:30;display:flex;flex-direction:column;gap:9px;transition:opacity .4s;}"
   + "#alp-dots button{position:relative;display:flex;align-items:center;justify-content:flex-end;background:none;border:none;cursor:pointer;padding:7px 6px;}"
@@ -622,7 +626,7 @@
   +   "#alp-nav .alp-call{width:42px;height:42px;padding:0;display:inline-flex;align-items:center;justify-content:center;}"
   +   ".alp-call-ic{display:inline-flex;align-items:center;justify-content:center;}"
   +   ".alp-call-ic svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;}"
-  +   ".alp-citext{display:inline-flex;}"
+  +   ".alp-citext,.alp-ciwa{display:inline-flex;}"
   +   ".alp-cibtn{width:42px;height:42px;}"
   +   "@media (max-width:360px){.alp-brand span{display:none;}#alp-nav .alp-call,.alp-cibtn{width:38px;height:38px;}.alp-contact{gap:6px;}}"
   +   "#alp-dots{display:none;}"
@@ -997,10 +1001,11 @@
     +         '<button class="alp-call alp-ccall" type="button" aria-haspopup="dialog" aria-expanded="false" aria-label="Call Addept">'
     +           '<span class="alp-call-txt">Call now</span><span class="alp-call-ic" aria-hidden="true">' + IC_PHONE + '</span>'
     +         '</button>'
-    +         '<div class="alp-callpop" role="dialog" aria-label="Phone number" hidden>'
+    +         '<div class="alp-callpop" role="dialog" aria-label="Contact" hidden>'
     +           '<div class="alp-callpop-n">' + PHONE_DISPLAY + '</div>'
     +           '<div class="alp-callpop-r"><button class="alp-callpop-copy" type="button">Copy</button>'
     +             '<a class="alp-callpop-dial" href="' + PHONE_TEL + '">Call from computer</a></div>'
+    +           '<a class="alp-callpop-wa" href="' + WA_URL + '" target="_blank" rel="noopener">' + IC_WA + 'Message on WhatsApp</a>'
     +         '</div>'
     +       '</div>'
     +       '<a class="alp-cibtn alp-citext" href="' + SMS_TEL + '" aria-label="Text Addept">' + IC_TEXT + '</a>'
@@ -3274,7 +3279,7 @@
     var w0 = svcCardEls[0].offsetWidth || 1, vw = window.innerWidth || 1, vh = window.innerHeight || 1;
     fCardW = w0 / vw * 100;
     var mob = fCardW > 50;                 // phones run wide cards → keep the deck tight
-    fGap = mob ? fCardW * 0.46 : 26;       // deck-like overlap; the steeper arc + this gap let the centred card's title clear its newer neighbour
+    fGap = mob ? fCardW * 0.46 : fCardW + 1.5; // desktop: cards almost touching (~1.5vw gap)
     fOut = 110 + fCardW + 4;               // s at which a card is fully off the left
     fArc = 120 + fCardW;                   // sine crest lands when the card is centred
     fTotal = (FLEET.length - 1) * fGap + fOut + 4; // +4: trailing card clears before fleetT=1

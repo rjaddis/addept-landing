@@ -29,38 +29,323 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "AutoRepair",
-    "name": "Addept Automotive",
-    "image": "https://addeptauto.co.nz/og.jpg",
-    "url": "https://addeptauto.co.nz/",
-    "telephone": "+64274393403",
-    "email": "addeptauto@gmail.com",
-    "priceRange": "$$",
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "35B Brookes Road, Frankton",
-      "addressLocality": "Queenstown",
-      "postalCode": "9300",
-      "addressCountry": "NZ"
-    },
-    "geo": { "@type": "GeoCoordinates", "latitude": -45.0178, "longitude": 168.7373 },
-    "openingHoursSpecification": [
-      {
-        "@type": "OpeningHoursSpecification",
-        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday"],
-        "opens": "07:00",
-        "closes": "17:00"
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "AutoRepair",
+      "@id": "https://addeptauto.co.nz/#business",
+      "name": "Addept Automotive",
+      "image": "https://addeptauto.co.nz/og.jpg",
+      "url": "https://addeptauto.co.nz/",
+      "telephone": "+64274393403",
+      "email": "addeptauto@gmail.com",
+      "priceRange": "$$",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "35B Brookes Road, Frankton",
+        "addressLocality": "Queenstown",
+        "addressRegion": "Otago",
+        "postalCode": "9300",
+        "addressCountry": "NZ"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": -45.0178,
+        "longitude": 168.7373
+      },
+      "areaServed": [
+        {
+          "@type": "City",
+          "name": "Queenstown"
+        },
+        {
+          "@type": "City",
+          "name": "Frankton"
+        },
+        {
+          "@type": "City",
+          "name": "Wānaka"
+        },
+        {
+          "@type": "City",
+          "name": "Cromwell"
+        },
+        {
+          "@type": "City",
+          "name": "Central Otago"
+        }
+      ],
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday"
+          ],
+          "opens": "07:00",
+          "closes": "17:00"
+        }
+      ],
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "reviewCount": "100"
+      },
+      "review": [
+        {
+          "@type": "Review",
+          "reviewRating": {
+            "@type": "Rating",
+            "ratingValue": "5",
+            "bestRating": "5"
+          },
+          "author": {
+            "@type": "Person",
+            "name": "J. T."
+          },
+          "reviewBody": "Hands down the best mechanic experience I've had in New Zealand, and I've had a fair few across the country."
+        },
+        {
+          "@type": "Review",
+          "reviewRating": {
+            "@type": "Rating",
+            "ratingValue": "5",
+            "bestRating": "5"
+          },
+          "author": {
+            "@type": "Person",
+            "name": "S. M."
+          },
+          "reviewBody": "Above and beyond service. Our car started having issues just as we arrived in Queenstown — sorted, no fuss."
+        },
+        {
+          "@type": "Review",
+          "reviewRating": {
+            "@type": "Rating",
+            "ratingValue": "5",
+            "bestRating": "5"
+          },
+          "author": {
+            "@type": "Person",
+            "name": "P. W."
+          },
+          "reviewBody": "Fantastic service from these guys. Hayden and Ryan are first-class mechanics. Highly recommended."
+        }
+      ],
+      "sameAs": [
+        "https://www.facebook.com/addeptauto"
+      ],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Mechanical services",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Car Servicing & Maintenance",
+              "description": "Oil, filters and a full inspection that keeps your car reliable between Queenstown's big drives.",
+              "areaServed": {
+                "@type": "City",
+                "name": "Queenstown"
+              }
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "WOF Repairs",
+              "description": "Failed your WOF? We fix every failure — brakes, lights, steering, tyres, exhaust — and get you legal again.",
+              "areaServed": {
+                "@type": "City",
+                "name": "Queenstown"
+              }
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Brake Repairs",
+              "description": "Pads, rotors and fluid for confident stops on steep Central Otago roads.",
+              "areaServed": {
+                "@type": "City",
+                "name": "Queenstown"
+              }
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Engine Diagnostics & Repair",
+              "description": "Check-engine-light diagnostics through to engine repair and rebuilds, in-house.",
+              "areaServed": {
+                "@type": "City",
+                "name": "Queenstown"
+              }
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Transmission Services",
+              "description": "Service, repair and rebuilds for manual and automatic gearboxes.",
+              "areaServed": {
+                "@type": "City",
+                "name": "Queenstown"
+              }
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Suspension & Steering",
+              "description": "Shocks, struts, bushes and steering tuned for gravel and alpine roads.",
+              "areaServed": {
+                "@type": "City",
+                "name": "Queenstown"
+              }
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Exhaust Repairs",
+              "description": "Mufflers, converters, pipes and full custom exhaust builds, welded in-house.",
+              "areaServed": {
+                "@type": "City",
+                "name": "Queenstown"
+              }
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Auto Electrical",
+              "description": "Batteries, starters, alternators, wiring and the intermittent faults others give up on.",
+              "areaServed": {
+                "@type": "City",
+                "name": "Queenstown"
+              }
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Performance Tuning & Emissions",
+              "description": "Aftermarket ECU tuning, factory remapping and emissions/DTC solutions.",
+              "areaServed": {
+                "@type": "City",
+                "name": "Queenstown"
+              }
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Pre-Purchase Inspections",
+              "description": "Know what a car needs now, soon, and what the seller didn't mention — before you buy.",
+              "areaServed": {
+                "@type": "City",
+                "name": "Queenstown"
+              }
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "European Car Specialists",
+              "description": "Audi, VW, BMW, Mercedes, Peugeot and more, serviced and repaired properly.",
+              "areaServed": {
+                "@type": "City",
+                "name": "Queenstown"
+              }
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Japanese Car Specialists",
+              "description": "Toyota, Subaru, Mazda, Nissan, Honda — the makes that handle our roads, kept reliable.",
+              "areaServed": {
+                "@type": "City",
+                "name": "Queenstown"
+              }
+            }
+          }
+        ]
       }
-    ],
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.9",
-      "reviewCount": "100"
     },
-    "sameAs": ["https://www.facebook.com/addeptauto"]
-  }
+    {
+      "@type": "WebSite",
+      "@id": "https://addeptauto.co.nz/#website",
+      "url": "https://addeptauto.co.nz/",
+      "name": "Addept Automotive",
+      "publisher": {
+        "@id": "https://addeptauto.co.nz/#business"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://addeptauto.co.nz/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How often should I get my car serviced?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Every 12 months or 10,000 km, whichever comes first."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is included in a service?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Fresh engine oil and a new oil filter, then a proper once-over: fluids, filters, suspension, bushes, brakes and tyres. If something's on its way out, you'll hear it from us first."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I know if my brakes need replacing?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Squealing, grinding, longer stops, or a pedal that just feels different. If you're asking, it's worth a look."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What should I do if my check engine light comes on?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Book a diagnostic before it turns into a bigger bill — we trace the fault to its source and fix it once."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can you do pre-purchase inspections?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. We'll list what it needs now, what it'll need soon, and what the seller forgot to mention."
+          }
+        }
+      ]
+    }
+  ]
+}
   </script>
 
   <!-- GA4 ANALYTICS: paste your Measurement ID (looks like G-XXXXXXXXXX) between the quotes below to switch analytics on.
@@ -82,6 +367,44 @@
   <style>html,body{margin:0;background:#000;}</style>
 </head>
 <body>
-  <script src="/embed.js?v=20260614x"></script>
+<noscript>
+  <main style="max-width:740px;margin:0 auto;padding:48px 22px;color:#fff;background:#000;font-family:system-ui,-apple-system,sans-serif;line-height:1.6">
+    <h1>Addept Automotive — Independent Mechanic in Queenstown</h1>
+    <p>Servicing, diagnostics and repairs in Frankton, Queenstown. European &amp; Japanese specialists. We'll tell you what's actually wrong with your car.</p>
+    <p><a href="tel:+64274393403" style="color:#fff">Call 027 439 3403</a> &middot; <a href="mailto:addeptauto@gmail.com" style="color:#fff">addeptauto@gmail.com</a> &middot; 35B Brookes Road, Frankton, Queenstown 9300 &middot; Mon&ndash;Thu 7am&ndash;5pm, Fri by appointment</p>
+    <h2>Our services in Queenstown</h2>
+    <ul>
+      <li><strong>Car Servicing &amp; Maintenance</strong> &mdash; Oil, filters and a full inspection that keeps your car reliable between Queenstown's big drives.</li>
+      <li><strong>WOF Repairs</strong> &mdash; Failed your WOF? We fix every failure — brakes, lights, steering, tyres, exhaust — and get you legal again.</li>
+      <li><strong>Brake Repairs</strong> &mdash; Pads, rotors and fluid for confident stops on steep Central Otago roads.</li>
+      <li><strong>Engine Diagnostics &amp; Repair</strong> &mdash; Check-engine-light diagnostics through to engine repair and rebuilds, in-house.</li>
+      <li><strong>Transmission Services</strong> &mdash; Service, repair and rebuilds for manual and automatic gearboxes.</li>
+      <li><strong>Suspension &amp; Steering</strong> &mdash; Shocks, struts, bushes and steering tuned for gravel and alpine roads.</li>
+      <li><strong>Exhaust Repairs</strong> &mdash; Mufflers, converters, pipes and full custom exhaust builds, welded in-house.</li>
+      <li><strong>Auto Electrical</strong> &mdash; Batteries, starters, alternators, wiring and the intermittent faults others give up on.</li>
+      <li><strong>Performance Tuning &amp; Emissions</strong> &mdash; Aftermarket ECU tuning, factory remapping and emissions/DTC solutions.</li>
+      <li><strong>Pre-Purchase Inspections</strong> &mdash; Know what a car needs now, soon, and what the seller didn't mention — before you buy.</li>
+      <li><strong>European Car Specialists</strong> &mdash; Audi, VW, BMW, Mercedes, Peugeot and more, serviced and repaired properly.</li>
+      <li><strong>Japanese Car Specialists</strong> &mdash; Toyota, Subaru, Mazda, Nissan, Honda — the makes that handle our roads, kept reliable.</li>
+    </ul>
+    <h2>What drivers say</h2>
+    <blockquote>&ldquo;Hands down the best mechanic experience I've had in New Zealand, and I've had a fair few across the country.&rdquo; &mdash; J. T., Google review</blockquote>
+    <blockquote>&ldquo;Above and beyond service. Our car started having issues just as we arrived in Queenstown — sorted, no fuss.&rdquo; &mdash; S. M., Google review</blockquote>
+    <blockquote>&ldquo;Fantastic service from these guys. Hayden and Ryan are first-class mechanics. Highly recommended.&rdquo; &mdash; P. W., Google review</blockquote>
+    <h2>Frequently asked questions</h2>
+    <h3>How often should I get my car serviced?</h3>
+    <p>Every 12 months or 10,000 km, whichever comes first.</p>
+    <h3>What is included in a service?</h3>
+    <p>Fresh engine oil and a new oil filter, then a proper once-over: fluids, filters, suspension, bushes, brakes and tyres. If something's on its way out, you'll hear it from us first.</p>
+    <h3>How do I know if my brakes need replacing?</h3>
+    <p>Squealing, grinding, longer stops, or a pedal that just feels different. If you're asking, it's worth a look.</p>
+    <h3>What should I do if my check engine light comes on?</h3>
+    <p>Book a diagnostic before it turns into a bigger bill — we trace the fault to its source and fix it once.</p>
+    <h3>Can you do pre-purchase inspections?</h3>
+    <p>Yes. We'll list what it needs now, what it'll need soon, and what the seller forgot to mention.</p>
+    <p><a href="https://maps.google.com/?q=35B+Brookes+Road,+Frankton,+Queenstown+9300" style="color:#fff">Find us on Google Maps</a></p>
+  </main>
+</noscript>
+  <script src="/embed.js?v=20260614af"></script>
 </body>
 </html>

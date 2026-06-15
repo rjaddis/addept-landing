@@ -262,10 +262,15 @@
   + ".alp-odc{position:relative;display:inline-block;overflow:hidden;height:.92em;width:.8em;vertical-align:top;background:var(--alp-blotch),linear-gradient(90deg,rgba(0,0,0,.55) 0%,rgba(255,255,255,.05) 15%,rgba(255,255,255,.05) 85%,rgba(0,0,0,.55) 100%),linear-gradient(#0e0e0e,#000);background-size:1.6em auto,auto,auto;background-blend-mode:soft-light,normal,normal;box-shadow:inset .02em 0 .02em rgba(255,255,255,.05),inset -.02em 0 .03em rgba(0,0,0,.9);}"
   + ".alp-odc::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:3;background:linear-gradient(102deg,rgba(255,255,255,.08) 0%,rgba(255,255,255,.02) 18%,rgba(255,255,255,0) 42%),linear-gradient(to bottom,rgba(0,0,0,.44) 0%,rgba(0,0,0,.13) 10%,rgba(0,0,0,0) 26%,rgba(255,255,255,.07) 50%,rgba(0,0,0,0) 74%,rgba(0,0,0,.15) 90%,rgba(0,0,0,.46) 100%);}"
   + ".alp-odw{display:block;transition:transform .55s cubic-bezier(.22,.85,.3,1);}"
+  /* the tenths wheel spins too fast to read: a continuous loop + vertical blur
+     reads as a smeared spinning drum (no digits), settling on 0 when it lands */
+  + "@keyframes alp-odspin{from{transform:translateY(0)}to{transform:translateY(-9.2em)}}"
+  + ".alp-odw.alp-odspin{animation:alp-odspin .2s linear infinite;filter:blur(1.1px);}"
   + ".alp-odw b{display:block;height:.92em;line-height:.92em;text-align:center;font-family:'Space Grotesk',Inter,sans-serif;font-weight:700;letter-spacing:.005em;background:linear-gradient(#ffffff 0%,#f8f6f0 60%,#ebe6db 100%);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 .006em 0 rgba(0,0,0,.3);}"
-  + ".alp-odc:last-child{background:var(--alp-blotch),linear-gradient(90deg,rgba(0,0,0,.5) 0%,rgba(255,255,255,.06) 15%,rgba(255,255,255,.06) 85%,rgba(0,0,0,.5) 100%),linear-gradient(#caa24e,#a6781f);background-size:1.6em auto,auto,auto;background-blend-mode:soft-light,normal,normal;}"
-  + ".alp-odc:last-child::after{background:linear-gradient(102deg,rgba(255,255,255,.2) 0%,rgba(255,255,255,.06) 18%,rgba(255,255,255,0) 42%),linear-gradient(to bottom,rgba(54,36,7,.6) 0%,rgba(54,36,7,.22) 11%,rgba(80,55,12,0) 30%,rgba(255,240,200,.18) 50%,rgba(80,55,12,0) 70%,rgba(48,31,6,.24) 89%,rgba(38,24,4,.62) 100%);}"
-  + ".alp-odc:last-child .alp-odw b{background:linear-gradient(#fff7e6 0%,#f3e4c2 55%,#d8c195 100%);-webkit-background-clip:text;background-clip:text;color:transparent;}"
+  /* tenths wheel: white drum with a black digit */
+  + ".alp-odc:last-child{background:var(--alp-blotch),linear-gradient(90deg,rgba(0,0,0,.14) 0%,rgba(255,255,255,.12) 15%,rgba(255,255,255,.12) 85%,rgba(0,0,0,.14) 100%),linear-gradient(#fcfbf8,#e7e4dc);background-size:1.6em auto,auto,auto;background-blend-mode:soft-light,normal,normal;}"
+  + ".alp-odc:last-child::after{background:linear-gradient(102deg,rgba(255,255,255,.4) 0%,rgba(255,255,255,.12) 18%,rgba(255,255,255,0) 42%),linear-gradient(to bottom,rgba(0,0,0,.3) 0%,rgba(0,0,0,.1) 11%,rgba(0,0,0,0) 30%,rgba(255,255,255,.22) 50%,rgba(0,0,0,0) 70%,rgba(0,0,0,.11) 89%,rgba(0,0,0,.32) 100%);}"
+  + ".alp-odc:last-child .alp-odw b{background:#000;-webkit-background-clip:text;background-clip:text;color:#000;text-shadow:0 .01em 0 rgba(255,255,255,.55);}"
   /* tagline matches the counter's cut; letters drop into place one by one,
      then the trailing dots count up in the beat before the burst */
   + "#alp-lstat{position:absolute;bottom:26px;left:0;right:0;text-align:center;font-size:13px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.85);opacity:0;}"
@@ -366,10 +371,6 @@
   + ".alp-btn-light:hover{transform:translateY(-3px) scale(1.04);box-shadow:0 26px 60px rgba(0,0,0,.5);}"
   + ".alp-btn-ghost{background:rgba(20,20,20,.55);color:#fff;border:1px solid rgba(255,255,255,.22);}"
   + ".alp-btn-ghost:hover{background:#fff;color:#000;transform:translateY(-3px);}"
-  /* estimate button reads in the hero-headline style (Space Grotesk, lighter
-     weight, tight tracking) — like a small headline rather than wide-tracked
-     button text */
-  + ".alp-btn.alp-openest{font-weight:500;letter-spacing:.02em;font-size:16px;}"
   + ".alp-btnrow{margin-top:30px;display:flex;flex-wrap:wrap;gap:14px;align-items:center;}"
   /* per-section contextual CTAs: hidden everywhere except phones (shown in the
      mobile block), where the nav drops its Book button */
@@ -1154,7 +1155,8 @@
   (function () {
     var st = document.getElementById("alp-open");
     var st2 = document.getElementById("alp-open2");
-    if (!st && !st2) return;
+    /* (no early return — the Workshop Hours badge + clock below must still run
+       even though the old contact status pills #alp-open/#alp-open2 are gone) */
     try {
       var parts = new Intl.DateTimeFormat("en-US", { timeZone: "Pacific/Auckland", weekday: "short", hour: "numeric", minute: "numeric", hour12: false }).formatToParts(new Date());
       var wd = "", hr = 0, mi = 0;

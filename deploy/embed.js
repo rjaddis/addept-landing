@@ -51,7 +51,7 @@
      switch GA on (e.g. the GoHighLevel page, which only loads embed.js), turn it
      on here so track() fires anywhere embed.js lives. Guarded on GA_ID so it can
      never double-load alongside the index.html bootstrap. */
-  var GA_ID_FALLBACK = "G-13X4NT1WMQ";
+  var GA_ID_FALLBACK = "G-NR6Y5X7BQV";
   if (!window.GA_ID && GA_ID_FALLBACK) {
     try {
       window.GA_ID = GA_ID_FALLBACK;

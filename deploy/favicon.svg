@@ -1,26 +1,4 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <defs>
-    <radialGradient id="arc" cx="50%" cy="47%" r="56%">
-      <stop offset="0%" stop-color="#ffffff"/>
-      <stop offset="20%" stop-color="#d2e3ff"/>
-      <stop offset="50%" stop-color="#4f8cff"/>
-      <stop offset="100%" stop-color="#0b1c47" stop-opacity="0"/>
-    </radialGradient>
-    <linearGradient id="a" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#ffffff"/>
-      <stop offset="100%" stop-color="#dbe9ff"/>
-    </linearGradient>
-  </defs>
-  <rect width="32" height="32" rx="7" fill="#08080d"/>
-  <!-- welding-arc light -->
-  <circle cx="16" cy="15" r="13.5" fill="url(#arc)"/>
-  <!-- arc spark flashes -->
-  <g stroke="#eaf2ff" stroke-width="1" stroke-linecap="round" opacity=".85">
-    <path d="M16 2 V5.4 M16 26.6 V30 M2 15 H5.4 M26.6 15 H30 M5.8 4.8 l2.3 2.3 M26.2 4.8 l-2.3 2.3"/>
-  </g>
-  <!-- the A -->
-  <g fill="none" stroke="url(#a)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M9.6 24 L16 8 L22.4 24"/>
-    <path d="M12.2 18.4 H19.8"/>
-  </g>
+  <rect width="32" height="32" rx="7" fill="#ff7d1e"/>
+  <path fill="#0a0704" fill-rule="evenodd" d="M16 6 L26 26 L6 26 Z M16 13 L20 19 L12 19 Z M16 20.5 L19.2 26 L12.8 26 Z"/>
 </svg>

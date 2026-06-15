@@ -2,11 +2,11 @@
 
 Cinematic stepped landing page for [Addept Automotive](https://addeptauto.co.nz/) (Queenstown mechanics), built as a single self-hosted embed for GoHighLevel.
 
-**Live:** https://addept-landing.vercel.app
+**Live (Vercel, rjaddis-projects):** https://addept-landing-olive.vercel.app
 **GHL embed (one line, full-page custom code):**
 
 ```html
-<script src="https://addept-landing.vercel.app/embed.js"></script>
+<script src="https://addept-landing-olive.vercel.app/embed.js"></script>
 ```
 
 ## How it works

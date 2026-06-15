@@ -452,6 +452,10 @@
   + "#alp-calskel{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;color:rgba(255,255,255,.45);font-size:11px;letter-spacing:.2em;text-transform:uppercase;}"
   + "#alp-calskel i{width:26px;height:26px;border:2px solid rgba(255,255,255,.15);border-top-color:rgba(255,255,255,.7);border-radius:50%;animation:alp-rot 1s linear infinite;}"
   + "#alp-calcard.alp-ld #alp-calskel{display:none;}"
+  /* transparent layer over the calendar iframe so the mouse wheel scrolls the
+     PAGE instead of being swallowed by the cross-origin iframe; a click drops it
+     for a moment so the calendar still gets the interaction (desktop only) */
+  + "#alp-calscroll{position:absolute;inset:0;z-index:3;pointer-events:none;}"
   /* testimonials: Oryzo-style square-card marquee over the workshop video */
   + "#alp-booking{position:relative;max-width:none;padding:0;overflow:hidden;}"
   /* video backdrop: a full-viewport FIXED layer that crossfades in over the
@@ -1046,7 +1050,7 @@
     +     '<h2 class="alp-heroh" style="font-size:clamp(2rem,4.2vw,3.2rem);">Make a booking</h2>'
     +     '<p class="alp-lead">Choose a date and time that suits you, and we’ll see you then. Prefer to talk it through? Call <a href="' + PHONE_TEL + '" style="color:#fff;">' + PHONE_DISPLAY + "</a>.</p></div>"
     +     '<div id="alp-calcard"><div id="alp-calskel" aria-hidden="true"><i></i><span>Loading bookings</span></div>'
-    +     '<iframe data-src="' + CAL_URL + '" scrolling="no" id="jk0S1digTnc8PT4F1AmO_alp" title="Addept Automotive Bookings"></iframe></div></div>'
+    +     '<iframe data-src="' + CAL_URL + '" scrolling="no" id="jk0S1digTnc8PT4F1AmO_alp" title="Addept Automotive Bookings"></iframe><div id="alp-calscroll" aria-hidden="true"></div></div></div>'
     +   "</div>"
     +   '<div class="alp-fsec" id="alp-faqs">'
     +     '<div class="alp-fhead"><div class="alp-eyebrow">FAQs</div><h2 class="alp-heroh" style="font-size:clamp(2rem,4.2vw,3.2rem);">Common questions</h2></div>'
@@ -1201,6 +1205,19 @@
     ifr.src = ifr.getAttribute("data-src");
     track("booking_calendar_open"); /* the booking calendar actually loaded */
     loadFormEmbedJs();
+    /* desktop: catch the wheel over the calendar so the page always scrolls;
+       a pointerdown drops the catcher for a beat so clicks reach the calendar */
+    var ov = document.getElementById("alp-calscroll");
+    if (ov && FINE) {
+      ov.style.pointerEvents = "auto";
+      ov.addEventListener("wheel", function (e) { e.preventDefault(); root.scrollTop += e.deltaY; }, { passive: false });
+      var calRearm;
+      ov.addEventListener("pointerdown", function () {
+        ov.style.pointerEvents = "none";
+        clearTimeout(calRearm);
+        calRearm = setTimeout(function () { ov.style.pointerEvents = "auto"; }, 350);
+      });
+    }
   }
   var feLoaded = false;
   function loadFormEmbedJs() {
@@ -1993,8 +2010,11 @@
   function enterFlow() {
     if (transitioning) return;
     flowReady = false;
+    /* cross-dissolve straight to the booking backdrop instead of scrubbing the
+       film through every section — same smooth jump as a far dot-nav click */
+    jumpMode = !REDUCE;
     transitioning = true; fromIdx = cur; toIdx = -2;
-    tFrom = pNow; tTo = 100; tT = 0; tDur = 1.15; scrollDir = 1;
+    tFrom = pNow; tTo = 100; tT = 0; tDur = jumpMode ? 0.8 : 1.15; scrollDir = 1;
     nav.classList.remove("alp-ctas"); // booking page surfaces its own CTAs
     sndWhoosh(0.9);
   }
@@ -3988,7 +4008,8 @@
     for (var an = 0; an < ANNOS.length; an++) if (annoEls[an].style.opacity !== "0") annoEls[an].style.opacity = 0;
     for (var g = 0; g < GHOSTS.length; g++) if (ghostEls[g].style.opacity !== "0") ghostEls[g].style.opacity = 0;
     hint.style.opacity = 0;
-    dots.style.opacity = 1; dots.style.pointerEvents = "auto"; count.style.opacity = 1;
+    var jflow = toIdx === -2;                 // entering booking — the HUD fades out
+    dots.style.opacity = jflow ? 0 : 1; dots.style.pointerEvents = jflow ? "none" : "auto"; count.style.opacity = jflow ? 0 : 1;
     for (var j = 0; j < dotEls.length; j++) dotEls[j].className = (j === toIdx) ? "alp-on" : "";
   }
 

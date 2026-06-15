@@ -3584,7 +3584,7 @@
   (function () {
     var realTitle = document.title;
     document.addEventListener("visibilitychange", function () {
-      document.title = document.hidden ? "Your car misses us 🔧" : realTitle;
+      document.title = document.hidden ? "It won't fix itself." : realTitle;
     });
   })();
 

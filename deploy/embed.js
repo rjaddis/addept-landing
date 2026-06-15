@@ -2503,8 +2503,27 @@
       return;
     }
     if (id === "top") {
-      if (MODE === "flow") exitFlow();
-      else goTo(0);
+      if (MODE === "flow") {
+        if (transitioning) return;
+        /* "Back to top" / brand logo from booking → the VERY top (hero), not
+           just the reviews section the booking sits above. Dissolve straight up. */
+        flowAnimToken++;
+        flowReady = false;
+        bridgeT = bridgeGoal = bridgeAcc = 0;
+        MODE = "story";
+        root.classList.remove("alp-flowmode");
+        root.scrollTop = 0;
+        if (bookbgEl) bookbgEl.style.opacity = "0"; // drop the booking video so the hero shows
+        jumpMode = !REDUCE;            // cross-dissolve to hero, no scrub-through
+        transitioning = true; fromIdx = -1; toIdx = 0;
+        tFrom = 100; tTo = SEC[0].stop; tT = 0; tDur = jumpMode ? 0.8 : 1.0; scrollDir = -1;
+        entFor = 0; entT0 = performance.now();
+        setCounter(0);
+        cooldownUntil = performance.now() + 500;
+        sndWhoosh(0.9);
+      } else {
+        goTo(0);
+      }
     }
   });
 

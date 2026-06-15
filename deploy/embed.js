@@ -67,6 +67,16 @@
   function track(ev, params) {
     try { if (window.gtag && window.GA_ID) window.gtag("event", ev, params || {}); } catch (e) {}
   }
+  /* Google Ads conversion tracking for bookings. The gtag library is already
+     loaded for GA4 above; registering the Ads account here lets the conversion
+     fire — on the main site AND the GHL-embedded copy. */
+  var ADS_ID = "AW-877695182", ADS_BOOK_LABEL = "pFzKCJuVx78cEM6hwqID", _bookingConvFired = false;
+  try { if (window.gtag) window.gtag("config", ADS_ID); } catch (e) {}
+  function trackBookingConversion() {
+    if (_bookingConvFired) return; _bookingConvFired = true;
+    try { if (window.gtag) window.gtag("event", "conversion", { send_to: ADS_ID + "/" + ADS_BOOK_LABEL }); } catch (e) {}
+    track("booking_conversion");
+  }
   function clamp01(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
   function ease(t) { return t * t * (3 - 2 * t); }
   function easeIO(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
@@ -1218,6 +1228,14 @@
         calRearm = setTimeout(function () { ov.style.pointerEvents = "auto"; }, 350);
       });
     }
+    /* the calendar is a cross-origin GHL iframe, so a completed booking can only
+       be detected from the postMessages it emits to us — fire the Google Ads
+       conversion when one signals a confirmed booking (once per session) */
+    window.addEventListener("message", function (e) {
+      if (!e.origin || !/leadconnector|msgsndr/i.test(e.origin)) return;
+      var d = e.data, s = typeof d === "string" ? d : (function () { try { return JSON.stringify(d); } catch (x) { return ""; } })();
+      if (/appointment|booked|booking[ _-]?(success|confirmed|complete)|slot[ _-]?booked/i.test(s)) trackBookingConversion();
+    }, false);
   }
   var feLoaded = false;
   function loadFormEmbedJs() {

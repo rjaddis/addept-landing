@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Addept Automotive</title>
+  <title>Addept Automotive | Your Go-To Mechanic In Queenstown</title>
   <meta name="description" content="Queenstown's go-to experts for vehicle performance and reliability. Servicing, diagnostics, repairs, WOF repairs and pre-purchase inspections. European and Japanese specialists.">
   <link rel="canonical" href="https://addeptauto.co.nz/">
   <meta name="theme-color" content="#000000">
@@ -16,15 +16,18 @@
   <meta name="geo.position" content="-45.0178;168.7373">
   <meta name="ICBM" content="-45.0178, 168.7373">
 
-  <!-- Google Search Console: paste your token and uncomment to verify ownership (search.google.com/search-console). -->
-  <!-- <meta name="google-site-verification" content="PASTE_TOKEN_HERE"> -->
+  <!-- Google Search Console verification (search.google.com/search-console) -->
+  <meta name="google-site-verification" content="SfwNhAwxW9hg9ObrRNL_IhmXzxsNwGO13TsD9-WlOIg">
 
   <link rel="manifest" href="/site.webmanifest">
 
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=4">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=4">
-  <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png?v=4">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=4">
+  <link rel="icon" href="/favicon/favicon.ico?v=9" sizes="any">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16.png?v=9">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32.png?v=9">
+  <link rel="icon" type="image/png" sizes="48x48" href="/favicon/favicon-48.png?v=9">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png?v=9">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon/android-chrome-192.png?v=9">
+  <link rel="icon" type="image/png" sizes="512x512" href="/favicon/android-chrome-512.png?v=9">
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Addept Automotive">
@@ -43,7 +46,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
   <!-- Performance: warm the LCP frame + lazy third-parties (invisible, no behaviour change) -->
-  <link rel="preload" as="image" href="/frames/frame_0001.jpg" fetchpriority="high">
+  <link rel="preload" as="image" href="/frames/frame_0001.jpg?v=2" fetchpriority="high">
   <link rel="preconnect" href="https://www.googletagmanager.com">
   <link rel="dns-prefetch" href="https://api.leadconnectorhq.com">
   <link rel="dns-prefetch" href="https://api.web3forms.com">
@@ -66,7 +69,7 @@
       "slogan": "We'll tell you what's actually wrong with your car.",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://addeptauto.co.nz/icon-512.png",
+        "url": "https://addeptauto.co.nz/favicon/android-chrome-512.png",
         "width": 512,
         "height": 512
       },
@@ -130,12 +133,6 @@
             "Wednesday",
             "Thursday"
           ],
-          "opens": "07:00",
-          "closes": "17:00"
-        },
-        {
-          "@type": "OpeningHoursSpecification",
-          "dayOfWeek": "Friday",
           "opens": "07:00",
           "closes": "17:00"
         }
@@ -422,7 +419,7 @@
       window.gtag = function () { dataLayer.push(arguments); };
       gtag("js", new Date());
       gtag("config", window.GA_ID, { anonymize_ip: true });
-      gtag("config", "AW-877695182"); // Google Ads — booking conversion
+      // Google Ads (AW-877695182) is configured once, inside embed.js — do NOT config it here too (that double-loaded the Ads base tag). embed.js is the single source of truth so the conversion also fires on the GHL-embedded copy.
     }
   </script>
 
@@ -433,7 +430,7 @@
   <main style="max-width:740px;margin:0 auto;padding:48px 22px;color:#fff;background:#000;font-family:system-ui,-apple-system,sans-serif;line-height:1.6">
     <h1>Addept Automotive — Independent Mechanic in Queenstown</h1>
     <p>Independent auto repair workshop in Frankton, Queenstown. Car servicing, WOF repairs, brakes, engine diagnostics, auto electrical and pre-purchase inspections — European &amp; Japanese specialists. We'll tell you what's actually wrong with your car.</p>
-    <p><a href="tel:+64274393403" style="color:#fff">Call 027 439 3403</a> &middot; <a href="mailto:addeptauto@gmail.com" style="color:#fff">addeptauto@gmail.com</a> &middot; 35B Brookes Road, Frankton, Queenstown 9300 &middot; Mon&ndash;Thu 7am&ndash;5pm, Fri by appointment</p>
+    <p><a href="tel:+64274393403" style="color:#fff">Call 027 439 3403</a> &middot; <a href="mailto:addeptauto@gmail.com" style="color:#fff">addeptauto@gmail.com</a> &middot; 35B Brookes Road, Frankton, Queenstown 9300 &middot; Mon&ndash;Thu 7am&ndash;5pm</p>
     <h2>Our services in Queenstown</h2>
     <ul>
       <li><strong>Car Servicing &amp; Maintenance</strong> &mdash; Oil, filters and a full inspection that keeps your car reliable between Queenstown's big drives.</li>
@@ -471,6 +468,6 @@
     <p><a href="https://maps.google.com/?q=35B+Brookes+Road,+Frankton,+Queenstown+9300" style="color:#fff">Find us on Google Maps</a></p>
   </main>
 </noscript>
-  <script src="/embed.js?v=20260615i"></script>
+  <script src="/embed.js?v=20260622a"></script>
 </body>
 </html>
